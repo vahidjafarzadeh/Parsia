@@ -1,5 +1,6 @@
 ﻿using System;
 using DataLayer.Base;
+using DataLayer.Token;
 using DataLayer.Tools;
 using Datalayer.UnitOfWork;
 
@@ -10,13 +11,13 @@ namespace Parsia.Core.User
         private static readonly UserFacade Facade = new UserFacade();
         private static readonly UserCopier Copier = new UserCopier();
         private readonly UnitOfWork _unitOfWork = new UnitOfWork();
-
         private UserFacade()
         {
+            
         }
-
         public ServiceResult<object> GridView(BusinessParam bp)
         {
+            
             throw new NotImplementedException();
         }
 
