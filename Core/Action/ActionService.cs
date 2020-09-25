@@ -1,10 +1,8 @@
 ﻿using DataLayer.Tools;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace Parsia.Core.Action
 {
-   
     [ApiController]
     public class ActionService : ControllerBase
     {

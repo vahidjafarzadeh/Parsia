@@ -5,18 +5,16 @@ using Datalayer.UnitOfWork;
 
 namespace Parsia.Core.Action
 {
-    public class ActionFacade:IBaseFacade<ActionDto>
+    public class ActionFacade : IBaseFacade<ActionDto>
     {
-        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
         private static readonly ActionFacade Facade = new ActionFacade();
         private static readonly ActionCopier Copier = new ActionCopier();
+        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+
         private ActionFacade()
         {
         }
-        public static ActionFacade GetInstance()
-        {
-            return Facade;
-        }
+
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             throw new NotImplementedException();
@@ -40,6 +38,11 @@ namespace Parsia.Core.Action
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
             throw new NotImplementedException();
+        }
+
+        public static ActionFacade GetInstance()
+        {
+            return Facade;
         }
     }
 }

@@ -7,16 +7,14 @@ namespace Parsia.Core.Menu
 {
     public class MenuFacade : IBaseFacade<MenuDto>
     {
-        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
         private static readonly MenuFacade Facade = new MenuFacade();
         private static readonly MenuCopier Copier = new MenuCopier();
+        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+
         private MenuFacade()
         {
         }
-        public static MenuFacade GetInstance()
-        {
-            return Facade;
-        }
+
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             throw new NotImplementedException();
@@ -40,6 +38,11 @@ namespace Parsia.Core.Menu
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
             throw new NotImplementedException();
+        }
+
+        public static MenuFacade GetInstance()
+        {
+            return Facade;
         }
     }
 }

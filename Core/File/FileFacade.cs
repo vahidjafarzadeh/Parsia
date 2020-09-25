@@ -7,16 +7,14 @@ namespace Parsia.Core.File
 {
     public class FileFacade : IBaseFacade<FileDto>
     {
-        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
         private static readonly FileFacade Facade = new FileFacade();
         private static readonly FileCopier Copier = new FileCopier();
+        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+
         private FileFacade()
         {
         }
-        public static FileFacade GetInstance()
-        {
-            return Facade;
-        }
+
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             throw new NotImplementedException();
@@ -40,6 +38,11 @@ namespace Parsia.Core.File
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
             throw new NotImplementedException();
+        }
+
+        public static FileFacade GetInstance()
+        {
+            return Facade;
         }
     }
 }

@@ -15,7 +15,8 @@ namespace Parsia.Core.AccessGroup
             };
         }
 
-        public DataLayer.Model.Core.AccessGroup.AccessGroup GetEntity(AccessGroupDto dto, BusinessParam bp, bool setCreate)
+        public DataLayer.Model.Core.AccessGroup.AccessGroup GetEntity(AccessGroupDto dto, BusinessParam bp,
+            bool setCreate)
         {
             var accessGroup = new DataLayer.Model.Core.AccessGroup.AccessGroup
             {
@@ -28,7 +29,9 @@ namespace Parsia.Core.AccessGroup
             };
             return SetMandatoryField(accessGroup, bp, setCreate);
         }
-        public DataLayer.Model.Core.AccessGroup.AccessGroup SetMandatoryField(DataLayer.Model.Core.AccessGroup.AccessGroup accessGroup, BusinessParam bp, bool setCreate)
+
+        public DataLayer.Model.Core.AccessGroup.AccessGroup SetMandatoryField(
+            DataLayer.Model.Core.AccessGroup.AccessGroup accessGroup, BusinessParam bp, bool setCreate)
         {
             accessGroup.UpdateBy = bp.UserInfo.UserId;
             accessGroup.Updated = DateTime.Now;

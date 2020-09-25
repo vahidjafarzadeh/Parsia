@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Parsia.Core.AccessGroup
 {
-   
     [ApiController]
     public class AccessGroupService : ControllerBase
     {

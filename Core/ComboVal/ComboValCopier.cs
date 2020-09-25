@@ -4,7 +4,7 @@ using DataLayer.Tools;
 
 namespace Parsia.Core.ComboVal
 {
-    public class ComboValCopier:IBaseCopier<ComboValDto,DataLayer.Model.Core.ComboVal.ComboVal>
+    public class ComboValCopier : IBaseCopier<ComboValDto, DataLayer.Model.Core.ComboVal.ComboVal>
     {
         public ComboValDto GetDto(DataLayer.Model.Core.ComboVal.ComboVal entity)
         {
@@ -26,7 +26,7 @@ namespace Parsia.Core.ComboVal
                 Active = dto.Active,
                 Code = dto.Code,
                 Deleted = dto.Deleted,
-                FullTitle = dto.Name + " | " + dto.Value + " | " + dto.EntityId+" | "+ dto.ParentId,
+                FullTitle = dto.Name + " | " + dto.Value + " | " + dto.EntityId + " | " + dto.ParentId,
                 Name = dto.Name,
                 AdminOnly = dto.AdminOnly,
                 ParentId = dto.ParentId,
@@ -34,7 +34,9 @@ namespace Parsia.Core.ComboVal
             };
             return SetMandatoryField(comboVal, bp, setCreate);
         }
-        public DataLayer.Model.Core.ComboVal.ComboVal SetMandatoryField(DataLayer.Model.Core.ComboVal.ComboVal comboVal, BusinessParam bp, bool setCreate)
+
+        public DataLayer.Model.Core.ComboVal.ComboVal SetMandatoryField(DataLayer.Model.Core.ComboVal.ComboVal comboVal,
+            BusinessParam bp, bool setCreate)
         {
             comboVal.UpdateBy = bp.UserInfo.UserId;
             comboVal.Updated = DateTime.Now;

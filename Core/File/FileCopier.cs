@@ -4,7 +4,7 @@ using DataLayer.Tools;
 
 namespace Parsia.Core.File
 {
-    public class FileCopier:IBaseCopier<FileDto,DataLayer.Model.Core.File.File>
+    public class FileCopier : IBaseCopier<FileDto, DataLayer.Model.Core.File.File>
     {
         public FileDto GetDto(DataLayer.Model.Core.File.File entity)
         {
@@ -32,7 +32,8 @@ namespace Parsia.Core.File
                 Active = dto.Active,
                 Code = dto.Code,
                 Deleted = dto.Deleted,
-                FullTitle = dto.Name + " | " +dto.Description + " | " + dto.Title + " | " + dto.EntityId + " | " + dto.Alt+" | "+dto.Extension,
+                FullTitle = dto.Name + " | " + dto.Description + " | " + dto.Title + " | " + dto.EntityId + " | " +
+                            dto.Alt + " | " + dto.Extension,
                 Name = dto.Name,
                 ParentId = dto.ParentId,
                 DisplayInFileManager = dto.DisplayInFileManager,
@@ -46,7 +47,9 @@ namespace Parsia.Core.File
             };
             return SetMandatoryField(file, bp, setCreate);
         }
-        public DataLayer.Model.Core.File.File SetMandatoryField(DataLayer.Model.Core.File.File file, BusinessParam bp, bool setCreate)
+
+        public DataLayer.Model.Core.File.File SetMandatoryField(DataLayer.Model.Core.File.File file, BusinessParam bp,
+            bool setCreate)
         {
             file.UpdateBy = bp.UserInfo.UserId;
             file.Updated = DateTime.Now;

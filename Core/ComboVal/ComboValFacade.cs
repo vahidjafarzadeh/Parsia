@@ -5,18 +5,16 @@ using Datalayer.UnitOfWork;
 
 namespace Parsia.Core.ComboVal
 {
-    public class ComboValFacade:IBaseFacade<ComboValDto>
+    public class ComboValFacade : IBaseFacade<ComboValDto>
     {
-        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
         private static readonly ComboValFacade Facade = new ComboValFacade();
         private static readonly ComboValCopier Copier = new ComboValCopier();
+        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+
         private ComboValFacade()
         {
         }
-        public static ComboValFacade GetInstance()
-        {
-            return Facade;
-        }
+
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             throw new NotImplementedException();
@@ -40,6 +38,11 @@ namespace Parsia.Core.ComboVal
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
             throw new NotImplementedException();
+        }
+
+        public static ComboValFacade GetInstance()
+        {
+            return Facade;
         }
     }
 }

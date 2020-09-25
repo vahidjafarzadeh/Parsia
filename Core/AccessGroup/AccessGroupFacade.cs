@@ -7,16 +7,14 @@ namespace Parsia.Core.AccessGroup
 {
     public class AccessGroupFacade : IBaseFacade<AccessGroupDto>
     {
-        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
         private static readonly AccessGroupFacade Facade = new AccessGroupFacade();
         private static readonly AccessGroupCopier Copier = new AccessGroupCopier();
+        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+
         private AccessGroupFacade()
         {
         }
-        public static AccessGroupFacade GetInstance()
-        {
-            return Facade;
-        }
+
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             throw new NotImplementedException();
@@ -40,6 +38,11 @@ namespace Parsia.Core.AccessGroup
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
             throw new NotImplementedException();
+        }
+
+        public static AccessGroupFacade GetInstance()
+        {
+            return Facade;
         }
     }
 }

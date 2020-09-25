@@ -16,13 +16,13 @@ namespace Parsia.Core.Menu
                 EntityId = entity.EntityId,
                 Name = entity.Name,
                 ParentId = entity.ParentId,
-                File = new FileDto() { EntityId = entity.CurrentFile.EntityId},
-                UseCase = new UseCaseDto() { EntityId = entity.CurrentUseCase.EntityId},
+                File = new FileDto {EntityId = entity.CurrentFile.EntityId},
+                UseCase = new UseCaseDto {EntityId = entity.CurrentUseCase.EntityId},
                 Path = entity.Path,
                 Title = entity.Title,
                 Icon = entity.Icon,
                 OrderNode = entity.OrderNode,
-                Target = new ComboValDto() { EntityId = entity.Target}
+                Target = new ComboValDto {EntityId = entity.Target}
             };
         }
 
@@ -47,7 +47,9 @@ namespace Parsia.Core.Menu
             };
             return SetMandatoryField(menu, bp, setCreate);
         }
-        public DataLayer.Model.Core.Menu.Menu SetMandatoryField(DataLayer.Model.Core.Menu.Menu menu, BusinessParam bp, bool setCreate)
+
+        public DataLayer.Model.Core.Menu.Menu SetMandatoryField(DataLayer.Model.Core.Menu.Menu menu, BusinessParam bp,
+            bool setCreate)
         {
             menu.UpdateBy = bp.UserInfo.UserId;
             menu.Updated = DateTime.Now;

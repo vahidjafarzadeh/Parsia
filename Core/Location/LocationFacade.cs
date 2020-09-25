@@ -7,16 +7,14 @@ namespace Parsia.Core.Location
 {
     public class LocationFacade : IBaseFacade<LocationDto>
     {
-        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
         private static readonly LocationFacade Facade = new LocationFacade();
         private static readonly LocationCopier Copier = new LocationCopier();
+        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+
         private LocationFacade()
         {
         }
-        public static LocationFacade GetInstance()
-        {
-            return Facade;
-        }
+
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             throw new NotImplementedException();
@@ -40,6 +38,11 @@ namespace Parsia.Core.Location
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
             throw new NotImplementedException();
+        }
+
+        public static LocationFacade GetInstance()
+        {
+            return Facade;
         }
     }
 }

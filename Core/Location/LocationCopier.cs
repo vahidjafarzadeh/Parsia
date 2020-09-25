@@ -15,6 +15,7 @@ namespace Parsia.Core.Location
                 ParentId = entity.ParentId
             };
         }
+
         public DataLayer.Model.Core.Location.Location GetEntity(LocationDto dto, BusinessParam bp, bool setCreate)
         {
             var location = new DataLayer.Model.Core.Location.Location
@@ -23,13 +24,15 @@ namespace Parsia.Core.Location
                 Active = dto.Active,
                 Code = dto.Code,
                 Deleted = dto.Deleted,
-                FullTitle = dto.Name  + " | " + dto.EntityId ,
+                FullTitle = dto.Name + " | " + dto.EntityId,
                 Name = dto.Name,
                 ParentId = dto.ParentId
             };
             return SetMandatoryField(location, bp, setCreate);
         }
-        public DataLayer.Model.Core.Location.Location SetMandatoryField(DataLayer.Model.Core.Location.Location location, BusinessParam bp, bool setCreate)
+
+        public DataLayer.Model.Core.Location.Location SetMandatoryField(DataLayer.Model.Core.Location.Location location,
+            BusinessParam bp, bool setCreate)
         {
             location.UpdateBy = bp.UserInfo.UserId;
             location.Updated = DateTime.Now;

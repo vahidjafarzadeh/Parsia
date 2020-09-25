@@ -28,7 +28,9 @@ namespace Parsia.Core.Action
             };
             return SetMandatoryField(action, bp, setCreate);
         }
-        public DataLayer.Model.Core.Action.Action SetMandatoryField(DataLayer.Model.Core.Action.Action action, BusinessParam bp, bool setCreate)
+
+        public DataLayer.Model.Core.Action.Action SetMandatoryField(DataLayer.Model.Core.Action.Action action,
+            BusinessParam bp, bool setCreate)
         {
             action.UpdateBy = bp.UserInfo.UserId;
             action.Updated = DateTime.Now;
