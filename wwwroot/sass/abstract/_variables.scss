@@ -1,0 +1,138 @@
+@import "colors";
+$grid-breakpoints: (
+        xs: 0,
+        s: 400px,
+        sm: 576px,
+        md: 768px,
+        lg: 992px,
+        xl: 1200px
+) !default;
+
+$font-size-base:              1rem; // Assumes the browser default, typically `16px`
+
+// z index
+$mandatory-icon-z-index: 2;
+$zindex-advance-search: 2 !default;
+$zindex-edit-frame: 2 !default;
+
+$body-bg: #fafafa;
+$base-color: #3d5afe !default;
+
+$transition-duration: 350ms;
+
+$scroll-content-padding: .5rem;
+
+// stylelint-disable value-keyword-case
+$font-family-samim: Samim, 'Tahoma' !default;
+$font-family-base: $font-family-samim !default;
+
+// index
+$search-bar-height: 40px !default;
+$search-bar-margin: 0 0 .5rem !default;
+$search-bar-padding: .25rem 0 !default;
+$simple-search-label-font-size: .8rem !default;
+$simple-search-label-margin: .25rem !default;
+
+$advance-search-btn-width: 100% !default;
+$advance-search-btn-margin: .25rem !default;
+$advance-search-button-font-size: 0.8rem !default;
+$advance-search-bg: #f9f8f8 !default;
+$advance-search-padding: .5rem !default;
+
+
+$a-s-search-input-icon-size: 30px;
+$a-s-search-input-icon-font-size: 1rem;
+$a-s-search-input-icon-border-color: #e5e7e8;
+
+// edit
+//$data-wrapper-border-color: map_get($grey, 'lighten-4');
+$fieldset-background: white;
+$fieldset-min-height : calc(100vh - 85px);
+
+
+
+// badge
+$badge-icon-margin: .3rem !default;
+
+
+// form(s)
+$mandatory-icon-horizontal-gap: 3px;
+$mandatory-icon-vertical-gap: 3px;
+$mandatory-icon-font-size: .5rem;
+$mandatory-icon-color: map_get($danger, 'dark');
+
+$has-error-color: darken(map_get($danger, 'dark'), 10%);
+
+$form-control-shadow: 0 0 0 2px transparent;
+$form-control-focus-shadow: 0 0 0 2px rgba(map_get($blue, 'accent-3'), .3);
+$input-placeholder-color: map_get($grey, 'darken-1');
+$input-border-color: map_get($grey, 'lighten-1');
+$form-control-border: $input-border-color;
+/*$form-control-focus-border: map_get($blue, 'accent-3');*/
+$form-control-focus-border: transparent;
+
+$form-check-label-margin: .25rem;
+
+$input-height-inner-sm: 30px;
+
+$small-rtl-font-size: .75rem !default;
+
+// select 2
+$select2-selection-height: 30px;
+
+
+// button(s)
+$icon-button-icon-holder-margin: .25rem !default;
+
+// pagination
+$pagination-input-group-width: auto !default;
+$pagination-input-group-flex-wrap: initial !default;
+$pagination-input-group-form-control-width: 50px !default;
+$pagination-input-group-form-control-radius: 0 .25rem .25rem 0 !default;
+$pagination-input-group-height: $input-height-inner-sm !default;
+$pagination-form-group-width-xs: auto !default;
+$pagination-form-group-width: 150px !default;
+$pagination-form-group-padding: .5rem !default;
+$pagination-form-group-margin: .5rem !default;
+$pagination-form-label-margin: .25rem !default;
+$pagination-form-label-font-size: .8rem !default;
+$pagination-page-link-padding: .3rem .75rem !default;
+$pagination-page-link-height: 100% !default;
+$pagination-form-group-form-control-padding: .1rem 0.5rem 0.25rem !default;
+$pagination-wrapper-margin: .5rem 0 !default;
+$pagination-number-wrapper-height: 30px;
+$pagination-number-wrapper-label-margin: .25rem;
+$pagination-list-margin: .5rem;
+
+
+// modal
+$modal-action-dialog-title-font-size: .95rem !default;
+$modal-action-dialog-close-font-size: 1rem !default;
+$modal-action-dialog-close-line-height: 1.4 !default;
+$modal-action-dialog-action-list-padding: 0 !default;
+$modal-action-dialog-action-list-margin: 0 !default;
+$modal-action-dialog-item-padding: .75rem 0 !default;
+$modal-action-dialog-item-hover-bg: #f2f4f5 !default;
+$modal-action-dialog-item-title-font-size: .8rem !default;
+$modal-action-dialog-item-title-color: #5e5e60 !default;
+$modal-action-dialog-item-icon-margin: 0 .25rem 0 0 !default;
+
+$modal-loading-width: 250px;
+$modal-loading-margin: .5rem auto;
+$modal-loading-radius: .25rem;
+$modal-loading-content-margin: .5rem;
+$modal-loading-icon-size: 1.75rem;
+
+// button(s)
+$btn-padding-y-xs:            .15rem;
+$btn-padding-x-xs:            .25rem;
+$btn-line-height-xs:          1;
+$font-size-xs:                ($font-size-base * .7) !default;
+
+$btn-has-shadow-default-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.24), 0 2px 10px 0 rgba(0, 0, 0, 0.03);
+$btn-has-shadow-hover-shadow: 0 5px 11px 0 rgba(0,0,0,.18),0 4px 15px 0 rgba(0,0,0,.15);
+
+// Progress
+$progress-shadow: 0 1px 8px -3px;
+$progress-status-holder-svg-font-size: 4rem;
+$progress-status-holder-svg-height: 80px;

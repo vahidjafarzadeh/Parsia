@@ -1,0 +1,36 @@
+@import "./mixins";
+@import "./colors";
+.w-auto {
+  width: auto !important;
+}
+
+.event-off {
+  cursor: default!important;
+  @include touchAction(none);
+}
+
+.ltr {
+  direction: ltr !important;
+}
+
+// background(s)
+@each $colorName, $colorMap in $baseColors {
+  .bg-#{$colorName} {
+    background-color: map_get($colorMap, 'base')!important;
+    &.light {
+      background-color: map_get($colorMap, 'light')!important;
+    }
+    &.dark {
+      background-color: map_get($colorMap, 'dark')!important;
+    }
+  }
+  .border-#{$colorName} {
+    border-color: map_get($colorMap, 'base')!important;
+    &.light {
+      border-color: map_get($colorMap, 'light')!important;
+    }
+    &.dark {
+      border-color: map_get($colorMap, 'dark')!important;
+    }
+  }
+}

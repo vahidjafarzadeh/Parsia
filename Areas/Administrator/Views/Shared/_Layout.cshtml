@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="~/lib/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/admin/style.css" rel="stylesheet" />
+    @RenderSection("Meta", false)
+</head>
+<body>
+    <!--start loading-->
+    <article class="loading">
+        <section>
+            <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+            <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="48px" height="48px" viewBox="0 0 128 128" xml:space="preserve"><g><path fill="#0068ff" d="M64,128a64,64,0,1,1,64-64A64,64,0,0,1,64,128ZM64,2.75A61.25,61.25,0,1,0,125.25,64,61.25,61.25,0,0,0,64,2.75Z" /><path fill="#0068ff" d="M64 128a64 64 0 1 1 64-64 64 64 0 0 1-64 64zM64 2.75A61.2 61.2 0 0 0 3.34 72.4c1.28-3.52 3.9-6.32 7.5-6.86 6.55-1 11.9 2.63 13.6 8.08 3.52 11.27.5 23 15 35.25 19.47 16.46 40.34 13.54 52.84 9.46A61.25 61.25 0 0 0 64 2.75z" /><animateTransform attributeName="transform" type="rotate" from="0 64 64" to="360 64 64" dur="1200ms" repeatCount="indefinite"></animateTransform></g></svg>
+        </section>
+    </article>
+    <!--end loading-->
+    <!--start content admin page-->
+    <article class="container-fluid">
+        <section class="row">
+            <!--start side bar-->
+            <aside class="col-12 col-sm-12 col-md-2 col-lg-2 scroll-container box-aside">
+                <nav class="menu">
+                    <ul class="container-menu">
+                        <li><img src="images/system/logo.png" alt="logo" /></li>
+                    </ul>
+                </nav>
+                <section class="meta-data-menu">
+                    <header>
+                        <span class="sign-out" data-toggle="tooltip" data-placement="bottom" parsi-title-key="logOut">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </span>
+                        <div class="avatar">
+                            <img src="images/users/avatar.png" alt="avatar user" />
+                        </div>
+                        <p class="user-name">وحید جعفرزاده</p>
+                        <small class="role">مدیر سیستم</small>
+                    </header>
+                    <nav class="main-nav">
+                        <div class="container-tootal-menu">
+
+                        </div>
+                    </nav>
+                </section>
+            </aside>
+            <section class="col-12 col-sm-12 col-md-10 col-lg-10 main-box">
+                <header class="tab-container">
+                    <div class="notification">
+                        <ul class="notifi-ul">
+                            <li>
+                                <div class="dropdown">
+
+                                    <i class="far fa-bell dropdown-toggle" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                    <span class="badge badge-info">5</span>
+
+                                    <div class="dropdown-menu" aria-labelledby="notification">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="dropdown">
+
+                                    <i class="fas fa-tasks dropdown-toggle" id="task" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                    <span class="badge badge-danger">5</span>
+
+
+                                    <div class="dropdown-menu" aria-labelledby="task">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+
+                                <i class="fas fa-comment-dots"></i>
+                                <span class="badge badge-success">5</span>
+
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab">
+                        <span class="next"></span>
+                        <div class="tab-content">
+                            <ul class="tab-container-main">
+                               
+                            </ul>
+                        </div>
+                        <span class="before"></span>
+                    </div>
+                </header>
+                <main class="main-section">
+
+                </main>
+            </section>
+        </section>
+    </article>
+
+    <div class="d-none">
+        @RenderBody()
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <script src="~/lib/jquery/jquery-v3.3.1.min.js"></script>
+    <script src="~/lib/fontawesome/fontawesome-all.min.js" data-auto-add-css="false"></script>
+    <script src="~/lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/scrollbar/simplebar.js"></script>
+    <script src="~/lib/persiandate/persian-date-0.1.8b.min.js"></script>
+    <script src="~/lib/persiandate/persian-datepicker.min.js"></script>
+    <script src="~/lib/api/config.js"></script>
+    <script src="~/lib/api/util.js"></script>
+    <script src="~/lib/api/cookie.js"></script>
+    <script src="~/lib/api/storage.js"></script>
+    <script src="~/lib/api/order-by.js"></script>
+    <script src="~/lib/api/where.js"></script>
+    <script src="~/lib/api/handler.js"></script>
+    <script src="~/lib/api/api.js"></script>
+    <script src="~/js/admin/admin_bundle.js"></script>
+    <script src="~/js/admin/script.js"></script>
+    @RenderSection("Scripts", false)
+</body>
+</html>

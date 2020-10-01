@@ -3,7 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="compilerconfig.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\admin\style.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BuildWebCompiler" Version="1.12.394" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
       <PrivateAssets>all</PrivateAssets>
@@ -17,9 +27,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.8" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Administrator\Data\" />
+    <Folder Include="Areas\Administrator\Models\" />
     <Folder Include="Core\Person\" />
     <Folder Include="Core\RoleAccessGroup\" />
     <Folder Include="Core\Role\" />
@@ -27,5 +40,11 @@
     <Folder Include="Core\UseCaseAction\" />
     <Folder Include="Core\UserRoleAccess\" />
     <Folder Include="Core\UserRole\" />
+    <Folder Include="wwwroot\lib\scrollbar\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
+    <None Include="wwwroot\sass\simple-bar\_region.scss" />
+    <None Include="wwwroot\sass\simple-bar\_simplebar.scss" />
   </ItemGroup>
 </Project>

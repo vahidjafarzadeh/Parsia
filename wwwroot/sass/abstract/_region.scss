@@ -1,0 +1,198 @@
+[lang=fa], [lang=ar] {
+  direction: rtl;
+
+  * {
+    font-family: Samim;
+    text-align: right;
+  }
+
+  .scroll-container {
+    direction: rtl;
+  }
+
+  // input(s)
+  .input-group-text {
+    border: $input-border-width solid $input-group-addon-border-color !important;
+  }
+
+  .input-group-item-wrapper {
+    .form-control {
+      @include borderRadius(0 .25rem .25rem 0);
+    }
+
+    .input-group-prepend {
+      .input-group-text {
+        @include borderRadius(.25rem 0 0 .25rem);
+      }
+    }
+  }
+
+  .form-check {
+    padding-left: 0;
+    text-align: right;
+
+    &:not(.form-group) {
+      padding-right: $form-check-input-gutter;
+    }
+  }
+
+  .form-check-input {
+    margin-left: 0;
+    margin-right: -$form-check-input-gutter;
+  }
+
+  .form-group {
+    &.mandatory {
+      .svg-holder {
+        right: initial;
+        left: $mandatory-icon-horizontal-gap;
+      }
+    }
+
+    .feedback {
+      text-align: right;
+      direction: rtl;
+    }
+  }
+
+  .col-form-label {
+    text-align: right;
+  }
+
+  .form-control-wrapper {
+    .form-check-input {
+      &:nth-child(n+2) {
+        margin-right: ($form-check-label-margin * 2) !important;
+        margin-left: initial !important;
+      }
+    }
+
+    .form-check-label {
+      margin-right: $form-check-label-margin;
+      margin-left: initial;
+    }
+  }
+
+  // select2
+  .select2-selection--single {
+    .select2-selection__rendered {
+      padding-right: 8px !important;
+      padding-left: 25px !important;
+      text-align: right !important;
+      direction: rtl;
+    }
+
+    .select2-selection__arrow {
+      right: initial !important;
+      left: 6px !important;
+    }
+
+    .select2-results {
+      text-align: right !important;
+    }
+  }
+
+  .select2-dropdown {
+    text-align: right;
+
+    .select2-results__option {
+      direction: rtl;
+    }
+  }
+
+  .select2-search__field {
+    text-align: right;
+  }
+
+  .select2-selection__clear {
+    float: left !important;
+  }
+
+  // button(s)
+  .icon-btn {
+    .icon-holder {
+      margin-right: 0;
+      margin-left: $icon-button-icon-holder-margin;
+    }
+  }
+
+  // table
+  .table {
+    th, td {
+      text-align: right;
+    }
+
+    thead {
+      .icon {
+        margin-right: .25rem;
+        margin-left: 0;
+      }
+    }
+
+    .action {
+      margin-right: .5rem;
+      margin-left: 0;
+
+      &:first-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  // pagination
+  .ksun-pagination-wrapper {
+    .number-wrapper {
+      .form-group {
+        padding-left: $pagination-form-group-padding;
+        padding-right: 0;
+      }
+
+      label {
+        margin-right: 0;
+        margin-left: $pagination-number-wrapper-label-margin;
+      }
+    }
+  }
+
+  @media screen and (min-width: map_get($grid-breakpoints, 'sm')) {
+    .pagination {
+      margin-left: 0;
+      margin-right: $pagination-list-margin;
+    }
+  }
+
+  // modal
+  .modal-loading {
+    .loading-content-wrapper {
+      .content {
+        margin-left: 0;
+        margin-right: $modal-loading-content-margin;
+      }
+    }
+  }
+
+  // tooltip
+  .tooltip-inner {
+    text-align: right;
+  }
+
+
+  @mixin make-col-offset($size, $columns: $grid-columns) {
+    $num: $size / $columns;
+    margin-left: 0;
+    margin-right: if($num == 0, 0, percentage($num));
+  }
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+    @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+      @for $i from 0 through ($grid-columns - 1) {
+        @if not ($infix == "" and $i == 0) { // Avoid emitting useless .offset-0
+          .offset#{$infix}-#{$i} {
+            @include make-col-offset($i, $grid-columns);
+          }
+        }
+      }
+    }
+  }
+}
+

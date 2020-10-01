@@ -1,0 +1,371 @@
+@mixin fontFace($fontName, $path, $weight: 100) {
+  @font-face {
+    font-family: $fontName;
+    src: url($path + '.eot');
+    src: url($path + '.eot?#iefix') format('embedded-opentype'),
+    url($path + '.woff') format('woff'),
+    url($path + '.ttf') format('truetype');
+    font-weight: $weight;
+  }
+}
+
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
+@mixin transform($args...) {
+  -webkit-transform: $args;
+  -moz-transform: $args;
+  -ms-transform: $args;
+  -o-transform: $args;
+  transform: $args;
+}
+
+@mixin saturation($value) {
+  -ms-filter: saturate($value);
+  -webkit-filter: saturate($value);
+  filter: saturate($value);
+}
+
+@mixin blur($value) {
+  -ms-filter: blur($value);
+  -webkit-filter: blur($value);
+  filter: blur($value);
+}
+
+@mixin brightness($value) {
+  -ms-filter: brightness($value);
+  -webkit-filter: brightness($value);
+  filter: brightness($value);
+}
+
+@mixin borderRadius($value) {
+  -moz-border-radius: $value;
+  -webkit-border-radius: $value;
+  border-radius: $value;
+}
+
+@mixin borderRadiusTopRight($value) {
+  -moz-border-radius-topright: $value;
+  -webkit-border-top-right-radius: $value;
+  border-top-right-radius: $value;
+}
+
+@mixin borderRadiusTopLeft($value) {
+  -moz-border-radius-topleft: $value;
+  -webkit-border-top-left-radius: $value;
+  border-top-left-radius: $value;
+}
+
+@mixin borderRadiusBottomRight($value) {
+  -moz-border-radius-bottomright: $value;
+  -webkit-border-bottom-right-radius: $value;
+  border-bottom-right-radius: $value;
+}
+
+@mixin borderRadiusBottomLeft($value) {
+  -moz-border-radius-bottomleft: $value;
+  -webkit-border-bottom-left-radius: $value;
+  border-bottom-left-radius: $value;
+}
+
+@mixin boxShadow($args...) {
+  -webkit-box-shadow: $args;
+  -moz-box-shadow: $args;
+  box-shadow: $args;
+}
+
+@mixin boxSizing($value) {
+  box-sizing: $value;
+  -moz-box-sizing: $value;
+  -webkit-box-sizing: $value;
+}
+
+@mixin placeholder($value, $size : 1rem) {
+  ::placeholder {
+    color: $value !important;
+    font-size: $size;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  ::-moz-placeholder {
+    color: $value !important;
+    font-size: $size;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  ::-webkit-input-placeholder {
+    color: $value !important;
+    font-size: $size;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  :-ms-input-placeholder {
+    color: $value !important;
+    font-size: $size;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@mixin appearance($value) {
+  -webkit-appearance: $value;
+  -moz-appearance: $value;
+}
+
+@mixin animation($args...) {
+  -webkit-animation: $args;
+  -o-animation: $args;
+  animation: $args;
+}
+
+@mixin animationName($value) {
+  -webkit-animation-name: $value;
+  -moz-animation-name: $value;
+  -o-animation-name: $value;
+  animation-name: $value;
+}
+@mixin animationDuration($value) {
+  -webkit-animation-duration: $value;
+  -moz-animation-duration: $value;
+  -o-animation-duration: $value;
+  animation-duration: $value;
+}
+@mixin animationIterationCount($value) {
+  -webkit-animation-iteration-count: $value;
+  -moz-animation-iteration-count: $value;
+  -o-animation-iteration-count: $value;
+  animation-iteration-count: $value;
+}
+
+@mixin animationDirection($value) {
+  -webkit-animation-direction: $value;
+  -moz-animation-direction: $value;
+  -o-animation-direction: $value;
+  animation-direction: $value;
+}
+
+@mixin animationDelay($value) {
+  -webkit-animation-delay: $value;
+  -moz-animation-delay: $value;
+  -o-animation-delay: $value;
+  animation-delay: $value;
+}
+
+@mixin opacity($value) {
+  filter: alpha(opacity=$value*100);
+  -ms-filter: alpha(opacity=$value*100);
+  -webkit-filter: alpha(opacity=$value*100);
+  opacity: $value;
+}
+
+@mixin saturate($value) {
+  -ms-filter: saturate($value);
+  -webkit-filter: saturate($value);
+  filter: saturate($value);
+}
+
+@mixin translate($args...) {
+  -ms-transform: translate($args); /* IE 9 */
+  -webkit-transform: translate($args); /* Safari */
+  transform: translate($args);
+}
+
+@mixin userSelect($value) {
+  -moz-user-select: $value;
+  user-select: $value;
+  -ms-user-select: $value;
+  -webkit-user-select: $value;
+}
+
+// Flex
+@mixin flex($args...) {
+  -webkit-flex: $args;
+  -ms-flex: $args;
+  -moz-box-flex: $args;
+  flex: $args;
+}
+
+@mixin flexBox($type, $important: "") {
+  @if ($type == flex) {
+    display: -webkit-box unquote($important);
+    display: -webkit-flex unquote($important);
+    display: -ms-flexbox unquote($important);
+    display: flex unquote($important);
+  } @else {
+    display: -webkit-inline-flex unquote($important);
+    display: -ms-inline-flexbox unquote($important);
+    display: inline-flex unquote($important);
+  }
+}
+
+@mixin flexDirection($dir, $important: '') {
+  -webkit-flex-direction: $dir unquote($important);
+  flex-direction: $dir unquote($important);
+}
+
+@mixin justifyContent($dir, $important: "") {
+  @if ($dir == start) {
+    -webkit-justify-content: flex-start unquote($important);
+    justify-content: flex-start unquote($important);
+  } @else if ($dir == end) {
+    -webkit-justify-content: flex-end unquote($important);
+    justify-content: flex-end unquote($important);
+  } @else {
+    -webkit-justify-content: $dir unquote($important);
+    justify-content: $dir unquote($important);
+  }
+}
+
+@mixin alignSelf($value, $important: "") {
+  @if ($value == start) {
+    -webkit-align-self: flex-start unquote($important);
+    align-self: flex-start unquote($important);
+  } @else if ($value == end) {
+    -webkit-align-self: flex-end unquote($important);
+    align-self: flex-end unquote($important);
+  } @else {
+    -webkit-align-self: $value unquote($important);
+    align-self: $value unquote($important);
+  }
+}
+
+@mixin alignItem($dir) {
+  @if ($dir == initial ) {
+    -webkit-align-items: initial;
+    align-items: initial;
+  } @else if($dir == center) {
+    -webkit-align-items: center;
+    align-items: center;
+  } @else {
+    -webkit-align-items: flex-#{$dir};
+    align-items: flex-#{$dir};
+  }
+}
+
+@mixin alignContent($dir, $important: "") {
+  @if ($dir == start) {
+    -webkit-align-content: flex-start unquote($important);
+    align-content: flex-start unquote($important);
+  } @else if ($dir == end) {
+    -webkit-align-content: flex-end unquote($important);
+    align-content: flex-end unquote($important);
+  } @else {
+    -webkit-align-content: $dir unquote($important);
+    align-content: $dir unquote($important);
+  }
+}
+
+@mixin flexWrap($value) {
+  -webkit-flex-wrap: $value;
+  flex-wrap: $value;
+}
+
+@mixin flexFlow($args...) {
+  -webkit-flex-flow: $args;
+  flex-flow: $args;
+}
+
+@mixin flexGrow($args...) {
+  -webkit-flex-grow: $args;
+  flex-grow: $args;
+}
+
+@mixin flexBasis($args...) {
+  -webkit-flex-basis: $args;
+  flex-basis: $args;
+}
+
+// flex-start, flex-end, space-between, space-around, stretch
+@mixin alignContent($value) {
+  -webkit-align-content: $value;
+  align-content: $value;
+}
+
+@mixin overFlow($value) {
+  overflow-y: $value;
+  -ms-overflow-y: $value;
+  overflow-x: $value;
+  -ms-overflow-x: $value;
+}
+
+@mixin overFlowY($value) {
+  overflow-y: $value;
+  -ms-overflow-y: $value;
+  @if ($value == auto or $value == scroll) {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@mixin overFlowX($value) {
+  overflow-x: $value;
+  -ms-overflow-x: $value;
+}
+
+@mixin touchAction($value) {
+  touch-action: $value;
+  -ms-touch-action: $value;
+}
+
+@mixin linearGradient($start-color: white 0%, $end-color: #efefef 100%, $angle: 45deg, $important: '') {
+  background: $start-color; /* Old browsers */
+  background: -moz-linear-gradient($angle, $start-color, $end-color); /* FF3.6-15 */
+  background: -webkit-linear-gradient($angle, $start-color, $end-color); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient($angle, $start-color, $end-color); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1e5799', endColorstr='#7db9e8', GradientType=0); /* IE6-9 */
+}
+
+@mixin radialGradient($inner-color: #555, $outer-color: #333, $important: '') {
+  background: $inner-color; /* Old browsers */
+  background: radial-gradient(circle, $inner-color, $outer-color) no-repeat unquote($important);
+}
+
+@mixin keyframes($animation-name) {
+  @-webkit-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @-moz-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @-ms-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @-o-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @keyframes #{$animation-name} {
+    @content;
+  }
+}
+
+@mixin fullWidthBG($imageURL) {
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=$imageURL, sizingMethod='scale');
+  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='#{$imageURL}', sizingMethod='scale')";
+  background: url($imageURL) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+@mixin objectFit($value) {
+  object-fit: $value;
+  -o-object-fit: $value;
+}
+
+@mixin rtl() {
+  [lang=fa] {
+    @content;
+  }
+  [lang=ar] {
+    @content;
+  }
+}

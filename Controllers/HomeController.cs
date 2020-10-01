@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using DataLayer.Token;
-using DataLayer.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Parsia.Models;
@@ -20,24 +19,6 @@ namespace Parsia.Controllers
 
         public IActionResult Index()
         {
-            var x = new TokenOption()
-            {
-                UserInfo = new UserInfo()
-                {
-                    PersonId = 1,
-                    UserId = 1,
-                    LastName = "vahid",
-                    Picture = "fergregrsdfdfsdfsdfsdfsdfsdfdsf",
-                    Username = "vahidjafarzadeh",
-                    FirstName = "jafarzadeh",
-                    Phone = "efrfrefrf"
-                },
-                ExpireMinutes = 10,
-                Ip = "1515.15151.6262.23"
-            };
-
-            InitialToken initialToken = new InitialToken(_jwtHandlers);
-            var jsonWebToken = initialToken.GetToken(x);
             return View();
         }
 

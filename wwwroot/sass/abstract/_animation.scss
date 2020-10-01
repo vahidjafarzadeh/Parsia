@@ -1,0 +1,55 @@
+@import "mixins";
+
+// select card
+@include keyframes(selectCard) {
+  0%, 25%, 55%, 80%, to {
+    -webkit-animation-timing-function: cubic-bezier(.215, .61, .355, 1);
+    animation-timing-function: cubic-bezier(.215, .61, .355, 1)
+  }
+  0% {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+  25% {
+    -webkit-transform: scale3d(.85, .85, .85);
+    transform: scale3d(.85, .85, .85)
+  }
+  55% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05)
+  }
+  80% {
+    -webkit-transform: scale3d(.95, .95, .95);
+    transform: scale3d(.95, .95, .95)
+  }
+  to {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1)
+  }
+}
+
+// spinner icon
+$spinnerColor: #26a69a;
+@include keyframes(spinnerIcon) {
+  0%, 100% {
+    /*-webkit-animation-timing-function: cubic-bezier(.215, .61, .355, 1);
+    animation-timing-function: cubic-bezier(.215, .61, .355, 1)*/
+  }
+  0% {
+    color: $spinnerColor;
+    @include transform(rotate(0));
+  }
+  /*25% {
+    color: $secondColor;
+  }
+  50% {
+    color: $thirdColor;
+  }*/
+  50% {
+    color: darken($spinnerColor, 15%);
+  }
+  100% {
+    color: $spinnerColor;
+    @include transform(rotate(360deg));
+  }
+}

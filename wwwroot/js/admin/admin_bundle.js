@@ -1,0 +1,3 @@
+﻿var adminBundle = {
+    logOut:"خروج"
+}

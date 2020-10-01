@@ -1,0 +1,33 @@
+@import "mixins";
+html, body {
+  min-height: 100%;
+}
+body {
+  padding: 0;
+  @include overFlowY(hidden);
+  @include overFlowX(hidden);
+}
+
+.scroll-container {
+  //padding: $scroll-content-padding;
+  width: 100vw;
+  height: 100vh;
+  @include overFlowX(hidden);
+  @include overFlowX(auto);
+}
+
+[disabled] {
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.no-shadow {
+  @include boxShadow(none !important);
+}
+
+// print
+@media print {
+  .hide-in-print-mode {
+    display: none !important;
+  }
+}
