@@ -10,6 +10,7 @@ $navBarColor: #272d47;
 
 //--------------color
 $bodyColor: #d8ddee;
+$hoverText: #0d47f6 ;
 $navBarColor: white;
 $rightNavColor: #1d53f7;
 $rightNavSecondColor: #0d47f6;
@@ -286,7 +287,12 @@ body, html {
                                 font-size: 0.9rem;
                                 margin: 0 0 0 10px;
                             }
-
+                            span{
+                                &:hover{
+                                    color :$hoverText;
+                                    transition:all 0.25s;
+                                }
+                            }
                             .color-1 {
                                 color: #4bc27d;
                             }
@@ -340,7 +346,6 @@ body, html {
         }
     }
 }
-
 .main-box {
     padding: 0;
     margin: 0;
@@ -457,7 +462,7 @@ body, html {
                     display: flex;
                     flex-direction: row;
                     justify-content: flex-start;
-                    flex-wrap: nowrap;
+                    flex-wrap: wrap;
 
 
 
@@ -472,39 +477,40 @@ body, html {
                         border: 0;
                         cursor: pointer;
                         border-bottom: 2px solid #fff;
-                        min-width: 105px;
-                        transition: 0.5s;
+                        min-width: 100px;
+                        transition: 350ms;
 
                         &:hover {
                             background: #1d53f7;
-                            transition: 0.5s;
+                            transition: all 0.5s;
                             border-bottom: 2px solid #ff7f7f;
 
                             .text {
-                                font-size: 9px;
+                                transition: all 0.5s;
                                 transition: 0.25s;
-                                margin: 10px 5px 0 0;
+                                margin: 8px 0.5rem 0 3.5rem;
                             }
 
                             .icon {
-                                display: block;
+                                transition: all 0.5s;
+                                opacity: 1;
                             }
                         }
 
                         .text {
                             display: table;
-                            margin: 8px auto;
+                            margin: 8px 2rem;
                             text-align: center;
                             font-size: 0.7rem;
                             font-weight: bold;
-                            transition: 0.5s;
+                            transition: all 0.5s;
                         }
 
                         .icon {
                             position: absolute;
                             top: 0;
                             left: 0;
-                            display: none;
+                            opacity: 0;
 
                             svg {
                                 font-size: 12px;
@@ -524,13 +530,11 @@ body, html {
                             top: 8px;
                             left: 14px;
                         }
-
                     }
 
                     .active {
                         border-bottom: 2px solid #ff7f7f;
                     }
-                   
                 }
             }
 
@@ -579,4 +583,58 @@ body, html {
             height: 100%;
         }
     }
+}
+
+//mobile
+@media only screen and (max-width:768px){
+    .box-aside {
+        height: auto;
+
+        .menu {
+            height: 60px;
+            position: fixed;
+            z-index: 10;
+
+            .container-menu {
+                width: 100%;
+                overflow: hidden;
+                transition: all 350ms;
+
+                li {
+                    img {
+                        margin: 10px auto;
+                        cursor:pointer;
+                    }
+                }
+            }
+        }
+
+        .auto {
+            height: 100vh;
+            transition: all 350ms;
+        }
+
+        .meta-data-menu {
+            width: 100%;
+            height: auto;
+            border: 0;
+
+            .main-nav {
+            }
+        }
+    }
+    .main-box {
+        .tab-container {
+            .notification {
+                .notifi-ul {
+                    justify-content: center;
+                }
+            }
+        }
+
+        .main-section {
+            height: 100%;
+        }
+    }
+    
 }

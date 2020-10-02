@@ -28,11 +28,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="WebMarkupMin.AspNetCore3" Version="2.8.11" />
     <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Administrator\Data\" />
-    <Folder Include="Areas\Administrator\Models\" />
     <Folder Include="Core\Person\" />
     <Folder Include="Core\RoleAccessGroup\" />
     <Folder Include="Core\Role\" />

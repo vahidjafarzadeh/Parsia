@@ -50,9 +50,9 @@
     }
 
     function onError(error, inputElement) { // 'this' is the form element
-        var container = $(this).find("[data-valmsg-for='" + escapeAttributeValue(inputElement[0].name) + "']"),
-            replaceAttrValue = container.attr("data-valmsg-replace"),
-            replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) !== false : null;
+        const container = $(this).find(`[data-valmsg-for='${escapeAttributeValue(inputElement[0].name)}']`);
+        const replaceAttrValue = container.attr("data-valmsg-replace");
+        const replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) !== false : null;
 
         container.removeClass("field-validation-valid").addClass("field-validation-error");
         error.data("unobtrusiveContainer", container);
@@ -66,8 +66,8 @@
     }
 
     function onErrors(event, validator) { // 'this' is the form element
-        var container = $(this).find("[data-valmsg-summary=true]"),
-            list = container.find("ul");
+        const container = $(this).find("[data-valmsg-summary=true]");
+        var list = container.find("ul");
 
         if (list && list.length && validator.errorList.length) {
             list.empty();
@@ -81,11 +81,11 @@
     }
 
     function onSuccess(error) { // 'this' is the form element
-        var container = error.data("unobtrusiveContainer");
+        const container = error.data("unobtrusiveContainer");
 
         if (container) {
-            var replaceAttrValue = container.attr("data-valmsg-replace"),
-                replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) : null;
+            const replaceAttrValue = container.attr("data-valmsg-replace");
+            const replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) : null;
 
             container.addClass("field-validation-valid").removeClass("field-validation-error");
             error.removeData("unobtrusiveContainer");
@@ -97,8 +97,8 @@
     }
 
     function onReset(event) { // 'this' is the form element
-        var $form = $(this),
-            key = "__jquery_unobtrusive_validation_form_reset";
+        const $form = $(this);
+        const key = "__jquery_unobtrusive_validation_form_reset";
         if ($form.data(key)) {
             return;
         }
@@ -127,7 +127,7 @@
             onResetProxy = $.proxy(onReset, form),
             defaultOptions = $jQval.unobtrusive.options || {},
             execInContext = function(name, args) {
-                var func = defaultOptions[name];
+                const func = defaultOptions[name];
                 func && $.isFunction(func) && func.apply(form, args);
             };
 
@@ -153,8 +153,8 @@
                 },
                 attachValidation: function() {
                     $form
-                        .off("reset." + data_validation, onResetProxy)
-                        .on("reset." + data_validation, onResetProxy)
+                        .off(`reset.${data_validation}`, onResetProxy)
+                        .on(`reset.${data_validation}`, onResetProxy)
                         .validate(this.options);
                 },
                 validate: function() { // a validation function that is called by unobtrusive Ajax
@@ -198,9 +198,9 @@
 
             $.each(this.adapters,
                 function() {
-                    var prefix = "data-val-" + this.name,
-                        message = $element.attr(prefix),
-                        paramValues = {};
+                    var prefix = `data-val-${this.name}`;
+                    const message = $element.attr(prefix);
+                    var paramValues = {};
 
                     if (message !== undefined
                     ) { // Compare against undefined, because an empty message is legal (and falsy)
@@ -239,19 +239,19 @@
 
             // $forms includes all forms in selector's DOM hierarchy (parent, children and self) that have at least one
             // element with data-val=true
-            var $selector = $(selector),
-                $forms = $selector.parents()
-                    .addBack()
-                    .filter("form")
-                    .add($selector.find("form"))
-                    .has("[data-val=true]");
+            const $selector = $(selector);
+            const $forms = $selector.parents()
+                .addBack()
+                .filter("form")
+                .add($selector.find("form"))
+                .has("[data-val=true]");
 
             $selector.find("[data-val=true]").each(function() {
                 $jQval.unobtrusive.parseElement(this, true);
             });
 
             $forms.each(function() {
-                var info = validationInfo(this);
+                const info = validationInfo(this);
                 if (info) {
                     info.attachValidation();
                 }
@@ -339,8 +339,8 @@
         return this.add(adapterName,
             [minAttribute || "min", maxAttribute || "max"],
             function(options) {
-                var min = options.params.min,
-                    max = options.params.max;
+                const min = options.params.min;
+                const max = options.params.max;
 
                 if (min && max) {
                     setValidationValues(options, minMaxRuleName, [min, max]);
@@ -420,11 +420,10 @@
     adapters.add("equalto",
         ["other"],
         function(options) {
-            var prefix = getModelPrefix(options.element.name),
-                other = options.params.other,
-                fullOtherName = appendModelPrefix(other, prefix),
-                element =
-                    $(options.form).find(":input").filter("[name='" + escapeAttributeValue(fullOtherName) + "']")[0];
+            const prefix = getModelPrefix(options.element.name);
+            const other = options.params.other;
+            const fullOtherName = appendModelPrefix(other, prefix);
+            const element = $(options.form).find(":input").filter(`[name='${escapeAttributeValue(fullOtherName)}']`)[0];
 
             setValidationValues(options, "equalTo", element);
         });
@@ -450,8 +449,8 @@
                 function(i, fieldName) {
                     var paramName = appendModelPrefix(fieldName, prefix);
                     value.data[paramName] = function() {
-                        var field = $(options.form).find(":input")
-                            .filter("[name='" + escapeAttributeValue(paramName) + "']");
+                        const field = $(options.form).find(":input")
+                            .filter(`[name='${escapeAttributeValue(paramName)}']`);
                         // For checkboxes and radio buttons, only pick up values from checked fields.
                         if (field.is(":checkbox")) {
                             return field.filter(":checked").val() || field.filter(":hidden").val() || "";

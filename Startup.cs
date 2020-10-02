@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebMarkupMin.AspNetCore3;
 
 namespace Parsia
 {
@@ -23,6 +24,9 @@ namespace Parsia
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddWebMarkupMin(option => { option.AllowMinificationInDevelopmentEnvironment = true;
+                option.AllowCompressionInDevelopmentEnvironment=true;
+            }).AddHtmlMinification().AddHttpCompression().AddXmlMinification().AddXhtmlMinification();
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDbContext<ParsiContext>(options =>
@@ -47,7 +51,7 @@ namespace Parsia
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseWebMarkupMin();
             app.UseAuthorization();
             app.UseCors(builder =>
                 builder.WithOrigins("http://localhost:52318/")
@@ -56,8 +60,8 @@ namespace Parsia
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "areas",
-                    pattern: "{area:exists}/{controller=Management}/{action=Index}");
+                    "areas",
+                    "{area:exists}/{controller=Management}/{action=Index}");
                 endpoints.MapControllerRoute(
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");

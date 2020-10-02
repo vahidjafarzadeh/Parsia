@@ -2,12 +2,12 @@
  * Created by Farshad Kazemi on 2/17/2018.
  */
 
-var Wheres = function () {
+var Wheres = function() {
 
     var list = [];
 
-    var add = function (key, value, condition, operatorWithNext, operatorWithList, wheres, fieldType) {
-        var obj = {key: key, value: value, condition: condition};
+    const add = function(key, value, condition, operatorWithNext, operatorWithList, wheres, fieldType) {
+        const obj = { key: key, value: value, condition: condition };
         if (key === ENVIRONMENT.FULL_TEXT_SEARCH_KEY) {
             list = [];
             list.push(obj);
@@ -28,10 +28,10 @@ var Wheres = function () {
         list.push(obj);
     };
 
-    var remove = function (key, wheres) {
+    const remove = function(key, wheres) {
         var index = -1;
         if (wheres) {
-            wheres.forEach(function (item, i) {
+            wheres.forEach(function(item, i) {
                 if (item.key == key) {
                     index = i;
                     return -1;
@@ -41,7 +41,7 @@ var Wheres = function () {
                 wheres.splice(index, 1);
             }
         } else {
-            list.forEach(function (item, i) {
+            list.forEach(function(item, i) {
                 if (item.key == key) {
                     index = i;
                     return -1;
@@ -53,9 +53,9 @@ var Wheres = function () {
         }
     };
 
-    var removeByValue = function (value) {
+    const removeByValue = function(value) {
         var index = -1;
-        list.forEach(function (item, i) {
+        list.forEach(function(item, i) {
             if (item.value === value) {
                 index = i;
                 return -1;
@@ -66,17 +66,17 @@ var Wheres = function () {
         }
     };
 
-    var get = function (key, wheres) {
+    const get = function(key, wheres) {
         var result = null;
         if (wheres) {
-            wheres.forEach(function (item) {
+            wheres.forEach(function(item) {
                 if (item.key == key) {
                     result = item;
                     return -1;
                 }
             });
         } else {
-            list.forEach(function (item) {
+            list.forEach(function(item) {
                 if (item.key == key) {
                     result = item;
                     return -1;
@@ -86,12 +86,12 @@ var Wheres = function () {
         return result;
     };
 
-    var getList = function () {
+    const getList = function() {
         return list;
     };
 
-    var clearList = function () {
-      list = [];
+    const clearList = function() {
+        list = [];
     };
 
     return {
@@ -101,5 +101,5 @@ var Wheres = function () {
         get: get,
         getList: getList,
         clearList: clearList
-    }
+    };
 };

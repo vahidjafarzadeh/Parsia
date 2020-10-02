@@ -14,6 +14,7 @@ namespace Parsia.Areas.Administrator.Controllers
         {
             _systemConfig = options.Value;
         }
+
         public IActionResult Index()
         {
             ViewData["Title"] = _systemConfig.AdminTitlePage;

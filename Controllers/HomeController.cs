@@ -8,8 +8,8 @@ namespace Parsia.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IJwtHandlers _jwtHandlers;
+        private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger, IJwtHandlers jwtHandlers)
         {

@@ -2,13 +2,13 @@
  * Created by Farshad Kazemi on 2/17/2018.
  */
 
-const OrderBy = function () {
+const OrderBy = function() {
 
     let list = [];
 
     const add = (columnName, type, fieldType = "STRING") => {
         let index = -1;
-        list.forEach(function (item, i) {
+        list.forEach(function(item, i) {
             if (item.columnName === columnName) {
                 index = i;
                 return -1;
@@ -17,7 +17,7 @@ const OrderBy = function () {
         if (index > -1) {
             list[index].orderByType = type;
         } else {
-            list.push({columnName: columnName, orderByType: type, fieldType: fieldType});
+            list.push({ columnName: columnName, orderByType: type, fieldType: fieldType });
         }
     };
 
@@ -33,6 +33,6 @@ const OrderBy = function () {
         add: add,
         remove: remove,
         get: get
-    }
+    };
 
 };

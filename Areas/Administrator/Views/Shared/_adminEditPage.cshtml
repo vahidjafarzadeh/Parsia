@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"]</title>
+    <link href="~/lib/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/admin/edit.css" rel="stylesheet" />
+    @RenderSection("Meta", false)
+</head>
+<body>
+
+    @RenderBody()
+    <script src="~/lib/jquery/jquery-v3.3.1.min.js"></script>
+    <script src="~/lib/fontawesome/fontawesome-all.min.js" data-auto-add-css="false"></script>
+    <script src="~/lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/scrollbar/simplebar.js"></script>
+    <script src="~/lib/persiandate/persian-date-0.1.8b.min.js"></script>
+    <script src="~/lib/persiandate/persian-datepicker.min.js"></script>
+    <script src="~/lib/api/config.js"></script>
+    <script src="~/lib/api/util.js"></script>
+    <script src="~/lib/api/cookie.js"></script>
+    <script src="~/lib/api/storage.js"></script>
+    <script src="~/lib/api/order-by.js"></script>
+    <script src="~/lib/api/where.js"></script>
+    <script src="~/lib/api/handler.js"></script>
+    <script src="~/lib/api/api.js"></script>
+    <script src="~/js/admin/admin_bundle.js"></script>
+    <script src="~/js/admin/edit.js"></script>
+    @RenderSection("Script", false)
+</body>
+</html>

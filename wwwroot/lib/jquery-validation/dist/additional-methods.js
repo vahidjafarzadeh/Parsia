@@ -41,8 +41,8 @@
 
         $.validator.addMethod("rangeWords",
             function(value, element, params) {
-                var valueStripped = stripHtml(value),
-                    regex = /\b\w+\b/g;
+                const valueStripped = stripHtml(value);
+                const regex = /\b\w+\b/g;
                 return this.optional(element) ||
                     valueStripped.match(regex).length >= params[0] && valueStripped.match(regex).length <= params[1];
             },
@@ -55,9 +55,9 @@
         function(value, element, param) {
 
             // Split mime on commas in case we have multiple types we can accept
-            var typeParam = typeof param === "string" ? param.replace(/\s/g, "") : "image/*",
-                optionalValue = this.optional(element),
-                i,
+            var typeParam = typeof param === "string" ? param.replace(/\s/g, "") : "image/*";
+            const optionalValue = this.optional(element);
+            var i,
                 file,
                 regex;
 
@@ -78,7 +78,7 @@
 
                 // Check if the element has a FileList before checking each file
                 if (element.files && element.files.length) {
-                    regex = new RegExp(".?(" + typeParam + ")$", "i");
+                    regex = new RegExp(`.?(${typeParam})$`, "i");
                     for (i = 0; i < element.files.length; i++) {
                         file = element.files[i];
 
@@ -118,10 +118,11 @@
             }
 
             // Now '11 check'
-            var account = value.replace(/ /g, ""), // Remove spaces
-                sum = 0,
-                len = account.length,
-                pos,
+            const account = value.replace(/ /g, "");
+            var // Remove spaces
+                sum = 0;
+            const len = account.length;
+            var pos,
                 factor,
                 digit;
             for (pos = 0; pos < len; pos++) {
@@ -221,10 +222,13 @@
                 return true;
             }
 
-            var cifRegEx = new RegExp(/^([ABCDEFGHJKLMNPQRSUVW])(\d{7})([0-9A-J])$/gi);
-            var letter = value.substring(0, 1), // [ T ]
-                number = value.substring(1, 8), // [ P ][ P ][ N ][ N ][ N ][ N ][ N ]
-                control = value.substring(8, 9), // [ C ]
+            const cifRegEx = new RegExp(/^([ABCDEFGHJKLMNPQRSUVW])(\d{7})([0-9A-J])$/gi);
+            const letter = value.substring(0, 1);
+            const number = value.substring(1, 8);
+            const control = value.substring(8, 9);
+            var // [ T ]
+                // [ P ][ P ][ N ][ N ][ N ][ N ][ N ]
+                // [ C ]
                 all_sum = 0,
                 even_sum = 0,
                 odd_sum = 0,
@@ -493,16 +497,15 @@
  */
     $.validator.addMethod("currency",
         function(value, element, param) {
-            var isParamString = typeof param === "string",
-                symbol = isParamString ? param : param[0],
-                soft = isParamString ? true : param[1],
-                regex;
+            const isParamString = typeof param === "string";
+            var symbol = isParamString ? param : param[0];
+            const soft = isParamString ? true : param[1];
+            var regex;
 
             symbol = symbol.replace(/,/g, "");
             symbol = soft ? symbol + "]" : symbol + "]?";
-            regex = "^[" +
-                symbol +
-                "([1-9]{1}[0-9]{0,2}(\\,[0-9]{3})*(\\.[0-9]{0,2})?|[1-9]{1}[0-9]{0,}(\\.[0-9]{0,2})?|0(\\.[0-9]{0,2})?|(\\.[0-9]{1,2})?)$";
+            regex = `^[${symbol
+                }([1-9]{1}[0-9]{0,2}(\\,[0-9]{3})*(\\.[0-9]{0,2})?|[1-9]{1}[0-9]{0,}(\\.[0-9]{0,2})?|0(\\.[0-9]{0,2})?|(\\.[0-9]{1,2})?)$`;
             regex = new RegExp(regex);
             return this.optional(element) || regex.test(value);
 
@@ -538,9 +541,9 @@
  */
     $.validator.addMethod("dateITA",
         function(value, element) {
-            var check = false,
-                re = /^\d{1,2}\/\d{1,2}\/\d{4}$/,
-                adata,
+            var check = false;
+            const re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+            var adata,
                 gg,
                 mm,
                 aaaa,
@@ -576,7 +579,7 @@
     $.validator.addMethod("extension",
         function(value, element, param) {
             param = typeof param === "string" ? param.replace(/,/g, "|") : "png|jpe?g|gif";
-            return this.optional(element) || value.match(new RegExp("\\.(" + param + ")$", "i"));
+            return this.optional(element) || value.match(new RegExp(`\\.(${param})$`, "i"));
         },
         $.validator.format("Please enter a value with a valid extension."));
 
@@ -604,8 +607,8 @@
             }
 
             // Remove spaces and to upper case
-            var iban = value.replace(/ /g, "").toUpperCase(),
-                ibancheckdigits = "",
+            const iban = value.replace(/ /g, "").toUpperCase();
+            var ibancheckdigits = "",
                 leadingZeroes = true,
                 cRest = "",
                 cOperator = "",
@@ -624,7 +627,7 @@
             // country code ISO 3166-1 - two letters,
             // two check digits,
             // Basic Bank Account Number (BBAN) - up to 30 chars
-            var minimalIBANlength = 5;
+            const minimalIBANlength = 5;
             if (iban.length < minimalIBANlength) {
                 return false;
             }
@@ -708,7 +711,7 @@
             // Strict checking should return FALSE for unknown
             // countries.
             if (typeof bbanpattern !== "undefined") {
-                ibanregexp = new RegExp("^[A-Z]{2}\\d{2}" + bbanpattern + "$", "");
+                ibanregexp = new RegExp(`^[A-Z]{2}\\d{2}${bbanpattern}$`, "");
                 if (!(ibanregexp.test(iban))) {
                     return false; // Invalid country specific format
                 }
@@ -729,7 +732,7 @@
             // Calculate the result of: ibancheckdigits % 97
             for (p = 0; p < ibancheckdigits.length; p++) {
                 cChar = ibancheckdigits.charAt(p);
-                cOperator = "" + cRest + "" + cChar;
+                cOperator = `${cRest}${cChar}`;
                 cRest = cOperator % 97;
             }
             return cRest === 1;
@@ -818,10 +821,10 @@
                 return true;
             }
 
-            var nieRegEx = new RegExp(/^[MXYZ]{1}[0-9]{7,8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/gi);
-            var validChars = "TRWAGMYFPDXBNJZSQVHLCKET",
-                letter = value.substr(value.length - 1).toUpperCase(),
-                number;
+            const nieRegEx = new RegExp(/^[MXYZ]{1}[0-9]{7,8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}$/gi);
+            const validChars = "TRWAGMYFPDXBNJZSQVHLCKET";
+            const letter = value.substr(value.length - 1).toUpperCase();
+            var number;
 
             value = value.toString().toUpperCase();
 
@@ -890,13 +893,13 @@
                 return false;
             }
 
-            var arrSteps = [6, 5, 7, 2, 3, 4, 5, 6, 7];
+            const arrSteps = [6, 5, 7, 2, 3, 4, 5, 6, 7];
             var intSum = 0;
-            for (var i = 0; i < 9; i++) {
+            for (let i = 0; i < 9; i++) {
                 intSum += arrSteps[i] * value[i];
             }
-            var int2 = intSum % 11;
-            var intControlNr = (int2 === 10) ? 0 : int2;
+            const int2 = intSum % 11;
+            const intControlNr = (int2 === 10) ? 0 : int2;
 
             return (intControlNr === parseInt(value[9], 10));
         },
@@ -933,7 +936,7 @@
                 return true;
             }
             if (typeof param === "string") {
-                param = new RegExp("^(?:" + param + ")$");
+                param = new RegExp(`^(?:${param})$`);
             }
             return param.test(value);
         },
@@ -1086,14 +1089,14 @@
  */
     $.validator.addMethod("require_from_group",
         function(value, element, options) {
-            var $fields = $(options[1], element.form),
-                $fieldsFirst = $fields.eq(0),
-                validator =
-                    $fieldsFirst.data("valid_req_grp") ? $fieldsFirst.data("valid_req_grp") : $.extend({}, this),
-                isValid = $fields.filter(function() {
-                        return validator.elementValue(this);
-                    }).length >=
-                    options[0];
+            const $fields = $(options[1], element.form);
+            const $fieldsFirst = $fields.eq(0);
+            var validator =
+                $fieldsFirst.data("valid_req_grp") ? $fieldsFirst.data("valid_req_grp") : $.extend({}, this);
+            const isValid = $fields.filter(function() {
+                    return validator.elementValue(this);
+                }).length >=
+                options[0];
 
             // Store the cloned validator for future validation
             $fieldsFirst.data("valid_req_grp", validator);
@@ -1133,13 +1136,13 @@
  */
     $.validator.addMethod("skip_or_fill_minimum",
         function(value, element, options) {
-            var $fields = $(options[1], element.form),
-                $fieldsFirst = $fields.eq(0),
-                validator = $fieldsFirst.data("valid_skip") ? $fieldsFirst.data("valid_skip") : $.extend({}, this),
-                numberFilled = $fields.filter(function() {
-                    return validator.elementValue(this);
-                }).length,
-                isValid = numberFilled === 0 || numberFilled >= options[0];
+            const $fields = $(options[1], element.form);
+            const $fieldsFirst = $fields.eq(0);
+            var validator = $fieldsFirst.data("valid_skip") ? $fieldsFirst.data("valid_skip") : $.extend({}, this);
+            const numberFilled = $fields.filter(function() {
+                return validator.elementValue(this);
+            }).length;
+            const isValid = numberFilled === 0 || numberFilled >= options[0];
 
             // Store the cloned validator for future validation
             $fieldsFirst.data("valid_skip", validator);
@@ -1192,17 +1195,17 @@
  */
     $.validator.addMethod("stateUS",
         function(value, element, options) {
-            var isDefault = typeof options === "undefined",
-                caseSensitive = (isDefault || typeof options.caseSensitive === "undefined")
-                    ? false
-                    : options.caseSensitive,
-                includeTerritories = (isDefault || typeof options.includeTerritories === "undefined")
-                    ? false
-                    : options.includeTerritories,
-                includeMilitary = (isDefault || typeof options.includeMilitary === "undefined")
-                    ? false
-                    : options.includeMilitary,
-                regex;
+            const isDefault = typeof options === "undefined";
+            const caseSensitive = (isDefault || typeof options.caseSensitive === "undefined")
+                ? false
+                : options.caseSensitive;
+            const includeTerritories = (isDefault || typeof options.includeTerritories === "undefined")
+                ? false
+                : options.includeTerritories;
+            const includeMilitary = (isDefault || typeof options.includeMilitary === "undefined")
+                ? false
+                : options.includeMilitary;
+            var regex;
 
             if (!includeTerritories && !includeMilitary) {
                 regex =
@@ -1269,13 +1272,13 @@
                 return false;
             }
 
-            var LL = [
-                    "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "U", "V", "W",
-                    "X", "Y", "Z"
-                ],
-                VL = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 7, 9, 2, 3, 4, 5, 6, 7, 8, 9],
-                FL = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2],
-                rs = 0,
+            const LL = [
+                "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "R", "S", "T", "U", "V", "W",
+                "X", "Y", "Z"
+            ];
+            const VL = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 7, 9, 2, 3, 4, 5, 6, 7, 8, 9];
+            const FL = [8, 7, 6, 5, 4, 3, 2, 10, 0, 9, 8, 7, 6, 5, 4, 3, 2];
+            var rs = 0,
                 i,
                 n,
                 d,
