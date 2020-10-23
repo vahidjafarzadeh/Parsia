@@ -10,5 +10,13 @@
   {
     "outputFile": "wwwroot/css/admin/index.css",
     "inputFile": "wwwroot/css/admin/index.scss"
+  },
+  {
+    "outputFile": "wwwroot/pages/core/file/Index.css",
+    "inputFile": "wwwroot/pages/core/file/Index.scss"
+  },
+  {
+    "outputFile": "wwwroot/lib/ripple/_ripple.css",
+    "inputFile": "wwwroot/lib/ripple/_ripple.scss"
   }
 ]

@@ -7,7 +7,7 @@ var Wheres = function() {
     var list = [];
 
     const add = function(key, value, condition, operatorWithNext, operatorWithList, wheres, fieldType) {
-        const obj = { key: key, value: value, condition: condition };
+        const obj = { key: key, value: value, condition: condition, operatorWithNext:1, operatorWithList:1, wheres:[], fieldType:1 };
         if (key === ENVIRONMENT.FULL_TEXT_SEARCH_KEY) {
             list = [];
             list.push(obj);

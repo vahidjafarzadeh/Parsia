@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="utf-8" />
+    <title>مدیریت فایل</title>
+    <base href="/" />
+    <link href="/css/admin/index.min.css" rel="stylesheet" />
+    <link href="/lib/fontawesome/font-awesome.min.css" rel="stylesheet" />
+    <link href="/lib/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="/pages/core/file/index.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="container-fluid position-relative">
+        <div class="row">
+            <div class="col-sm-5 selected-file">
+                <span parsia-bundle-key="countFile"></span><span id="file-manager-selected-count">0</span>
+            </div>
+            <div class="col-sm-7">
+                <button class="btn material deep-purple btn-sm icon-btn btn-icon" id="file-manager-previous-folder" disabled="">
+                    <span class="icon-holder">
+                        <i class="icon fas fa-arrow-up ml-1"></i>
+                    </span>
+                    <span parsia-bundle-key="prevFolder"></span>
+                </button>
+                <button id="file-manager-new-folder-button" class="btn material warning btn-sm icon-btn btn-icon">
+                    <span class="icon-holder">
+                        <i class="icon ml-1 fas fa-folder-open"></i>
+                    </span>
+                    <span parsia-bundle-key="newFolder"></span>
+                </button>
+                <button id="file-manager-new-file-button" class="btn material success btn-sm icon-btn btn-icon">
+                    <span class="icon-holder">
+                        <i class="icon ml-1 fas fa-file"></i>
+                    </span>
+                    <span parsia-bundle-key="newFile"></span>
+                    <input class="d-none" name="file" type="file">
+                </button>
+            </div>
+        </div>
+        <div class="row content-wrapper">
+            <div class="col-sm-2">
+                <div class="inner">
+                    <header>
+                        <div class="wrapper">
+                            <div class="svg-holder ml-1">
+                                <i class="fas fa-filter"></i>
+                            </div>
+                            <span class="title" parsia-bundle-key="filter"></span>
+                        </div>
+                        <button id="file-manager-filter-btn" class="btn material btn-sm btn-light btn-filter" parsia-bundle-key="perform"></button>
+                    </header>
+                    <ul id="file-manager-filter-main-list">
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-10">
+                <section id="file-manager-file-list-wrapper" class="d-flex flex-wrap p-3 file-wrapper">
+
+                </section>
+                <div class="inner position-relative d-none">
+                    <section id="context-menu-wrapper">
+                        <div class="context-menu-item" id="context-menu-delete-item">
+                            <svg class="svg-inline--fa fa-trash fa-w-14 icon" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path></svg><!-- <i class="icon fas fa-trash"></i> -->
+                            <span class="title">حذف</span>
+                        </div>
+                        <div class="context-menu-item" id="context-menu-download-item">
+                            <svg class="svg-inline--fa fa-cloud-download-alt fa-w-20 icon" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="cloud-download-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zm-132.9 88.7L299.3 420.7c-6.2 6.2-16.4 6.2-22.6 0L171.3 315.3c-10.1-10.1-2.9-27.3 11.3-27.3H248V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v112h65.4c14.2 0 21.4 17.2 11.3 27.3z"></path></svg><!-- <i class="icon fas fa-cloud-download-alt"></i> -->
+                            <span class="title">دانلود</span>
+                        </div>
+                        <div class="context-menu-item" id="context-menu-get-link-item">
+                            <svg class="svg-inline--fa fa-link fa-w-16 icon" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="link" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"></path></svg><!-- <i class="icon fas fa-link"></i> -->
+                            <span class="title">دریافت لینک دانلود عمومی</span>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="/lib/jquery/jquery-v3.3.1.min.js"></script>
+    <script src="/lib/fontawesome/fontawesome-all.min.js"></script>
+    <script src="/lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/lib/scrollbar/simplebar.js"></script>
+    <script src="/lib/api/environment.js"></script>
+    <script src="/lib/api/config.js"></script>
+    <script src="/lib/api/util.js"></script>
+    <script src="/lib/api/where.js"></script>
+    <script src="/lib/api/order-by.js"></script>
+    <script src="/lib/api/storage.js"></script>
+    <script src="/lib/api/cookie.js"></script>
+    <script src="/lib/api/handler.js"></script>
+    <script src="/lib/api/api.js"></script>
+    <script src="/pages/core/file/bundle.js"></script>
+    <script src="/lib/ripple/ripple.min.js"></script>
+    <script src="/js/admin/index.js"></script>
+    <script src="/pages/core/file/index.js"></script>
+</body>
+</html>

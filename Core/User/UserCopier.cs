@@ -42,6 +42,7 @@ namespace Parsia.Core.User
 
         public Users SetMandatoryField(Users user, BusinessParam bp, bool setCreate)
         {
+            user.AccessKey = bp.UserInfo.AccessKey;
             user.UpdateBy = bp.UserInfo.UserId;
             user.Updated = DateTime.Now;
             if (!setCreate) return user;

@@ -263,7 +263,7 @@ $(function () {
         {
             name: "مدیریت فایل ها",
             title: "file manager",
-            path: "/page/core/file/index.html",
+            path: "/pages/core/file/index.html",
             icon: "<i class='fas fa-file'></i>",
             orderNode: 1,
             parentId: 4,

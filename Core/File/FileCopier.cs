@@ -20,7 +20,15 @@ namespace Parsia.Core.File
                 Extension = entity.Extension,
                 Path = entity.Path,
                 Thumbnail = entity.Thumbnail,
-                Title = entity.Title
+                Title = entity.Title,
+                CreateBy = null,
+                Created = null,
+                UpdateBy = null,
+                Deleted = entity.Deleted,
+                Active = entity.Active,
+                Updated = null,
+                Code = null,
+                FullTitle = null
             };
         }
 
@@ -51,6 +59,7 @@ namespace Parsia.Core.File
         public DataLayer.Model.Core.File.File SetMandatoryField(DataLayer.Model.Core.File.File file, BusinessParam bp,
             bool setCreate)
         {
+            file.AccessKey = bp.UserInfo.AccessKey;
             file.UpdateBy = bp.UserInfo.UserId;
             file.Updated = DateTime.Now;
             if (!setCreate) return file;

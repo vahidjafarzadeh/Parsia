@@ -1,0 +1,79 @@
+﻿@import "../../../sass/abstract/mixins";
+.selected-file {
+    span {
+        float: right;
+        font-size: 0.8rem;
+        margin: 0 5px;
+        font-family: iran;
+        font-weight: normal;
+        color: #15da93;
+        cursor: default;
+    }
+}
+.content-wrapper {
+    height: calc(100vh - 30px);
+
+    .col-sm-2 {
+        .inner {
+            background: #fcfcfc;
+            border: 1px solid #f0f0f0;
+            height: 100%;
+            min-height: 300px;
+            @include boxShadow(0 5px 10px #dfdfdf78);
+
+            ul {
+                margin: 0;
+                padding: 0;
+                height: calc(100% - 30px);
+                overflow: auto;
+
+                li {
+                    list-style-type: none;
+                    padding: 3px;
+                }
+            }
+
+            header {
+                background: #6c8ffa;
+                height: 30px;
+                overflow: hidden;
+
+                .btn-filter {
+                    margin: 5px;
+                    width: 50px;
+                    height: 20px;
+                    padding: 0;
+                    font-size: 0.7rem;
+                    color: #6c8ffa;
+                }
+
+                .wrapper {
+                    float: right;
+                    width: auto;
+                    padding: 5px;
+                    @include flexBox(flex);
+                    @include justifyContent(center);
+                    @include flexDirection(row);
+
+                    .svg-holder {
+                        color: white;
+                        padding-top: 2px;
+                    }
+
+                    .title {
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+.file-wrapper {
+    width: 100%;
+    background: #fcfcfc;
+    height: calc(100vh - 34px);
+    margin: 2px 0;
+    border: 1px solid #f0f0f0;
+    overflow: auto;
+    @include boxShadow(0 5px 10px #dfdfdf78);
+}

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using WebMarkupMin.AspNetCore3;
 
 namespace Parsia
@@ -33,7 +34,9 @@ namespace Parsia
             {
                 options.UseSqlServer("Data Source =.;Initial Catalog=Parsi;Integrated Security=True");
             });
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+            }); ;
             services.AddLogging();
             services.AddCors();
             services.AddJwt(Configuration);

@@ -1,18 +1,18 @@
-﻿using DataLayer.Tools;
+﻿using System.Net.Mime;
+using DataLayer.Tools;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Parsia.Core.File
 {
     [ApiController]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json)]
     public class FileService : ControllerBase
     {
         [HttpPost]
         [Route("service/file/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "File", "search");
@@ -26,12 +26,10 @@ namespace Parsia.Core.File
         public ServiceResult<object> Save(FileDto dto)
         {
             if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
+                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid, Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File",
-                dto.EntityId == null ? "edit" : "save");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "File", dto.EntityId == null ? "edit" : "save");
             return checkAccess.Done ? FileFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
 
@@ -77,6 +75,19 @@ namespace Parsia.Core.File
             var checkAccess = UserSessionManager.CheckAccess(bp, "File", "search");
             return checkAccess.Done
                 ? FileFacade.GetInstance().AutocompleteView(bp)
+                : checkAccess;
+        }
+
+        //other need
+        [HttpPost]
+        [Route("service/file/getAllExtension")]
+        public ServiceResult<object> GetAllExtension(Clause clause)
+        {
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var bp = new BusinessParam(userInfo, clause);
+            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "search");
+            return checkAccess.Done
+                ? FileFacade.GetInstance().GetAllExtension(bp)
                 : checkAccess;
         }
     }

@@ -19,6 +19,7 @@ namespace Parsia.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 
