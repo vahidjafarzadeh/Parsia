@@ -140,22 +140,21 @@ const changeAllBundle = () => {
         });
 };
 const createTab = (data) => {
-    let flag = true;
-    $.each(tabContainer.find("li"),
-        (i, v) => {
-            if ($(v).data()) {
-                if ($(v).data().value.entityId === data.entityId) {
-                    $(v).click();
-                    flag = false;
-                }
-
-            }
-        });
-    if (flag) {
+//    let flag = true;
+//    $.each(tabContainer.find("li"),
+//        (i, v) => {
+//            if ($(v).data()) {
+//                if ($(v).data().value.entityId === data.entityId) {
+//                    $(v).click();
+//                    flag = false;
+//                }
+//
+//            }
+//        });
+//    if (flag) {
         tabContainer.find(".active").removeClass("active");
         const uuid = new Date().getTime();
-        const li = $("<li/>",
-            {
+        const li = $("<li/>",{
                 class: "active",
                 click: () => {
                     tabContainer.find(".active").removeClass("active");
@@ -183,8 +182,7 @@ const createTab = (data) => {
                 }
             });
         const spanText = $("<span/>", { class: "text", text: data.name });
-        const spanIconRemove = $("<span/>",
-            {
+        const spanIconRemove = $("<span/>",{
                 class: "icon remove",
                 html: `<i class="fas fa-times"></i>`,
                 click: () => {
@@ -194,8 +192,7 @@ const createTab = (data) => {
                     mainSection.find(`#${uuid}`).remove();
                 }
             });
-        const spanIconRefresh = $("<span/>",
-            {
+        const spanIconRefresh = $("<span/>",{
                 class: "icon refresh",
                 html: `<i class="fas fa-sync-alt"></i>`,
                 click: () => {
@@ -206,7 +203,7 @@ const createTab = (data) => {
         li.data({ value: data });
         tabContainer.append(li);
         li.trigger("click");
-    }
+//    }
 };
 
 $(function () {
@@ -281,7 +278,7 @@ $(function () {
         {
             name: "آیکون ها",
             title: "icons",
-            path: "/",
+            path: "/pages/core/icon/index.html",
             icon: "<i class='fas fa-atom'></i>",
             orderNode: 3,
             parentId: 4,

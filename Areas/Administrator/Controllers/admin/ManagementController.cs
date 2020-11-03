@@ -1,6 +1,5 @@
 ﻿using DataLayer.Tools;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace Parsia.Areas.Administrator.Controllers
 {
@@ -8,16 +7,10 @@ namespace Parsia.Areas.Administrator.Controllers
     [Route("admin")]
     public class ManagementController : Controller
     {
-        private readonly SystemConfig _systemConfig;
-
-        public ManagementController(IOptions<SystemConfig> options)
-        {
-            _systemConfig = options.Value;
-        }
 
         public IActionResult Index()
         {
-            ViewData["Title"] = _systemConfig.AdminTitlePage;
+            ViewData["Title"] = SystemConfig.AdminTitlePage;
             ViewData["UserImage"] = "avatar.png";
             return View();
         }

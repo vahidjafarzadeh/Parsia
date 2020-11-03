@@ -1,26 +1,47 @@
+using System.IO;
 using DataLayer.Context;
 using DataLayer.Token;
 using DataLayer.Tools;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 using WebMarkupMin.AspNetCore3;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Parsia
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IHostingEnvironment HostingEnvironment { get;}
+        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            HostingEnvironment = hostingEnvironment;
+            BuildAppSettingsProvider(hostingEnvironment);
         }
 
-        public IConfiguration Configuration { get; }
+        #region SystemConfig
+        private void BuildAppSettingsProvider(IHostingEnvironment hostingEnvironment)
+        {
+            var section = Configuration.GetSection("SystemConfig");
+            SystemConfig.AdminTitlePage = section["AdminTitlePage"];
+            SystemConfig.Root = section["Root"];
+            SystemConfig.ApiHashEncryption = section["ApiHashEncryption"];
+            SystemConfig.SystemRoleId = long.Parse(section["SystemRoleId"]);
+            SystemConfig.SystemAdminRoleId = long.Parse(section["SystemAdminRoleId"]);
+            SystemConfig.ApplicationAdminRoleId = long.Parse(section["ApplicationAdminRoleId"]);
+        }
+        #endregion
+
+
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,7 +62,23 @@ namespace Parsia
             services.AddCors();
             services.AddJwt(Configuration);
             services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
-            services.Configure<SystemConfig>(Configuration.GetSection("SystemConfig"));
+            #region Max Size To Upload
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = int.MaxValue;
+            });
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = int.MaxValue;
+            });
+            services.Configure<FormOptions>(options =>
+            {
+                options.ValueLengthLimit = int.MaxValue;
+                options.MultipartBodyLengthLimit = int.MaxValue;
+                options.MultipartHeadersLengthLimit = int.MaxValue;
+            });
+            #endregion
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -25,14 +25,14 @@ const OrderBy = function() {
         list = list.filter(item => item.columnName !== columnName);
     };
 
-    const get = () => {
+    const getList = () => {
         return list;
     };
 
     return {
         add: add,
         remove: remove,
-        get: get
+        getList: getList
     };
 
 };

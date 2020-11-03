@@ -3,7 +3,7 @@ var errorHandler = function (data) {
     showConfirmModalComplete = false;
     hideLoading();
     if (data && data.done !== undefined && data.done === false) {
-        if (data.ErrorCode === 2 || data.ErrorCode === 3 || data.ErrorCode === 4 || data.ErrorCode === 6 || data.ErrorCode === 7) {
+        if (data.errorCode === 2 || data.errorCode === 3 || data.errorCode === 4 || data.errorCode === 6 || data.errorCode === 7) {
             localStorage.removeItem("ticket");
             setTimeout(() => { window.location.href = Config.applicationUrl + "/login"; }, 2000);
         }
@@ -127,12 +127,19 @@ var createConfirmModal = function () {
     $("body").append(modal);
 };
 var showConfirm = function (message) {
+    debugger;
     if ($("body").find("#confirmModal").length === 0) {
         createConfirmModal();
     }
     setTimeout(() => {
-        $('#confirmModal .modal-content').removeAttr('class').addClass('modal-content modal-col-teal');
-        $('#confirmModal .modal-content .modal-body').text(message);
+        if (typeof message === "object") {
+            $('#confirmModal .modal-content').removeAttr('class').addClass('modal-content modal-col-teal');
+            $('#confirmModal .modal-content .modal-body').text(message.body);
+        } else {
+            $('#confirmModal .modal-content').removeAttr('class').addClass('modal-content modal-col-teal');
+            $('#confirmModal .modal-content .modal-body').text(message);
+        }
+       
         $('#confirmModal').modal('show');
     }, 10);
 };

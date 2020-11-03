@@ -1224,7 +1224,7 @@ body, html {
       color: #dc3545; }
 
 .modal-col-teal {
-  background-color: #15da93 !important; }
+  background-color: #249d71 !important; }
   .modal-col-teal .modal-header {
     padding: 0; }
     .modal-col-teal .modal-header .modal-title {
@@ -1233,7 +1233,8 @@ body, html {
       color: white; }
   .modal-col-teal .modal-body {
     text-align: right;
-    color: white; }
+    color: white;
+    font-size: 0.8rem; }
   .modal-col-teal .modal-footer {
     padding: 0; }
     .modal-col-teal .modal-footer button {

@@ -18,5 +18,9 @@
   {
     "outputFile": "wwwroot/lib/ripple/_ripple.css",
     "inputFile": "wwwroot/lib/ripple/_ripple.scss"
+  },
+  {
+    "outputFile": "wwwroot/pages/core/icon/index.css",
+    "inputFile": "wwwroot/pages/core/icon/index.scss"
   }
 ]
