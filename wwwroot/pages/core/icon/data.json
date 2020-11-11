@@ -63,7 +63,7 @@
         "name": "sun"
       },
       {
-          "class": "fas fa-temperature-high",
+        "class": "fas fa-temperature-high",
         "name": "temperature-high"
       },
       {
@@ -313,7 +313,6 @@
         "class": "fas fa-anchor",
         "name": "anchor"
       },
-
       {
         "class": "fas fa-apple-alt",
         "name": "apple-alt"
@@ -2030,7 +2029,7 @@
       {
         "class": "fas fa-robot",
         "name": "robot"
-      },{
+      }, {
         "class": "fas fa-rocket",
         "name": "rocket"
       },
@@ -2075,7 +2074,6 @@
         "class": "fas fa-ship",
         "name": "ship"
       }
-
     ]
   },
   {
@@ -2314,7 +2312,6 @@
         "class": "fas fa-volume-up",
         "name": "volume-up"
       }
-
     ]
   },
   {
@@ -2565,94 +2562,94 @@
       }
     ]
   },
-        {
-          "title" : "فایل",
-          "data":[
-        {
-          "class": "fas fa-archive",
-          "name": "archive"
-        },
-        {
-          "class": "fas fa-clone",
-          "name": "clone"
-        },
-        {
-          "class": "fas fa-copy",
-          "name": "copy"
-        },
-        {
-          "class": "fas fa-cut",
-          "name": "cut"
-        },
-            {
-              "class": "fas fa-file",
-              "name": "file"
-            },
-            {
-              "class": "fas fa-file-archive",
-              "name": "file-archive"
-            },
-            {
-              "class": "fas fa-file-alt",
-              "name": "file-alt"
-            },
-            {
-              "class": "fas fa-file-audio",
-              "name": "file-audio"
-            },
-            {
-              "class": "fas fa-file-code",
-              "name": "file-code"
-            },
-            {
-              "class": "fas fa-file-excel",
-              "name": "file-excel"
-            },
-            {
-              "class": "fas fa-file-export",
-              "name": "file-export"
-            },
-            {
-              "class": "fas fa-file-image",
-              "name": "file-image"
-            },
-            {
-              "class": "fas fa-file-pdf",
-              "name": "file-pdf"
-            },
-            {
-              "class": "fas fa-file-powerpoint",
-              "name": "file-powerpoint"
-            },
-            {
-              "class": "fas fa-file-video",
-              "name": "file-video"
-            },
-            {
-              "class": "fas fa-file-word",
-              "name": "file-word"
-            },
-            {
-              "class": "fas fa-folder",
-              "name": "folder"
-            },
-            {
-              "class": "fas fa-folder-open",
-              "name": "folder-open"
-            },
-            {
-              "class": "fas fa-paste",
-              "name": "paste"
-            },
-            {
-              "class": "fas fa-save",
-              "name": "save"
-            },
-            {
-              "class": "fas fa-sticky-note",
-              "name": "sticky-note"
-            }
-]
+  {
+    "title": "فایل",
+    "data": [
+      {
+        "class": "fas fa-archive",
+        "name": "archive"
+      },
+      {
+        "class": "fas fa-clone",
+        "name": "clone"
+      },
+      {
+        "class": "fas fa-copy",
+        "name": "copy"
+      },
+      {
+        "class": "fas fa-cut",
+        "name": "cut"
+      },
+      {
+        "class": "fas fa-file",
+        "name": "file"
+      },
+      {
+        "class": "fas fa-file-archive",
+        "name": "file-archive"
+      },
+      {
+        "class": "fas fa-file-alt",
+        "name": "file-alt"
+      },
+      {
+        "class": "fas fa-file-audio",
+        "name": "file-audio"
+      },
+      {
+        "class": "fas fa-file-code",
+        "name": "file-code"
+      },
+      {
+        "class": "fas fa-file-excel",
+        "name": "file-excel"
+      },
+      {
+        "class": "fas fa-file-export",
+        "name": "file-export"
+      },
+      {
+        "class": "fas fa-file-image",
+        "name": "file-image"
+      },
+      {
+        "class": "fas fa-file-pdf",
+        "name": "file-pdf"
+      },
+      {
+        "class": "fas fa-file-powerpoint",
+        "name": "file-powerpoint"
+      },
+      {
+        "class": "fas fa-file-video",
+        "name": "file-video"
+      },
+      {
+        "class": "fas fa-file-word",
+        "name": "file-word"
+      },
+      {
+        "class": "fas fa-folder",
+        "name": "folder"
+      },
+      {
+        "class": "fas fa-folder-open",
+        "name": "folder-open"
+      },
+      {
+        "class": "fas fa-paste",
+        "name": "paste"
+      },
+      {
+        "class": "fas fa-save",
+        "name": "save"
+      },
+      {
+        "class": "fas fa-sticky-note",
+        "name": "sticky-note"
+      }
+    ]
   },
   {
     "title": "کاربران و افراد",
@@ -3382,7 +3379,6 @@
         "class": "fas fa-volleyball-ball",
         "name": "volleyball-ball"
       }
-
     ]
   },
   {

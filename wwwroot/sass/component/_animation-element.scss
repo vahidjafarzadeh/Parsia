@@ -1,0 +1,18 @@
+@import "../abstract/mixins";
+
+[ksun-animation-element] {
+  opacity: 0;
+  z-index: -1;
+  @include transition(750ms ease-in-out);
+  &.visible {
+    opacity: 1;
+    z-index: 1;
+  }
+}
+
+[ksun-animation-enter-direction="bottom"] {
+  @include transform(translateY(-50%));
+  &.visible {
+    @include transform(translateY(0));
+  }
+}

@@ -22,5 +22,9 @@
   {
     "outputFile": "wwwroot/pages/core/icon/index.css",
     "inputFile": "wwwroot/pages/core/icon/index.scss"
+  },
+  {
+    "outputFile": "wwwroot/sass/core/core.css",
+    "inputFile": "wwwroot/sass/core/core.scss"
   }
 ]

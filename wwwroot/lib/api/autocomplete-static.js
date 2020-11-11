@@ -2,18 +2,18 @@
  * Created by MFS on 3/02/2019.
  */
 
-var AutocompleteStatic = function () {
+var AutocompleteStatic = function() {
 
     var config = {
         element: undefined,
-        placeholder: 'Enter Value',
-        url: '',
+        placeholder: "Enter Value",
+        url: "",
         type: ENVIRONMENT.Autocomplete.TYPE.STATIC,
-        data: [{id: 1, title: '', object: {}}],
+        data: [{ id: 1, title: "", object: {} }],
         handler: new Handler(),
         onSelect: null
     };
-    var init = function (configObject) {
+    const init = function(configObject) {
         if (configObject) {
             if (configObject.element) {
                 config.element = configObject.element;
@@ -50,7 +50,8 @@ var AutocompleteStatic = function () {
             }
 
             if (configObject.dynamicConfig) {
-                config.minCharacter = configObject.dynamicConfig.minCharacter ? configObject.dynamicConfig.minCharacter : 1;
+                config.minCharacter =
+                    configObject.dynamicConfig.minCharacter ? configObject.dynamicConfig.minCharacter : 1;
                 config.searchColumn = configObject.dynamicConfig.searchColumn;
                 config.text = configObject.dynamicConfig.text;
                 config.value = configObject.dynamicConfig.value;
@@ -62,7 +63,7 @@ var AutocompleteStatic = function () {
                     config.searchColumn = configObject.searchColumn;
                 }
                 if (configObject.text) {
-                    config.text = configObject.text ? configObject.text : 'title';
+                    config.text = configObject.text ? configObject.text : "title";
                 }
                 if (configObject.value) {
                     config.value = configObject.value ? configObject.value : "entityId";
@@ -70,73 +71,78 @@ var AutocompleteStatic = function () {
             }
         }
         switch (config.type) {
-            case ENVIRONMENT.Autocomplete.TYPE.STATIC:
-                initStaticAutocomplete();
-                break;
+        case ENVIRONMENT.Autocomplete.TYPE.STATIC:
+            initStaticAutocomplete();
+            break;
         }
     };
 
-    var initStaticAutocomplete = function () {
+    var initStaticAutocomplete = function() {
         var staticWhere = new Wheres();
         if (config.where) {
             staticWhere = config.where;
         }
-        var staticHandler = new Handler();
-        staticHandler.beforeSend = function () {
+        const staticHandler = new Handler();
+        staticHandler.beforeSend = function() {
         };
-        staticHandler.complete = function () {
+        staticHandler.complete = function() {
         };
-        staticHandler.error = function () {
+        staticHandler.error = function() {
         };
-        var staticFilter = new Filter(1, 100, staticWhere.getList());
+        const staticFilter = new Filter(1, 100, staticWhere.getList());
         var staticItem = {};
 
         staticItem = Storage.get(config.staticKey);
         if (staticItem) { // agar baraye key morde-e nazar data vojood dashte bashad
-            if (Util.differentTime(new Date().getTime(), staticItem.createdTime, Config.AUTOCOMPLETE_CACHE_TIMEOUT)) { // agar bazeye zamani b payan nareside bashad, data az storage khande shavad
+            if (Util.differentTime(new Date().getTime(), staticItem.createdTime, Config.AUTOCOMPLETE_CACHE_TIMEOUT)
+            ) { // agar bazeye zamani b payan nareside bashad, data az storage khande shavad
                 fillStaticAutocomplete(staticItem.data);
             } else {
-                staticHandler.success = function (data) {
+                staticHandler.success = function(data) {
                     if (data.done) {
                         // map result
                         var temp = [];
-                        data.result.forEach(function (item) {
-                            var obj = {value: item.entityId, text: item.name, object: item};
+                        data.result.forEach(function(item) {
+                            const obj = { value: item.entityId, text: item.name, object: item };
                             temp.push(obj);
                         });
                         fillStaticAutocomplete(temp);
-                        staticItem = {createdTime: new Date().getTime(), data: temp};
+                        staticItem = { createdTime: new Date().getTime(), data: temp };
                         Storage.set(config.staticKey, staticItem);
                     }
                 };
-                Api.gridView({url: 'EntityCustom/autocompleteView', filter: staticFilter.get(), handler: staticHandler});
+                Api.gridView({
+                    url: "EntityCustom/autocompleteView",
+                    filter: staticFilter.get(),
+                    handler: staticHandler
+                });
             }
         } else {
-            staticHandler.success = function (data) {
+            staticHandler.success = function(data) {
                 if (data.done) {
                     // map result
                     var temp = [];
-                    data.result.forEach(function (item) {
-                        var obj = {value: item.entityId, text: item.title, object: item};
+                    data.result.forEach(function(item) {
+                        const obj = { value: item.entityId, text: item.title, object: item };
                         temp.push(obj);
                     });
                     fillStaticAutocomplete(temp);
-                    staticItem = {createdTime: new Date().getTime(), data: temp};
+                    staticItem = { createdTime: new Date().getTime(), data: temp };
                     Storage.set(config.staticKey, staticItem);
                 }
             };
-            Api.gridView({url: 'EntityCustom/autocompleteView', filter: staticFilter.get(), handler: staticHandler});
+            Api.gridView({ url: "EntityCustom/autocompleteView", filter: staticFilter.get(), handler: staticHandler });
         }
 
     };
-    var fillStaticAutocomplete = function (data) {
+    var fillStaticAutocomplete = function(data) {
         config.element.empty();
         if (data) {
-            data.forEach(function (item) {
-                var option = $('<option></option>');
-                option.attr('value', item.value);
+            data.forEach(function(item) {
+                const option = $("<option></option>");
+                option.attr("value", item.value);
                 option.text(item.text);
-                option.data('object', item.object);
+                option.data("object", item.object);
                 config.element.append(option);
             });
         }
@@ -146,28 +152,32 @@ var AutocompleteStatic = function () {
             dropdownCssClass: config.dropdownCssClass ? config.dropdownCssClass : null,
             containerCssClass: config.containerCssClass ? config.containerCssClass : null,
             language: {
-                noResults: function () {
-                    return GeneralBundle['$autocompleteNoData'];
+                noResults: function() {
+                    return GeneralBundle["$autocompleteNoData"];
                 }
             },
-            escapeMarkup: function (markup) {
+            escapeMarkup: function(markup) {
                 return markup;
             }
-        }).on('select2:select', function (e) {
-            var optionElement = $(e.params.data.element);
-            var object = optionElement.data('object');
-            if (config.onSelect) {
-                config.onSelect.apply(null, [{
-                    object: object,
-                    value: optionElement.attr('value'),
-                    title: optionElement.text()
-                }, e])
-            }
-        });
+        }).on("select2:select",
+            function(e) {
+                const optionElement = $(e.params.data.element);
+                const object = optionElement.data("object");
+                if (config.onSelect) {
+                    config.onSelect.apply(null,
+                        [
+                            {
+                                object: object,
+                                value: optionElement.attr("value"),
+                                title: optionElement.text()
+                            }, e
+                        ]);
+                }
+            });
     };
 
     return {
         init: init
-    }
+    };
 
 };

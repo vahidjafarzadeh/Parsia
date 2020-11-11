@@ -1,0 +1,208 @@
+@import "../abstract/mixins";
+@import "../abstract/variables";
+$floating-form-base-color: $base-color;
+@import "../component/floating-form";
+@import "../component/floating-form-region";
+$floating-form-select-base-color: $base-color;
+@import "../component/floating-form-select2";
+$modal-backdrop-opacity:.8;
+$simple-search-wrapper-width: 150px;
+.search_filter {
+  width: 100%;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  z-index: 1;
+  position: absolute;
+  top: 45px;
+  right: 10px;
+  .container-search {
+    width: 300px;
+    margin-top: 6px;
+    .card{
+      border: 0;
+      .data-container {
+        overflow: auto;
+        height: calc(100vh - 70px);
+      }
+    }
+  }
+}
+.filter-search-btn {
+  width: 100%;
+  position: relative;
+  background: transparent;
+  height: 33px;
+  padding: 0;
+  margin: 0;
+  z-index: 1;
+}
+.fade_grid {
+  @include opacity(0.1);
+  @include transition(all 0.5s);
+}
+
+
+.index {
+  background-color: $body-bg;
+  > .scroll-container {
+    padding: .5rem;
+  }
+  .modal-backdrop {
+    &.show { opacity: $modal-backdrop-opacity; }
+  }
+  .search-bar {
+    margin: 0;
+    padding: $search-bar-padding;
+    @include overFlowX(hidden);
+    @include overFlowY(hidden);
+    @include boxSizing(border-box);
+
+    @media screen and (min-width: map_get($grid-breakpoints, 'sm')){
+      margin: $search-bar-margin;
+    }
+
+    #simple-search-wrapper {
+      width: 100%;
+      .input-group-item-wrapper {
+        width: 100%;
+      }
+      @media screen and (min-width: map_get($grid-breakpoints, 'sm')){
+        width: $simple-search-wrapper-width;
+      }
+    }
+
+    .col-form-label {
+      font-size: $simple-search-label-font-size;
+      margin-right: $simple-search-label-margin;
+    }
+
+    .search-bar-btn {
+      height: 33px;
+      @include flexBox(flex);
+      @include alignItem(center);
+      @media screen and (min-width: map_get($grid-breakpoints, 'sm')){
+        margin-left: $advance-search-btn-margin;
+      }
+    }
+
+    .input-group {
+      @include flex(1);
+    }
+
+  }
+  .advance-search-wrapper {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: -100vw;
+    background-color: $advance-search-bg;
+    z-index:$zindex-advance-search;
+    padding: $advance-search-padding;
+    @include transition($transition-duration);
+    &.visible {
+      left: 0;
+    }
+    .a-s-input-wrapper {
+      &.state-one {
+        .a-s-value {
+          padding-right: $a-s-search-input-icon-size + 5px;
+        }
+      }
+      &.state-two {
+        .a-s-value {
+          padding-right: ($a-s-search-input-icon-size*2) + 5px;
+        }
+      }
+    }
+    .remove-icon, .add-icon {
+      position: absolute;
+      width: $a-s-search-input-icon-size;
+      height: $a-s-search-input-icon-size;
+      right: 0;
+      font-size: $a-s-search-input-icon-font-size;
+      border-left: 1px solid $a-s-search-input-icon-border-color;
+      cursor: pointer;
+      color: darken($a-s-search-input-icon-border-color, 10%);
+      @include transition($transition-duration);
+    }
+    .remove-icon {
+      right: $a-s-search-input-icon-size;
+    }
+    .add-icon {
+      @include borderRadius(0 .25rem .25rem 0);
+    }
+
+  }
+  .edit-frame-wrapper {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    right: -100vw;
+    background-color: $advance-search-bg;
+    z-index:$zindex-edit-frame;
+    @include transition($transition-duration);
+    &.visible {
+      right: 0
+    }
+    .edit-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  }
+
+  .simple-search-container {
+    max-width: 950px;
+    margin: 0 auto;
+  }
+  .simple-search-fieldset {
+    form {
+      padding: 1rem;
+      background-color: white;
+      border: 1px solid #eee;
+      @include borderRadius(.5rem);
+      @include boxShadow(0 7px 7px -3px rgba(231, 231, 231, 0.3));
+    }
+  }
+  .btn-wrapper {
+    margin: 1rem auto;
+    max-width: 400px;
+    @include flexBox(flex);
+    button {
+      @include flex(1);
+    }
+    :last-child {
+      margin-left: .5rem;
+    }
+  }
+}
+
+
+// region
+[lang=fa], [lang=ar] {
+  .index {
+    @media screen and (min-width: map_get($grid-breakpoints, 'sm')) {
+      .search-bar-btn {
+        margin-right: $advance-search-btn-margin;
+        margin-left: 0;
+      }
+    }
+    .advance-search-wrapper {
+      left: initial;
+      right: -100vw;
+      &.visible {
+        right: 0;
+      }
+    }
+    .edit-frame-wrapper {
+      right: initial;
+      left: -100vw;
+      &.visible {
+        left: 0;
+      }
+    }
+  }
+}

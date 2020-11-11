@@ -1,0 +1,14 @@
+@import "../abstract/mixins";
+@import "../abstract/colors";
+
+$border-color: #ede7e7;
+
+.cke {
+  .cke_button {
+    @for $i from 1 through 15 {
+      &:nth-child(#{$i}) {
+        border-color: darken(adjust_hue(#8954ff, 7deg * $i), 10%) !important;
+      }
+    }
+  }
+}

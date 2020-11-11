@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DataLayer.Tools;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +8,7 @@ namespace Parsia.Core.File
     [ApiController]
     public class FileService : ControllerBase
     {
-        private IWebHostEnvironment _hostEnvironment;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
         public FileService(IWebHostEnvironment environment)
         {
@@ -33,7 +32,8 @@ namespace Parsia.Core.File
         public ServiceResult<object> Save(FileDto dto)
         {
             if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid, Enumerator.ErrorCode.ModelNotValid.GetDescription());
+                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
+                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo);
             var checkAccess = UserSessionManager.CheckAccess(bp, "File", dto.EntityId == null ? "edit" : "save");
@@ -94,6 +94,7 @@ namespace Parsia.Core.File
                 ? FileFacade.GetInstance().GetAllExtension(bp)
                 : checkAccess;
         }
+
         [HttpPost]
         [Route("service/file/createFolder")]
         public ServiceResult<object> CreateFolder(FolderDto dto)
@@ -102,11 +103,11 @@ namespace Parsia.Core.File
             var bp = new BusinessParam(userInfo, _hostEnvironment);
             var checkAccess = UserSessionManager.CheckAccess(bp, "File", "save");
             return checkAccess.Done
-                ? FileFacade.GetInstance().CreateFolder(bp,dto)
+                ? FileFacade.GetInstance().CreateFolder(bp, dto)
                 : checkAccess;
         }
-        
-        
+
+
         [HttpPost]
         [Route("service/file/createFile")]
         public ServiceResult<object> CreateFile()
@@ -139,7 +140,6 @@ namespace Parsia.Core.File
             var thumbnail = Request.Query.ContainsKey("thumbnail");
             var bp = new BusinessParam(_hostEnvironment);
             return await FileFacade.GetInstance().Download(file, bp, thumbnail);
-
         }
     }
 }

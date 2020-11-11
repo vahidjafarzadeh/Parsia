@@ -1,0 +1,45 @@
+@import "../abstract/mixins";
+
+$material-datepicker-base-color: #43c8ba !default;
+$material-datepicker-secondary-color: #2db4aa !default;
+$material-datepicker-shadow-color: lighten($material-datepicker-base-color, 30%) !default;
+
+.datepicker-plot-area {
+  border: 2px solid $material-datepicker-base-color;
+  @include boxShadow(0 5px 250px $material-datepicker-shadow-color !important);
+
+  .table-days {
+    span {
+      &:hover {
+        background-color: $material-datepicker-base-color !important;
+      }
+      &.selected {
+        background-color: $material-datepicker-base-color !important;
+        text-shadow: none !important;
+      }
+    }
+  }
+  .datepicker-month-view {
+    .month-item {
+      &:hover {
+        background-color: $material-datepicker-base-color !important;
+      }
+      &.selected {
+        background-color: $material-datepicker-base-color !important;
+        text-shadow: none !important;
+      }
+    }
+
+  }
+  .datepicker-year-view {
+    .year-item {
+      &:hover {
+        background-color: $material-datepicker-base-color !important;
+      }
+      &.selected {
+        background-color: $material-datepicker-base-color !important;
+        text-shadow: none !important;
+      }
+    }
+  }
+}

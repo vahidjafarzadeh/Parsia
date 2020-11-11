@@ -1,6 +1,7 @@
 ﻿using System;
 using DataLayer.Base;
 using DataLayer.Tools;
+using Parsia.Core.User;
 
 namespace Parsia.Core.ComboVal
 {
@@ -8,14 +9,33 @@ namespace Parsia.Core.ComboVal
     {
         public ComboValDto GetDto(DataLayer.Model.Core.ComboVal.ComboVal entity)
         {
-            return new ComboValDto
+            var userCopier = new UserCopier();
+            var createUser = entity.CreateUserEntity != null
+                ? userCopier.GetDto(entity.CreateUserEntity)
+                : new UserDto();
+            var updateUser = entity.CreateUserEntity != null
+                ? userCopier.GetDto(entity.CreateUserEntity)
+                : new UserDto();
+            var comboValDto = new ComboValDto
             {
                 EntityId = entity.EntityId,
                 Name = entity.Name,
                 AdminOnly = entity.AdminOnly,
-                ParentId = entity.ParentId,
-                Value = entity.Value
+                Value = entity.Value,
+                Created = entity.Created?.GetTimeStamp(),
+                Updated = entity.Updated?.GetTimeStamp(),
+                CreatedBy = createUser,
+                UpdatedBy = updateUser,
+                Active = entity.Active,
+                Code = entity.Code
             };
+            if (entity.CurrentComboVal != null)
+                comboValDto.Parent = new ComboValDto
+                {
+                    EntityId = entity.CurrentComboVal.EntityId,
+                    Name = entity.CurrentComboVal?.Name
+                };
+            return comboValDto;
         }
 
         public DataLayer.Model.Core.ComboVal.ComboVal GetEntity(ComboValDto dto, BusinessParam bp, bool setCreate)
@@ -26,10 +46,10 @@ namespace Parsia.Core.ComboVal
                 Active = dto.Active,
                 Code = dto.Code,
                 Deleted = dto.Deleted,
-                FullTitle = dto.Name + " | " + dto.Value + " | " + dto.EntityId + " | " + dto.ParentId,
+                FullTitle = dto.Name + " | " + dto.Value + " | " + dto.EntityId + " | " + dto.Parent,
                 Name = dto.Name,
                 AdminOnly = dto.AdminOnly,
-                ParentId = dto.ParentId,
+                ParentId = dto.Parent?.EntityId,
                 Value = dto.Value
             };
             return SetMandatoryField(comboVal, bp, setCreate);

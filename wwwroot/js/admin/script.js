@@ -1,6 +1,6 @@
 ﻿"use strict";
 //initialise all variable in admin page
-let loading, containerMenu, navMenu, tabContainer, mainSection, next, before, logo, menu;
+let loading, containerMenu, navMenu, tabContainer, mainSection, next, before, logo, menu, modalInstance;
 const initVariable = () => {
     loading = $(".loading");
     tabContainer = $(".tab-container-main");
@@ -11,6 +11,7 @@ const initVariable = () => {
     before = $(".before");
     menu = $(".menu");
     logo = $("#logo");
+    modalInstance = Modal.init();
     changeAllBundle();
 };
 const initAllEvent = () => {
@@ -41,7 +42,7 @@ const createScrollBar = () => {
 
 };
 const createMenu = (data) => {
-    data.sort(function (a, b) {
+    data.sort(function(a, b) {
         if (a.orderNode !== b.orderNode) {
             return a.orderNode - b.orderNode;
         }
@@ -140,73 +141,71 @@ const changeAllBundle = () => {
         });
 };
 const createTab = (data) => {
-//    let flag = true;
-//    $.each(tabContainer.find("li"),
-//        (i, v) => {
-//            if ($(v).data()) {
-//                if ($(v).data().value.entityId === data.entityId) {
-//                    $(v).click();
-//                    flag = false;
-//                }
-//
-//            }
-//        });
-//    if (flag) {
-        tabContainer.find(".active").removeClass("active");
-        const uuid = new Date().getTime();
-        const li = $("<li/>",{
-                class: "active",
-                click: () => {
-                    tabContainer.find(".active").removeClass("active");
-                    $(li).addClass("active");
-                    if (mainSection.find(`#${uuid}`).length > 0) {
-                        mainSection.find("iframe").fadeOut();
-                        setTimeout(() => {
+    tabContainer.find(".active").removeClass("active");
+    const uuid = new Date().getTime();
+    const li = $("<li/>",
+        {
+            class: "active",
+            click: () => {
+                tabContainer.find(".active").removeClass("active");
+                $(li).addClass("active");
+                if (mainSection.find(`#${uuid}`).length > 0) {
+                    mainSection.find("iframe").fadeOut();
+                    setTimeout(() => {
                             mainSection.find(`#${uuid}`).fadeIn();
                         },
-                            500);
-                    } else {
-                        var iframe = $("<iframe/>",
-                            {
-                                src: data.path,
-                                id: uuid,
-                                class: "custom-frame"
-                            });
-                        mainSection.find("iframe").fadeOut();
-                        setTimeout(() => {
+                        500);
+                } else {
+                    var iframe = $("<iframe/>",
+                        {
+                            src: data.path,
+                            id: uuid,
+                            class: "custom-frame"
+                        });
+                    mainSection.find("iframe").fadeOut();
+                    setTimeout(() => {
                             mainSection.append(iframe);
                         },
-                            500);
-                    }
+                        500);
+                }
 
-                }
-            });
-        const spanText = $("<span/>", { class: "text", text: data.name });
-        const spanIconRemove = $("<span/>",{
-                class: "icon remove",
-                html: `<i class="fas fa-times"></i>`,
-                click: () => {
-                    li.remove();
-                    tabContainer.find(".active").removeClass("active");
-                    tabContainer.find("li:eq(0)").addClass("active").trigger("click");
-                    mainSection.find(`#${uuid}`).remove();
-                }
-            });
-        const spanIconRefresh = $("<span/>",{
-                class: "icon refresh",
-                html: `<i class="fas fa-sync-alt"></i>`,
-                click: () => {
-                    mainSection.find(`#${uuid}`).attr("src", data.path);
-                }
-            });
-        li.append(spanText, spanIconRemove, spanIconRefresh);
-        li.data({ value: data });
-        tabContainer.append(li);
-        li.trigger("click");
-//    }
+            }
+        });
+    const spanText = $("<span/>", { class: "text", text: data.name });
+    const spanIconRemove = $("<span/>",
+        {
+            class: "icon remove",
+            html: `<i class="fas fa-times"></i>`,
+            click: () => {
+                li.remove();
+                tabContainer.find(".active").removeClass("active");
+                tabContainer.find("li:eq(0)").addClass("active").trigger("click");
+                mainSection.find(`#${uuid}`).remove();
+            }
+        });
+    const spanIconRefresh = $("<span/>",
+        {
+            class: "icon refresh",
+            html: `<i class="fas fa-sync-alt"></i>`,
+            click: () => {
+                mainSection.find(`#${uuid}`).attr("src", data.path);
+            }
+        });
+    li.append(spanText, spanIconRemove, spanIconRefresh);
+    li.data({ value: data });
+    tabContainer.append(li);
+    li.trigger("click");
 };
 
-$(function () {
+function showConfirm(config) {
+    modalInstance.showConfirm(config);
+}
+
+function hideConfirm() {
+    modalInstance.hideConfirm();
+}
+
+$(function() {
     initVariable();
     initAllEvent();
     createScrollBar();
@@ -269,7 +268,7 @@ $(function () {
         {
             name: "مقادیر چند گزینه ای",
             title: "combo val",
-            path: "https://www.google.com",
+            path: "/pages/core/comboval/index.html",
             icon: "<i class='fas fa-list-ol'></i>",
             orderNode: 2,
             parentId: 4,
@@ -420,4 +419,16 @@ $(function () {
             entityId: 22
         }
     ]);
+    const user = {
+        username: "vahid",
+        firstName: "وحید",
+        lastName: "جعفرزاده",
+        roleName: "مدیر سیستم",
+        orgName: "فناوران",
+        ticket: "tvahid|55a1ab7d4431df72c8efc8d8903ae7834790cf33",
+        lang: 1,
+        menuTree: "",
+        timestamp: new Date().getTime()
+    };
+    Storage.set("user", user);
 });

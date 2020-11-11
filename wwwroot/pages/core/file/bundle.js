@@ -10,5 +10,5 @@
     folderName: "نام پوشه",
     fileName: "نام فایل",
     subTitle: "متن جایگزین",
-    description:"توضیحات فایل"
+    description: "توضیحات فایل"
 }

@@ -1,0 +1,244 @@
+@import "../abstract/mixins";
+@import "../abstract/colors";
+$floating-form-base-color: #43c8ba !default;
+$floating-form-danger-color: map_get($danger, 'light') !default;
+$grey-color: #a6a6a6;
+$floating-bar-color: #ede7e7;
+$floating-form-selection-bg: #f0f0f0;
+
+.floating-form-group {
+  position: relative;
+  padding-top: 25px;
+
+  &.has-error {
+    .floating-form-control {
+      border: none !important;
+    }
+    .floating-label, .floating-form-control-msg {
+      color: $floating-form-danger-color;
+    }
+    .floating-form-bar::after {
+      width: 100%;
+      left: 0;
+      background-color: $floating-form-danger-color;
+    }
+  }
+
+  .floating-form-checkbox-wrapper {
+    &:nth-child(2) {
+      .floating-form-radio {
+        &::after {
+          left: 17%;
+        }
+      }
+    }
+  }
+
+  :first-child {
+    &.floating-label {
+      font-size: .9rem;
+      top: 0;
+    }
+  }
+}
+.floating-label {
+  position: absolute;
+  left: .5rem;
+  //top: 0;
+  top: 31px;
+  color: $grey-color;
+  margin-bottom: 0;
+  //font-size: .9rem;
+  font-size: 1rem;
+  @include transition(250ms);
+
+  .star {
+    color: $floating-form-danger-color;
+  }
+}
+[class*=col] {
+  &.floating-form-group {
+    .floating-label {
+      left: calc(15px + .5rem);
+    }
+  }
+}
+
+.floating-form-control {
+  background-color: transparent;
+  padding-left: .5rem;
+  padding-right: .5rem;
+  border: none !important;
+
+  &[readonly], &[disabled] {
+    color: #a1a0a0;
+    background-color: transparent;
+    ~ .floating-form-bar {
+      //background-color: transparent;
+    }
+  }
+
+  &::selection {
+    background-color: $floating-form-selection-bg;
+  }
+
+  &[class*=sm] {
+    ~ .floating-label {
+      font-size: .875rem;
+      top: 29px;
+    }
+  }
+  &.file {
+    ~ .floating-label {
+      font-size: .9rem;
+      top: 0;
+    }
+  }
+
+  &.floating-mode {
+    ~ .floating-label {
+      font-size: .9rem;
+      top: 0;
+    }
+  }
+
+  &:focus {
+    outline: none;
+    background-color: transparent;
+    @include boxShadow(none !important);
+
+    ~ .floating-label {
+      color: $floating-form-base-color;
+    }
+
+    ~ .floating-form-bar::after {
+      width: 100%;
+      left: 0;
+    }
+
+    ~ .floating-form-control-msg {
+      color: $floating-form-base-color;
+    }
+  }
+
+  &:not([ksun-placeholder]) {
+    &::placeholder {
+      color: transparent !important;
+    }
+    &::-webkit-input-placeholder {
+      color: transparent !important;
+    }
+    &::-moz-placeholder {
+      color: transparent !important;
+    }
+  }
+}
+
+.floating-form-bar {
+  position: relative;
+  height: 1px;
+  background: $floating-bar-color;
+  display: block;
+
+  &::after {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 3px;
+    top: 0;
+    left: 50%;
+    background-color: $floating-form-base-color;
+    @include transition(250ms);
+  }
+}
+
+.floating-form-control-msg {
+  display: block;
+  font-size: .8rem;
+  color: darken($floating-bar-color, 5%);
+  margin-top: .15rem;
+  margin-bottom: 0;
+  @include flexBox(flex);
+  @include alignItem(center);
+  @include justifyContent(space-between);
+  @include transition(250ms);
+}
+
+.floating-form-checkbox-wrapper {
+  padding-left: .5rem;
+  margin-top: .3rem;
+  @include flexBox(inline-flex);
+  @include alignItem(center);
+  label {
+    margin-bottom: 0;
+    color: #495057;
+    cursor: pointer;
+  }
+
+  input {
+    position: absolute;
+    left: -3000px;
+    display: none;
+    &:checked {
+      ~ .floating-form-radio, ~ .floating-form-checkbox {
+        border-color: $floating-form-base-color;
+        &::after {
+          @include transform(scale(1));
+        }
+      }
+    }
+
+    &.form-control-sm {
+      ~ .floating-form-checkbox-label {
+        font-size: .875rem;
+        &::selection {
+          background-color: $floating-form-selection-bg;
+        }
+      }
+    }
+  }
+  .floating-form-radio {
+    width: 15px;
+    height: 15px;
+    border: 1px solid darken($grey-color, 15%);
+    margin-right: .25rem;
+    position: relative;
+    @include borderRadius(50%);
+    @include transition(250ms);
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 70%;
+      height: 70%;
+      left: 15%;
+      top: 16%;
+      background-color: $floating-form-base-color;
+      @include transform(scale(0));
+      @include transition(250ms);
+      @include borderRadius(50%);
+    }
+  }
+
+  .floating-form-checkbox {
+    width: 15px;
+    height: 15px;
+    border: 1px solid darken($grey-color, 15%);
+    margin-right: .25rem;
+    position: relative;
+    @include borderRadius(3px);
+    @include transition(250ms);
+
+    &::after {
+      content: '\2714';
+      position: absolute;
+      left: 0px;
+      top: -9px;
+      color: $floating-form-base-color;
+      font-size: 1.2rem;
+      @include transform(scale(0));
+      @include transition(250ms);
+    }
+  }
+
+}

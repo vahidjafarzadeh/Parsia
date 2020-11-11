@@ -2,7 +2,7 @@
  * Created by Farshad Kazemi on 2/13/2018.
  */
 const ENVIRONMENT = {
-    FULL_TEXT_SEARCH_KEY: 'fullTitle',
+    FULL_TEXT_SEARCH_KEY: "fullTitle",
     OrderType: {
         ASC: 1,
         DESC: 2
@@ -18,13 +18,13 @@ const ENVIRONMENT = {
         START_WITH: 8, // %LIKE
         END_WITH: 9, // LIKE%
         NOT_LIKE: 10, // NOT %LIKE%
-        IN:11, // IN
+        IN: 11, // IN
         NOT_IN: 12, // NOT IN
-        IS_NULL:13, // IS NULL
+        IS_NULL: 13, // IS NULL
         NOT_NULL: 14 // IS NOT NULL
     },
     Operator: {
-        AND:1,
+        AND: 1,
         OR: 2
     },
     FieldType: {
@@ -33,35 +33,40 @@ const ENVIRONMENT = {
 //        AUTOCOMPLETE: 'AUTOCOMPLETE',
         DATE: 2,
         BOOLEAN: 8,
-        STRING:0,
+        STRING: 0,
         INTEGER: 3,
         LONG: 4,
         DOUBLE: 5,
         FLOAT: 7
     },
     FieldCondition: {
-        NUMBER: ['EQUAL', 'NOT_EQUAL', 'GREATER', 'LESS', 'GREATER_OR_EQUAL', 'LESS_OR_EQUAL', 'IN', 'NOT_IN', 'BETWEEN', 'IS_NULL', 'NOT_NULL'],
-        TEXT: ['EQUAL', 'NOT_EQUAL', 'CONTAINS', 'START_WITH', 'END_WITH', 'IN', 'NOT_IN', 'BETWEEN', 'IS_NULL', 'NOT_NULL'],
-        AUTOCOMPLETE: ['EQUAL', 'NOT_EQUAL', 'IN', 'NOT_IN', 'IS_NULL', 'NOT_NULL'],
-        DATE: ['EQUAL', 'NOT_EQUAL', 'BETWEEN', 'IN', 'NOT_IN', 'IS_NULL', 'NOT_NULL'],
-        BOOLEAN: ['EQUAL', 'NOT_EQUAL']
+        NUMBER: [
+            "EQUAL", "NOT_EQUAL", "GREATER", "LESS", "GREATER_OR_EQUAL", "LESS_OR_EQUAL", "IN", "NOT_IN", "BETWEEN",
+            "IS_NULL", "NOT_NULL"
+        ],
+        TEXT: [
+            "EQUAL", "NOT_EQUAL", "CONTAINS", "START_WITH", "END_WITH", "IN", "NOT_IN", "BETWEEN", "IS_NULL", "NOT_NULL"
+        ],
+        AUTOCOMPLETE: ["EQUAL", "NOT_EQUAL", "IN", "NOT_IN", "IS_NULL", "NOT_NULL"],
+        DATE: ["EQUAL", "NOT_EQUAL", "BETWEEN", "IN", "NOT_IN", "IS_NULL", "NOT_NULL"],
+        BOOLEAN: ["EQUAL", "NOT_EQUAL"]
     },
     StorageKey: {
-        USER: 'user'
+        USER: "user"
     },
     ErrorCode: {
-        USER_EXPIRED: 'USER_EXPIRED',
-        BUSINESS_MESSAGE: 'BUSINESS_MESSAGE',
-        IS_NULL: 'IS_NULL'
+        USER_EXPIRED: "USER_EXPIRED",
+        BUSINESS_MESSAGE: "BUSINESS_MESSAGE",
+        IS_NULL: "IS_NULL"
     },
     ErrorDesc: {
-        NO_DATA: 'NO_DATA'
+        NO_DATA: "NO_DATA"
     },
     Action: {
-        DELETE: 'DELETE',
-        EDIT: 'EDIT',
-        DUPLICATE: 'DUPLICATE',
-        EXPORT:'EXPORT'
+        DELETE: "DELETE",
+        EDIT: "EDIT",
+        DUPLICATE: "DUPLICATE",
+        EXPORT: "EXPORT"
     },
     KeyCode: {
         MIDDLE_MOUSE: 2,
@@ -175,8 +180,8 @@ const ENVIRONMENT = {
         NUM_9: 57
     },
     PaginationKey: {
-        NEXT: 'next',
-        PREV: 'prev'
+        NEXT: "next",
+        PREV: "prev"
     },
     ResponseCode: {
         200: "موفقیت آمیز",
@@ -218,53 +223,51 @@ const ENVIRONMENT = {
     },
     Autocomplete: {
         TYPE: {
-            STATIC: 'STATIC',
-            DYNAMIC: 'DYNAMIC'
+            STATIC: "STATIC",
+            DYNAMIC: "DYNAMIC"
         }
     },
     ShowLoginPageType: {
         SHOW_LOGIN_PAGE: "SHOW_LOGIN_PAGE",
         WRITE_MESSAGE: "WRITE_MESSAGE",
-        NOTHINGS:"NOTHINGS"
+        NOTHINGS: "NOTHINGS"
     },
     CssClass: {
-        ACTIVE: 'active',
-        VISIBLE: 'visible',
+        ACTIVE: "active",
+        VISIBLE: "visible",
         HAS_ERROR: "has-error",
         VALID: "valid",
-        MANDATORY: 'mandatory',
-        FORM_GROUP: 'form-group',
-        FORM_CONTROL: 'form-control',
-        FEED_BACK: 'feedback',
-        FLOATING_MODE: 'floating-mode',
-        INVALID_FEED_BACK: 'invalid-feedback',
-        DATE: 'date',
-        DISABLE: 'disable',
-        DISABLED: 'disabled',
-        SUCCESS: 'success',
-        DANGER: 'danger',
-        WARNING: 'warning',
-        ANIMATED: 'animated',
-        BOUNCE_IN: 'bounceIn',
-        FLASH: 'flash',
-        FADE_IN_UP: 'fadeInUp',
-        EXPANDED: 'expanded',
-        INVISIBLE: 'invisible'
+        MANDATORY: "mandatory",
+        FORM_GROUP: "form-group",
+        FORM_CONTROL: "form-control",
+        FEED_BACK: "feedback",
+        FLOATING_MODE: "floating-mode",
+        INVALID_FEED_BACK: "invalid-feedback",
+        DATE: "date",
+        DISABLE: "disable",
+        DISABLED: "disabled",
+        SUCCESS: "success",
+        DANGER: "danger",
+        WARNING: "warning",
+        ANIMATED: "animated",
+        BOUNCE_IN: "bounceIn",
+        FLASH: "flash",
+        FADE_IN_UP: "fadeInUp",
+        EXPANDED: "expanded",
+        INVISIBLE: "invisible"
     },
     InputType: {
-        TEXT: 'text',
-        NUMBER: 'number'
+        TEXT: "text",
+        NUMBER: "number"
     },
     PersianDateFormat: {
-        FullDateDigit: '',
-        FullDateText: '',
-        FullDateDigitWithMonthText: 'D MMMM YYYY'
+        FullDateDigit: "",
+        FullDateText: "",
+        FullDateDigitWithMonthText: "D MMMM YYYY"
     },
     EditorType: {
-        DEFAULT: 'default',
-        HTML: 'html',
-        CSS: 'css'
+        DEFAULT: "default",
+        HTML: "html",
+        CSS: "css"
     }
 };
-
-

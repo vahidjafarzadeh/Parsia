@@ -7,7 +7,6 @@ namespace Parsia.Areas.Administrator.Controllers
     [Route("admin")]
     public class ManagementController : Controller
     {
-
         public IActionResult Index()
         {
             ViewData["Title"] = SystemConfig.AdminTitlePage;

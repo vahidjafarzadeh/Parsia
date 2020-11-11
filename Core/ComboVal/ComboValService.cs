@@ -10,9 +10,6 @@ namespace Parsia.Core.ComboVal
         [Route("service/comboVal/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "search");
@@ -23,11 +20,12 @@ namespace Parsia.Core.ComboVal
 
         [HttpPost]
         [Route("service/comboVal/save")]
-        public ServiceResult<object> Save(ComboValDto dto)
+        public ServiceResult<object> Save()
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
+            var dtoFromRequest = ComboValFacade.GetInstance().GetDtoFromRequest(HttpContext.Request);
+            if (!dtoFromRequest.Done)
+                return dtoFromRequest;
+            var dto = (ComboValDto) dtoFromRequest.Result;
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo);
             var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal",
@@ -39,9 +37,6 @@ namespace Parsia.Core.ComboVal
         [Route("service/comboVal/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "edit");
@@ -69,15 +64,23 @@ namespace Parsia.Core.ComboVal
         [Route("service/comboVal/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "search");
             return checkAccess.Done
                 ? ComboValFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
+        }
+
+
+        [HttpPost]
+        [Route("service/comboVal/getAccess")]
+        public ServiceResult<bool> GetAccess(Clause clause)
+        {
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            return SystemConfig.IsUnlimitedRole(userInfo.RoleId, false)
+                ? new ServiceResult<bool>(true, 1)
+                : new ServiceResult<bool>(false, 1);
         }
     }
 }

@@ -744,7 +744,7 @@ var Util = (function() {
                 script.addEventListener("error",
                     () => {
                         console.log("Error ==> ", url);
-                        reject(script)
+                        reject(script);
                     },
                     false);
                 document.body.appendChild(script);

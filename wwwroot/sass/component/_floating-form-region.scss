@@ -1,0 +1,31 @@
+[lang=fa],[lang=ar] {
+  .floating-form-group {
+    text-align: right;
+  }
+  .floating-label {
+    left: initial;
+    right: .5rem;
+  }
+
+  .floating-form-control-msg {
+    text-align: right;
+  }
+  .floating-form-radio, .floating-form-checkbox {
+    margin-right: 0;
+    margin-left: .25rem;
+  }
+  .floating-form-checkbox-wrapper {
+    padding-left: 0;
+    padding-right: .5rem;
+  }
+
+  [class*=col] {
+    &.floating-form-group {
+      .floating-label {
+        left: initial;
+        right: calc(15px + .5rem);
+      }
+    }
+  }
+
+}

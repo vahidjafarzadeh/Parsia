@@ -1,0 +1,197 @@
+.pagination {
+  display: flex;
+  @include list-unstyled();
+  @include border-radius();
+}
+
+.page-link {
+  position: relative;
+  display: block;
+  padding: $pagination-padding-y $pagination-padding-x;
+  margin-left: -$pagination-border-width;
+  line-height: $pagination-line-height;
+  color: $pagination-color;
+  background-color: $pagination-bg;
+  border: $pagination-border-width solid $pagination-border-color;
+
+  &:hover {
+    color: $pagination-hover-color;
+    text-decoration: none;
+    background-color: $pagination-hover-bg;
+    border-color: $pagination-hover-border-color;
+  }
+
+  &:focus {
+    z-index: 2;
+    outline: 0;
+    box-shadow: $pagination-focus-box-shadow;
+  }
+
+  // Opinionated: add "hand" cursor to non-disabled .page-link elements
+  &:not(:disabled):not(.disabled) {
+    cursor: pointer;
+  }
+}
+
+.page-item {
+  &:first-child {
+    .page-link {
+      margin-left: 0;
+      @include border-left-radius($border-radius);
+      @include border-right-radius(0 !important);
+    }
+  }
+  &:last-child {
+    .page-link {
+      @include border-right-radius($border-radius);
+      @include border-left-radius(0 !important);
+      &.btn.outline {
+        border-left: none !important;
+      }
+    }
+  }
+
+  &.active .page-link {
+    z-index: 1;
+    color: $pagination-active-color;
+    background-color: $pagination-active-bg;
+    border-color: $pagination-active-border-color;
+  }
+
+  &.disabled .page-link {
+    color: $pagination-disabled-color;
+    pointer-events: none;
+    // Opinionated: remove the "hand" cursor set previously for .page-link
+    cursor: not-allowed;
+    background-color: $pagination-disabled-bg;
+    border-color: $pagination-disabled-border-color;
+  }
+}
+
+//
+// Sizing
+//
+
+.pagination-lg {
+  @include pagination-size($pagination-padding-y-lg, $pagination-padding-x-lg, $font-size-lg, $line-height-lg, $border-radius-lg);
+}
+
+.pagination-sm {
+  @include pagination-size($pagination-padding-y-sm, $pagination-padding-x-sm, $font-size-sm, $line-height-sm, $border-radius-sm);
+}
+
+// Farshad
+@import "../abstract/variables";
+.ksun-pagination-wrapper {
+  padding: 0 1px;
+  @include flexDirection(column);
+  .number-wrapper {
+    margin-bottom: .5rem;
+    @include flexBox(flex);
+    label {
+      margin-right: $pagination-number-wrapper-label-margin;
+    }
+  }
+  .input-group {
+
+    width: $pagination-input-group-width;
+    @include flexWrap($pagination-input-group-flex-wrap);
+
+    .form-control {
+      width: $pagination-input-group-form-control-width;
+      height: $pagination-input-group-height;
+      padding: $input-padding-y-sm $input-padding-x-sm;
+      @include flex(none);
+    }
+
+    .input-group-text {
+      cursor: pointer;
+      height: $pagination-input-group-height;
+      padding: $input-padding-y-sm $input-padding-x-sm;
+    }
+  }
+  .form-group {
+    width: $pagination-form-group-width-xs;
+    margin: 0;
+    padding-right: $pagination-form-group-padding;
+    @include flex(1);
+    @include flexBox(inline-flex);
+    @include alignItem(center);
+
+    .form-control {
+      padding: $pagination-form-group-form-control-padding;
+      font-size: .9rem;
+      @include flex(1);
+    }
+  }
+  .col-form-label {
+    margin-left: $pagination-form-label-margin;
+    font-size: $pagination-form-label-font-size;
+  }
+  .pagination {
+    margin-bottom: $pagination-list-margin;
+    padding: 0;
+    @include justifyContent(center);
+  }
+  .page-item {
+    @include flex(1);
+    &:first-child, &:last-child {
+      .page-link {
+        padding-left: .6rem;
+        padding-right: .6rem;
+      }
+    }
+  }
+  .page-link {
+    padding: $pagination-page-link-padding;
+    height: $pagination-page-link-height;
+    @include flexBox(flex);
+    @include alignItem(center);
+    @include justifyContent(center);
+  }
+  @media screen and (min-width: map_get($grid-breakpoints, 'sm')) {
+    @include flexDirection(row);
+    margin: $pagination-wrapper-margin;
+    .number-wrapper {
+      height: $pagination-number-wrapper-height;
+      margin-bottom: 0;
+    }
+    .form-group {
+      width: $pagination-form-group-width;
+      @include justifyContent(end);
+    }
+    .form-control {
+      height: 100% !important;
+      @include flex(none);
+    }
+    .pagination {
+      margin-left: $pagination-list-margin;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// region
+[lang=fa], [lang=ar] {
+  .page-item {
+    &:first-child {
+      .page-link {
+        @include border-left-radius(0 !important);
+        @include border-right-radius($border-radius !important);
+      }
+    }
+    &:last-child {
+      .page-link {
+        @include border-left-radius($border-radius !important);
+        @include border-right-radius(0 !important);
+        &.btn.outline {
+          border-left: 2px solid !important;
+          border-right: none !important;
+        }
+      }
+    }
+    svg {
+      @include transform(rotate(180deg));
+    }
+  }
+}

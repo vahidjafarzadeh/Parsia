@@ -1,0 +1,46 @@
+@import "../abstract/mixins";
+@import "../abstract/colors";
+
+.multiple-select-container {
+  @include flexBox(flex);
+  @include flexWrap(wrap);
+
+  &.multiple-line {
+    @include flexDirection(column);
+  }
+
+  .badge {
+    max-width: 100%;
+    margin: .25rem;
+    padding: .5rem;
+    @include flexBox(flex);
+    @include alignItem(center);
+    @include justifyContent(space-between);
+  }
+
+  .full-width {
+    display: block;
+    width: 100%;
+  }
+
+  .title {
+    font-size: 12px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-left: 0.25rem;
+    padding: 2px 4px;
+    color: #0bb3a3;
+  }
+
+  .remove-icon {
+    color: map_get($grey, 'lighten-2');
+    cursor: pointer;
+    float: left;
+    @include transition(250ms);
+
+    &:hover {
+      color: map_get($danger, 'light');
+    }
+  }
+}

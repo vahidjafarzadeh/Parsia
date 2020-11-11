@@ -32,7 +32,8 @@ const OrderBy = function() {
     return {
         add: add,
         remove: remove,
-        getList: getList
+        getList: getList,
+        get: getList
     };
 
 };

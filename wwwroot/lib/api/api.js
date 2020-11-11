@@ -27,7 +27,7 @@ var Api = (function() {
                     requestConfig.handler.beforeSend();
                 },
                 success: function(data, textStatus, jqXHR) {
-                    if (data.errorCode === "USER_EXPIRED") {
+                    if (data.errorCode === 2) {
                         Storage.removeUserInfo();
                         localStorage.removeItem("user");
                         showLoginPage(top.location.href);

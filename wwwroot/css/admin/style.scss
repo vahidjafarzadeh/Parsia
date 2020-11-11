@@ -6,6 +6,7 @@
 @import "../../sass/font-aswome/font-awsome";
 @import "../../sass/button/material-buttons.scss";
 @import "../../lib/ripple/_ripple.scss";
+@import "../../sass/modal/_modal.scss";
 //start color
 $navBarColor: #272d47;
 
@@ -618,7 +619,6 @@ body, html {
         }
     }
 }
-
 .modal-col-teal {
     background-color: #249d71 !important;
 

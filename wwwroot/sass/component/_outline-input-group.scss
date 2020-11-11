@@ -1,0 +1,121 @@
+@import "../abstract/mixins";
+@import "../abstract/colors";
+
+.outline-input-group {
+  input:not([type=checkbox]):not([type=radio]) {
+    border: 2px solid;
+  }
+  .input-btn {
+    color: white !important;
+    border: 2px solid !important;
+  }
+
+  &.blue {
+    input:not([type=checkbox]):not([type=radio]) {
+      border-color: map_get($blue, 'accent-3');
+      &:focus {
+        @include boxShadow(0 2px 10px -3px rgba(map_get($blue, 'accent-3'), .4));
+      }
+    }
+    .input-btn {
+      border-color: map_get($blue, 'accent-3') !important;
+      background-color: map_get($blue, 'accent-3');
+    }
+  }
+  &.indigo {
+    input:not([type=checkbox]):not([type=radio]) {
+      border-color: map_get($indigo, 'accent-3');
+      &:focus {
+        @include boxShadow(0 2px 10px -3px rgba(map_get($indigo, 'accent-3'), .4));
+      }
+    }
+    .input-btn {
+      border-color: map_get($indigo, 'accent-3') !important;
+      background-color: map_get($indigo, 'accent-3');
+    }
+  }
+  &.violet {
+    input:not([type=checkbox]):not([type=radio]) {
+      border-color: map_get($deep-purple, 'accent-2');
+      &:focus {
+        @include boxShadow(0 2px 10px -3px rgba(map_get($deep-purple, 'accent-2'), .4));
+      }
+    }
+    .input-btn {
+      border-color: map_get($deep-purple, 'accent-2') !important;
+      background-color: map_get($deep-purple, 'accent-2');
+    }
+  }
+  &.purple {
+    input:not([type=checkbox]):not([type=radio]) {
+      border-color: map_get($purple, 'accent-2');
+      &:focus {
+        @include boxShadow(0 2px 10px -3px rgba(map_get($purple, 'accent-2'), .4));
+      }
+    }
+    .input-btn {
+      border-color: map_get($purple, 'accent-2') !important;
+      background-color: map_get($purple, 'accent-2');
+    }
+  }
+  &.deep-purple {
+    input:not([type=checkbox]):not([type=radio]) {
+      border-color: map_get($deep-purple, 'accent-3');
+      &:focus {
+        @include boxShadow(0 2px 10px -3px rgba(map_get($deep-purple, 'accent-3'), .4));
+      }
+    }
+    .input-btn {
+      border-color: map_get($deep-purple, 'accent-3') !important;
+      background-color: map_get($deep-purple, 'accent-3');
+    }
+  }
+  &.success {
+    input:not([type=checkbox]):not([type=radio]) {
+      border-color: map_get($success, 'light');
+      &:focus {
+        @include boxShadow(0 2px 10px -3px rgba(map_get($success, 'light'), .4));
+      }
+    }
+    .input-btn {
+      border-color: map_get($success, 'light') !important;
+      background-color: map_get($success, 'light');
+    }
+  }
+  &.danger {
+    input:not([type=checkbox]):not([type=radio]) {
+      border-color: map_get($danger, 'base');
+      &:focus {
+        @include boxShadow(0 2px 10px -3px rgba(map_get($danger, 'base'), .4));
+      }
+    }
+    .input-btn {
+      border-color: map_get($danger, 'base') !important;
+      background-color: map_get($danger, 'base');
+    }
+  }
+  &.warning {
+    input:not([type=checkbox]):not([type=radio]) {
+      border-color: map_get($warning, 'base');
+      &:focus {
+        @include boxShadow(0 2px 10px -3px rgba(map_get($warning, 'base'), .4));
+      }
+    }
+    .input-btn {
+      border-color: map_get($warning, 'base') !important;
+      background-color: map_get($warning, 'base');
+    }
+  }
+  &.blue-grey {
+    input:not([type=checkbox]):not([type=radio]) {
+      border-color: map_get($blue-grey, 'darken-1');
+      &:focus {
+        @include boxShadow(0 2px 10px -3px rgba(map_get($blue-grey, 'darken-1'), .4));
+      }
+    }
+    .input-btn {
+      border-color: map_get($blue-grey, 'darken-1') !important;
+      background-color: map_get($blue-grey, 'darken-1');
+    }
+  }
+}

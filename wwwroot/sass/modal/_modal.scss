@@ -1,0 +1,148 @@
+@import "../abstract/mixins";
+
+// modal variable(s)
+$confirm-modal-width: 300px;
+$confirm-modal-default-width: 90vw;
+$confirm-modal-lg-width: 1200px;
+$confirm-modal-margin: 0 auto;
+$confirm-modal-title-font-size: 1rem;
+$confirm-modal-title-font-color: #a5a5a5;
+$confirm-modal-close-font-size: 1rem;
+$confirm-modal-close-padding-top: 1.25rem;
+$confirm-modal-close-color: rgba(white, .2);
+$confirm-modal-close-hover-color: rgba(white, 1);
+$confirm-modal-header-bg: #6e2bff !default;
+$confirm-modal-body-min-height: 80px;
+$confirm-modal-body-bg: white;
+$confirm-modal-footer-bg: #fefeff;
+$confirm-modal-footer-border: #e9ecef;
+$confirm-modal-shadow: 0 0 35px -5px rgba($confirm-modal-header-bg, .6);
+$confirm-modal-header-padding: .75rem 1rem;
+$confirm-modal-footer-padding: 0;
+$confirm-modal-title-color: white;
+$confirm-modal-transition-duration: 250ms !default;
+
+
+// modal(s)
+#confirm-modal {
+  z-index: 99999;
+  &:not(.modal-lg) {
+    .modal-content {
+      width: $confirm-modal-width;
+    }
+  }
+  .modal-content {
+    margin: $confirm-modal-margin;
+    border: none !important;
+    background-color: transparent !important;
+    @include boxShadow($confirm-modal-shadow);
+  }
+  .modal-title {
+    font-size: $confirm-modal-title-font-size;
+    color: $confirm-modal-title-font-color;
+  }
+  .close {
+    font-size: $confirm-modal-close-font-size;
+    padding-top: $confirm-modal-close-padding-top;
+    color: $confirm-modal-close-color;
+    opacity: 1 !important;
+    @include transition($confirm-modal-transition-duration);
+
+    &:hover, &:focus {
+      color: $confirm-modal-close-hover-color;
+    }
+  }
+  .modal-body {
+    text-align: left;
+    background-color: $confirm-modal-body-bg;
+    min-height: $confirm-modal-body-min-height;
+  }
+  .modal-header {
+    background-color: $confirm-modal-header-bg;
+    padding: $confirm-modal-header-padding;
+  }
+  .modal-title {
+    color: $confirm-modal-title-color;
+  }
+  .modal-footer {
+    background-color: $confirm-modal-footer-bg;
+    padding: $confirm-modal-footer-padding;
+    border-color: $confirm-modal-footer-border;
+
+    .button-wrapper {
+      width: 100%;
+      height: 100%;
+      @include flexBox(flex);
+      @include justifyContent(center);
+      @include alignItem(center);
+
+      button {
+        padding: 0.75rem;
+        background-color: transparent;
+        font-weight: bold;
+        border: none;
+        text-align: center;
+        @include flex(1);
+        @include borderRadius(0);
+        @include transition(250ms);
+
+        &:focus {
+          border: none;
+        }
+
+        &:nth-child(2) {
+          border-left: 1px solid $confirm-modal-footer-border;
+        }
+
+        &.btn-danger {
+          color: map_get($danger, 'base');
+          @include boxShadow(none !important)
+        }
+        &.btn-success {
+          color: map_get($success, 'base');
+          @include boxShadow(none !important)
+        }
+      }
+    }
+  }
+  &.modal-lg {
+    max-width: 100vw;
+    .modal-dialog {
+      max-width: $confirm-modal-default-width;
+    }
+    .modal-content {
+      max-width: $confirm-modal-default-width;
+    }
+    @media screen and (min-width: 1200px) {
+      .modal-dialog {
+        max-width: $confirm-modal-lg-width;
+      }
+      .modal-content {
+        max-width: $confirm-modal-lg-width;
+      }
+    }
+  }
+}
+
+@include rtl() {
+  // modal(s)
+  #confirm-modal {
+    .modal-body {
+      text-align: right;
+    }
+    .close {
+      margin: -1rem auto -1rem -1rem;
+    }
+    .modal-footer {
+      @include justifyContent(end);
+      .button-wrapper {
+        button {
+          &:nth-child(2) {
+            border-right: 1px solid $confirm-modal-footer-border;
+            border-left: none !important;
+          }
+        }
+      }
+    }
+  }
+}

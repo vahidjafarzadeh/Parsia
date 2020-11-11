@@ -1,0 +1,487 @@
+$card-grid-header-form-control-padding: .1rem 0.5rem 0.25rem !default;
+$card-grid-header-form-label-font-size: .8rem !default;
+$card-grid-header-form-label-margin: 0 0 0 .25rem !default;
+
+$card-grid-border-radius: 1rem !default;
+$card-grid-padding: .75rem !default;
+$card-grid-td-padding: .2rem !default;
+$card-grid-header-font-size: .75rem !default;
+$card-grid-header-color: #515865 !default;
+$card-grid-value-color: #4B515D !default;
+$card-grid-value-font-size: .8rem !default;
+$card-grid-check-status-size: 25px !default;
+$card-grid-check-status-border-color: #e5e7e8 !default;
+$card-grid-check-status-border-radius: 50% !default;
+$card-grid-check-status-selected-color: #1de9b6 !default;
+$card-grid-selected-border-color: #1de9b6 !default;
+$card-grid-selected-shadow: 0 2px 20px -10px rgba($card-grid-selected-border-color, 0.6) !default;
+
+$table-bg: white !default;
+$table-accent-bg: #f9fbfc !default;
+$table-hover-bg: #f3f5f6 !default;
+$table-active-bg: $table-hover-bg !default;
+
+$table-border-width: $border-width !default;
+$table-border-color: $gray-300 !default;
+
+$table-body-font-size: .75rem !default;
+$table-body-color: #4B515D !default;
+
+$table-head-bg: $gray-200 !default;
+$table-head-color: $gray-700 !default;
+$table-head-font-size: .8rem !default;
+$table-head-icon-color: #424242 !default;
+$table-head-icon-unsorted-color: #bdbdbd !default;
+
+$table-dark-bg: $gray-900 !default;
+$table-dark-accent-bg: rgba($white, .05) !default;
+$table-dark-hover-bg: rgba($white, .075) !default;
+$table-dark-border-color: lighten($gray-900, 7.5%) !default;
+$table-dark-color: $body-bg !default;
+
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: $spacer;
+  background-color: $table-bg; // Reset for nesting within parents with `background-color`.
+
+  th,
+  td {
+    padding: $table-cell-padding;
+    vertical-align: top;
+    border-top: $table-border-width solid $table-border-color;
+  }
+
+  thead th {
+    vertical-align: bottom;
+    border-bottom: (2 * $table-border-width) solid $table-border-color;
+  }
+
+  tbody + tbody {
+    border-top: (2 * $table-border-width) solid $table-border-color;
+  }
+
+  .table {
+    background-color: $body-bg;
+  }
+}
+
+//
+// Condensed table w/ half padding
+//
+
+.table-sm {
+  th,
+  td {
+    padding: $table-cell-padding-sm;
+  }
+}
+
+// Bordered version
+//
+// Add borders all around the table and between all the columns.
+
+.table-bordered {
+  border: $table-border-width solid $table-border-color;
+
+  th,
+  td {
+    border: $table-border-width solid $table-border-color;
+  }
+
+  thead {
+    th,
+    td {
+      border-bottom-width: (2 * $table-border-width);
+    }
+  }
+}
+
+// Zebra-striping
+//
+// Default zebra-stripe styles (alternating gray and transparent backgrounds)
+
+.table-striped {
+  tbody tr:nth-of-type(odd) {
+    background-color: $table-accent-bg;
+  }
+}
+
+// Hover effect
+//
+// Placed here since it has to come after the potential zebra striping
+
+.table-hover {
+  tbody tr {
+    @include hover {
+      background-color: $table-hover-bg;
+    }
+  }
+}
+
+// Table backgrounds
+//
+// Exact selectors below required to override `.table-striped` and prevent
+// inheritance to nested tables.
+
+@each $color, $value in $theme-colors {
+  @include table-row-variant($color, theme-color-level($color, -9));
+}
+
+@include table-row-variant(active, $table-active-bg);
+
+// Dark styles
+//
+// Same table markup, but inverted color scheme: dark background and light text.
+
+// stylelint-disable-next-line no-duplicate-selectors
+.table {
+  .thead-dark {
+    th {
+      color: $table-dark-color;
+      background-color: $table-dark-bg;
+      border-color: $table-dark-border-color;
+    }
+  }
+
+  .thead-light {
+    th {
+      color: $table-head-color;
+      background-color: $table-head-bg;
+      border-color: $table-border-color;
+    }
+  }
+}
+
+.table-dark {
+  color: $table-dark-color;
+  background-color: $table-dark-bg;
+
+  th,
+  td,
+  thead th {
+    border-color: $table-dark-border-color;
+  }
+
+  &.table-bordered {
+    border: 0;
+  }
+
+  &.table-striped {
+    tbody tr:nth-of-type(odd) {
+      background-color: $table-dark-accent-bg;
+    }
+  }
+
+  &.table-hover {
+    tbody tr {
+      @include hover {
+        background-color: $table-dark-hover-bg;
+      }
+    }
+  }
+}
+
+// Responsive tables
+//
+// Generate series of `.table-responsive-*` classes for configuring the screen
+// size of where your table will overflow.
+
+.table-responsive {
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    $next: breakpoint-next($breakpoint, $grid-breakpoints);
+    $infix: breakpoint-infix($next, $grid-breakpoints);
+
+    &#{$infix} {
+      @include media-breakpoint-down($breakpoint) {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: -ms-autohiding-scrollbar; // See https://github.com/twbs/bootstrap/pull/10057
+
+        // Prevent double border on horizontal scroll due to use of `display: block;`
+        > .table-bordered {
+          border: 0;
+        }
+      }
+    }
+  }
+}
+
+// Farshad
+@import "../abstract/colors";
+@import "../abstract/variables";
+@import "../abstract/mixins";
+.table {
+  background-color: $body-bg;
+  th,
+  td {
+    padding: $table-cell-padding;
+    vertical-align: middle;
+    border-top: $table-border-width solid $table-border-color;
+  }
+  thead {
+    th {
+      //border-bottom: (2 * $table-border-width) solid $table-border-color;
+      border-bottom: $table-border-width solid $table-border-color;
+      color: $table-head-color;
+      font-size: $table-head-font-size;
+
+      .icon {
+        color: $table-head-icon-color;
+        margin-left: .25rem;
+        @include transition(350ms);
+        &.unsorted {
+          color: $table-head-icon-unsorted-color;
+        }
+      }
+      &:hover {
+        .icon {
+          color: $table-head-icon-color;
+        }
+      }
+
+    }
+
+    .col-wrapper {
+      @include flexBox(flex);
+      @include justifyContent(center);
+      @include alignItem(center);
+    }
+
+    .value {
+      cursor: pointer;
+      @include flexBox(inline-flex);
+      @include alignItem(center);
+    }
+  }
+  tbody + tbody {
+    border-top: (2 * $table-border-width) solid $table-border-color;
+  }
+  tbody {
+    tr {
+      background-color: transparent;
+      //@include transition(350ms);
+    }
+    td {
+      font-size: $table-body-font-size;
+      color: $table-body-color;
+    }
+    .col-value {
+      @include flexBox(flex);
+      @include justifyContent(center);
+      @include alignItem(center);
+    }
+  }
+  &.table-striped {
+    tbody {
+      tr {
+        background-color: white;
+        &:nth-of-type(even) {
+          background-color: #fbfbfb;
+        }
+      }
+
+    }
+  }
+  &.table-hover {
+    tbody tr {
+      @include hover {
+        background-color: lighten(map_get($default, 'light'), 2%);
+      }
+    }
+  }
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    @include media-breakpoint-down($breakpoint) {
+      $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+      &.card-grid#{$infix} {
+        border: 0;
+        background-color: transparent;
+        thead {
+          border: none;
+          clip: rect(0 0 0 0);
+          height: 1px;
+          margin: -1px;
+          overflow: hidden;
+          padding: 0;
+          position: absolute;
+          width: 1px;
+        }
+        tr {
+          border: 1px solid transparent;
+          margin-bottom: 1rem;
+          padding: $card-grid-padding;
+          cursor: pointer;
+          position: relative;
+          background-color: white;
+          @include flexBox(flex);
+          @include flexDirection(column);
+          @include borderRadius($card-grid-border-radius);
+          @include boxShadow($grid-card-shadow);
+        }
+
+        &.has-checkbox {
+          tr {
+            &::before {
+              content: '\2714';
+              font-family: 'Zapf Dingbats';
+              position: absolute;
+              left: .5rem;
+              top: .5rem;
+              width: $card-grid-check-status-size;
+              height: $card-grid-check-status-size;
+              border: 1px solid $card-grid-check-status-border-color;
+              color: $card-grid-check-status-border-color;
+              padding-top: 3px;
+              font-size: .8rem;
+              @include borderRadius($card-grid-check-status-border-radius);
+              @include flexBox(flex);
+              @include alignItem(center);
+              @include justifyContent(center);
+            }
+            &.selected {
+              border-color: $card-grid-selected-border-color;
+              @include boxShadow($card-grid-selected-shadow);
+              @include animation(selectCard 700ms);
+              &::before {
+                color: $card-grid-check-status-selected-color;
+                border-color: $card-grid-check-status-selected-color;
+              }
+            }
+            &:hover {
+              background-color: white;
+            }
+          }
+        }
+
+        td {
+          border: none;
+          display: block;
+          text-align: right;
+          font-size: $card-grid-value-font-size;
+          color: $card-grid-value-color;
+          font-weight: bold;
+          padding: $card-grid-td-padding;
+          &[data-label] {
+            &::before {
+              color: $card-grid-header-color;
+              font-size: $card-grid-header-font-size;
+              content: attr(data-label) ":";
+              float: right;
+              margin-left: .25rem;
+              font-weight: normal;
+            }
+          }
+          &:last-child {
+            border-bottom: 0;
+          }
+
+          &.hide-in-card-view {
+            display: none;
+          }
+        }
+        &.table-striped {
+          tbody tr:nth-of-type(even) {
+            background-color: white;
+          }
+        }
+      }
+    }
+  }
+  .action {
+    cursor: pointer;
+    text-decoration: none;
+    color: $table-body-color;
+    font-size: .85rem;
+    margin-left: .5rem;
+    @include transition(300ms);
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:hover {
+      text-shadow: $textShadowHover;
+    }
+    &.delete {
+      &:hover {
+        color: map_get($danger, 'base');
+      }
+    }
+  }
+  @each $colorName, $colorMap in $baseColors {
+    &.thead-#{$colorName} {
+      thead {
+        background-color: map_get($colorMap, 'base');
+        th {
+          color: white !important;
+          @if ($colorName == 'default') {
+            .value {
+              color: map_get($grey, 'darken-3');
+              .icon {
+                color: map_get($grey, 'darken-3');
+                &.unsorted {
+                  color: map_get($grey, 'lighten-1');
+                }
+              }
+              &:hover {
+                .icon {
+                  color: map_get($grey, 'darken-4');
+                }
+              }
+            }
+          } @else {
+            .value {
+              .icon {
+                color: lighten(map_get($colorMap, 'base'), 70%);
+                &.unsorted {
+                  color: lighten(map_get($colorMap, 'base'), 10%);
+                }
+              }
+              &:hover {
+                .icon {
+                  color: white;
+                }
+              }
+            }
+          }
+        }
+      }
+      &.table-bordered {
+        border-color: lighten(map_get($colorMap, 'base'), 60%);
+        thead {
+          tr {
+            border: 1px solid lighten(map_get($colorMap, 'base'), 60%);
+          }
+          th {
+            border-color: lighten(map_get($colorMap, 'base'), 10%);
+          }
+        }
+        tbody {
+          tr {
+            border-color: lighten(map_get($colorMap, 'base'), 60%);
+          }
+        }
+      }
+    }
+    caption.caption-#{$colorName} {
+      color: white !important;
+      background-color: map_get($colorMap, 'base') !important;
+    }
+    caption.caption-default {
+      color: map_get($elegant, 'base') !important;
+    }
+  }
+}
+
+// region
+@include rtl {
+  .table {
+    tbody {
+      td {
+        font-size: .8rem;
+      }
+    }
+  }
+}

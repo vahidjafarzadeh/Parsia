@@ -11,6 +11,7 @@ namespace Parsia.Areas.Administrator.Controllers.core.person
         {
             return View();
         }
+
         [Route("edit")]
         public IActionResult Edit()
         {

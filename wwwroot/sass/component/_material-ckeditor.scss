@@ -1,0 +1,109 @@
+@import "../abstract/mixins";
+@import "../abstract/colors";
+
+$border-color: #ede7e7;
+$floating-form-danger-color: map_get($danger, 'light');
+
+.cke {
+  border-color: lighten($border-color, 5%) !important;
+
+  ~ .floating-form-bar {
+    background-color: lighten($border-color, 5%);
+  }
+
+  ~ .floating-label {
+    top: 0 !important;
+    font-size: .9rem !important;
+  }
+
+  &.cke_focus {
+    ~ .floating-label {
+      color: $floating-form-base-color;
+    }
+
+    ~ .floating-form-bar::after {
+      width: 100%;
+      left: 0;
+    }
+  }
+
+  .cke_top {
+    background-color: #fdfdfd !important;
+    border-bottom: 1px dashed #ede7e7;
+    background-image: none;
+  }
+
+  .cke_bottom {
+    background-color: #fdfdfd !important;
+    border-top: 1px dashed $border-color;
+    background-image: none;
+  }
+
+  .cke_button {
+    background-color: white;
+    cursor: pointer;
+    padding: 4px 6px !important;
+    border: 1px solid #d3d3d3 !important;
+    margin: 0 3px;
+    @include borderRadius(3px);
+    @include boxShadow(0 3px 5px -4px rgba(227, 227, 227, 0.51), 0 2px 10px -2px rgba(186, 186, 186, 0.11) !important);
+    @include transition(.25s ease-in-out);
+
+    &:hover {
+      background-color: transparent !important;
+      @include boxShadow(0 6px 10px -2px rgba(227, 227, 227, 0.69), 0 2px 5px 0 rgba(186, 186, 186, 0.2) !important);
+    }
+  }
+
+  .cke_toolgroup {
+    a {
+      &.cke_button {
+        &:last-child {
+          &::after {
+            right: -7px;
+          }
+          &:hover {
+            &::after {
+              right: -7px;
+            }
+          }
+        }
+        &.cke_button_disabled {
+          &:hover {
+            &:last-child {
+              &::after {
+                right: -7px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .cke_wordcount {
+    .cke_path_item {
+      color: #a3a3a3 !important;
+    }
+    .cke_wordcountLimitReached {
+      color: $floating-form-danger-color !important;
+    }
+  }
+}
+
+@include rtl() {
+    .cke {
+        .cke_wordcount {
+            float: left;
+
+            .cke_path_item {
+                font-family: Iran;
+            }
+        }
+    }
+}
+ .cke_toolgroup {
+  background-image: none !important;
+  background: transparent !important;
+}
+

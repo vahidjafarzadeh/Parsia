@@ -1,0 +1,203 @@
+@import "../abstract/mixins";
+@import "../abstract/variables";
+
+$floating-form-base-color: $base-color;
+@import "../component/floating-form";
+@import "../component/floating-form-region";
+$floating-form-select-base-color: $base-color;
+@import "../component/floating-form-select2";
+@import "../component/material-ckeditor";
+
+$material-datepicker-base-color: $base-color;
+$material-datepicker-secondary-color: darken($base-color, 10%);
+@import "../component/material-datepicker";
+
+@import "../component/multiple-select";
+
+$modal-backdrop-opacity: .8;
+$process-title-margin: .5rem;
+$header-btn-margin: .25rem;
+
+$file-item-bg: #fff;
+$file-item-margin: .25rem .25rem 0 0;
+$file-item-padding: .25rem;
+$file-item-font-size: .85rem;
+$file-item-border-color: #d3dde9;
+$file-item-color: #78838f;
+$file-item-title-font-size: .8rem;
+$file-item-remove-color: #c8ced4;
+$file-item-remove-hover-color: map_get($danger, 'dark');
+$file-item-remove-margin: .25rem;
+.locker{
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1000;
+  @include flexBox(flex);
+  @include justifyContent(center);
+  @include flexDirection(column);
+  svg{
+    display: table;
+    margin: auto;
+    color: green;
+    font-size: 16px;
+  }
+  .text-gold{
+    color:gold;
+  }
+}
+.edit-page {
+  background-color: $body-bg;
+  .modal-backdrop {
+    &.show {
+      opacity: $modal-backdrop-opacity;
+    }
+  }
+
+  .data-wrapper {
+    //border: 1px solid $data-wrapper-border-color;
+    background-color: $body-bg;
+  }
+
+  .edit-form-container {
+    max-width: 950px;
+    margin: 0 auto;
+  }
+
+  .tabs-wrapper {
+    &.bg-stylish {
+      .nav-link {
+        color: white;
+        &:hover {
+          color: white;
+        }
+        &.active {
+          background-color: white;
+          color: map_get($stylish, 'base');
+        }
+      }
+    }
+  }
+
+  .edit-fieldset {
+    //min-height: $fieldset-min-height;
+    form {
+      display: none;
+      padding: 1rem;
+      background-color: white;
+      border: 1px solid #eee;
+      position: relative;
+      @include borderRadius(.5rem);
+      @include boxShadow(0 7px 7px -3px rgba(231, 231, 231, 0.3));
+      &.visible {
+        display: block;
+      }
+    }
+  }
+
+  .star {
+    color: map_get($danger, 'light');
+  }
+
+  // header
+  #edit-return, #edit-new, #edit-refresh {
+    @include flex(1)
+  }
+  #edit-return {
+    .icon-holder {
+      font-size: 1.1rem;
+    }
+  }
+  #edit-new, #edit-refresh {
+    margin-left: $header-btn-margin;
+  }
+  #process-title {
+    display: inline;
+    margin-left: $process-title-margin;
+  }
+  @media screen and (min-width: map_get($grid-breakpoints, 's')) {
+    #process-title {
+      display: block
+    }
+    #edit-return, #edit-new, #edit-refresh {
+      @include flex(none)
+    }
+  }
+
+  .files-wrapper { // TODO
+    .item {
+      background: $file-item-bg;
+      margin: $file-item-margin;
+      padding: $file-item-padding;
+      font-size: $file-item-font-size;
+      border: 1px solid $file-item-border-color;
+      color: $file-item-color;
+      @include borderRadius(.25rem);
+      .title {
+        font-size: $file-item-title-font-size;
+        direction: ltr !important;
+      }
+      .file-remove-svg-holder {
+        cursor: pointer;
+        color: $file-item-remove-color;
+        margin-left: $file-item-remove-margin;
+        @include transition($transition-duration);
+        &:hover {
+          color: $file-item-remove-hover-color;
+        }
+      }
+    }
+  }
+
+  .btn-wrapper {
+    margin: 1rem auto;
+    max-width: 400px;
+    @include flexBox(flex);
+    button {
+      @include flex(1);
+    }
+    :last-child {
+      margin-left: .5rem;
+    }
+  }
+}
+
+// region
+[lang=fa], [lang=ar] {
+  .edit-page {
+    #edit-return {
+      .icon-holder {
+        @include transform(rotate(180deg));
+      }
+    }
+    #edit-new {
+      margin-right: .25rem;
+      margin-left: 0;
+    }
+    #edit-refresh {
+      margin-left: 0;
+      margin-right: $header-btn-margin;
+    }
+    #process-title {
+      text-align: right;
+      margin-left: 0;
+      margin-right: $process-title-margin;
+    }
+    .files-wrapper {
+      .file-remove-svg-holder {
+        margin-left: 0;
+        margin-right: $file-item-remove-margin;
+      }
+    }
+  }
+  .btn-wrapper {
+    :last-child {
+      margin-left: 0;
+      margin-right: .5rem;
+    }
+  }
+}

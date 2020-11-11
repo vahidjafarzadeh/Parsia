@@ -1,4 +1,3 @@
-using System.IO;
 using DataLayer.Context;
 using DataLayer.Token;
 using DataLayer.Tools;
@@ -18,8 +17,6 @@ namespace Parsia
 {
     public class Startup
     {
-        public IHostingEnvironment HostingEnvironment { get;}
-        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
@@ -27,7 +24,11 @@ namespace Parsia
             BuildAppSettingsProvider(hostingEnvironment);
         }
 
+        public IHostingEnvironment HostingEnvironment { get; }
+        public IConfiguration Configuration { get; }
+
         #region SystemConfig
+
         private void BuildAppSettingsProvider(IHostingEnvironment hostingEnvironment)
         {
             var section = Configuration.GetSection("SystemConfig");
@@ -38,16 +39,17 @@ namespace Parsia
             SystemConfig.SystemAdminRoleId = long.Parse(section["SystemAdminRoleId"]);
             SystemConfig.ApplicationAdminRoleId = long.Parse(section["ApplicationAdminRoleId"]);
         }
+
         #endregion
-
-
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddWebMarkupMin(option => { option.AllowMinificationInDevelopmentEnvironment = true;
-                option.AllowCompressionInDevelopmentEnvironment=true;
+            services.AddWebMarkupMin(option =>
+            {
+                option.AllowMinificationInDevelopmentEnvironment = true;
+                option.AllowCompressionInDevelopmentEnvironment = true;
             }).AddHtmlMinification().AddHttpCompression().AddXmlMinification().AddXhtmlMinification();
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -55,30 +57,25 @@ namespace Parsia
             {
                 options.UseSqlServer("Data Source =.;Initial Catalog=Parsi;Integrated Security=True");
             });
-            services.AddMvc().AddJsonOptions(options => {
-                options.JsonSerializerOptions.IgnoreNullValues = true;
-            }); ;
+            services.AddMvc().AddJsonOptions(options => { options.JsonSerializerOptions.IgnoreNullValues = true; });
+            ;
             services.AddLogging();
             services.AddCors();
             services.AddJwt(Configuration);
             services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+
             #region Max Size To Upload
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.MaxRequestBodySize = int.MaxValue;
-            });
-            services.Configure<KestrelServerOptions>(options =>
-            {
-                options.Limits.MaxRequestBodySize = int.MaxValue;
-            });
+
+            services.Configure<IISServerOptions>(options => { options.MaxRequestBodySize = int.MaxValue; });
+            services.Configure<KestrelServerOptions>(options => { options.Limits.MaxRequestBodySize = int.MaxValue; });
             services.Configure<FormOptions>(options =>
             {
                 options.ValueLengthLimit = int.MaxValue;
                 options.MultipartBodyLengthLimit = int.MaxValue;
                 options.MultipartHeadersLengthLimit = int.MaxValue;
             });
-            #endregion
 
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,7 +86,7 @@ namespace Parsia
             else
                 app.UseExceptionHandler("/Home/Error");
             app.UseStaticFiles();
-
+            app.UseDeveloperExceptionPage();
             app.UseRouting();
             app.UseWebMarkupMin();
             app.UseAuthorization();

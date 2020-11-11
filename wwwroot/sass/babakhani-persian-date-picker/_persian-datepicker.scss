@@ -359,29 +359,34 @@ $main-btn-hover-bg: #eee;
 
 // region
 [lang=fa], [lang=ar] {
-  .datepicker-container {
-    .btn-switch {
-      text-align: center !important;
-      direction: ltr;
-    }
-    .btn-next, .btn-prev {
-      text-align: center !important;
-      @include transform(rotate(180deg));
-    }
-    .datepicker-day-view .table-days td > span{
-      text-align: center !important;
-    }
-    .header-row-cell {
-      font-family: Samim !important;
-    }
-    .datepicker-time-view {
-      @include flexDirection(row-reverse);
-      .time-segment {
-        > * {
-          text-align: center !important;
-          text-align: center !important;
+    .datepicker-container {
+        .btn-switch {
+            text-align: center !important;
+            direction: ltr;
         }
-      }
+
+        .btn-next, .btn-prev {
+            text-align: center !important;
+            @include transform(rotate(180deg));
+        }
+
+        .datepicker-day-view .table-days td > span {
+            text-align: center !important;
+        }
+
+        .header-row-cell {
+            font-family: Iran !important;
+        }
+
+        .datepicker-time-view {
+            @include flexDirection(row-reverse);
+
+            .time-segment {
+                > * {
+                    text-align: center !important;
+                    text-align: center !important;
+                }
+            }
+        }
     }
-  }
 }

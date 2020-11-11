@@ -1,0 +1,86 @@
+@import "../abstract/mixins";
+
+$floating-form-select-base-color: #43c8ba !default;
+$floating-bar-color: #ede7e7;
+
+.floating-form-control {
+  + .select2-container {
+    width: 100% !important;
+    position: relative;
+    &::after {
+      position: absolute;
+      content: '';
+      width: 0;
+      height: 3px;
+      bottom: 0;
+      left: 50%;
+      background-color: $floating-form-select-base-color;
+      @include transition(250ms);
+    }
+    &.select2-container--focus {
+      &::after {
+        width: 100%;
+        left: 0;
+      }
+    }
+    &.select2-container--focus, &.select2-container--open {
+      ~ .floating-form-control-msg, ~ .floating-label {
+        color: $floating-form-select-base-color;
+      }
+    }
+    .select2-selection {
+      border: none !important;
+      &:focus {
+        @include boxShadow(none !important);
+      }
+    }
+    ~ .floating-label {
+      top: 0 !important;
+      font-size: .9rem !important;
+    }
+  }
+  &[readonly] {
+    + .select2-container {
+      pointer-events: none !important;
+      .select2-selection__rendered {
+        color: #a1a0a0;
+      }
+    }
+  }
+}
+.has-error {
+  .select2-container {
+    &::after {
+      background-color: transparent;
+    }
+    ~ .floating-label {
+      color: map_get($danger, 'light') !important;
+    }
+  }
+}
+
+.select2-dropdown {
+  &.floating {
+    border: 2px solid $floating-form-select-base-color;
+    @include borderRadius(0);
+    @include boxShadow(0 15px 30px rgba($floating-form-select-base-color, .15) !important);
+
+    .select2-results__options {
+      font-size: .85rem !important;
+    }
+    .select2-results__option {
+      @include transition(250ms);
+    }
+    .select2-results__option--highlighted[aria-selected] {
+      background-color: rgba($floating-form-select-base-color, 0.7);
+    }
+    .select2-results__option[aria-selected="true"] {
+      background-color: rgba(238, 238, 238, 0.89);
+      color: initial !important;
+    }
+    .select2-search__field {
+      background: #fbfbfb;
+      border: 1px solid #e7e7e7;
+    }
+  }
+}
