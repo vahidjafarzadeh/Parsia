@@ -81,9 +81,7 @@ var initInstances = function() {
             gridHandler = localVariables.gridHandler;
         } else {
             gridHandler = new Handler();
-            gridHandler.complete = () => {};
             gridHandler.success = function(resp) {
-
                 if (top.hideLoading) {
                     top.hideLoading();
                 } else if (hidePageLoading) {
@@ -490,8 +488,8 @@ var initListeners = function() {
             dataContainer.find("input").not(".list-item,.read-only").each(function() {
                 var ctx = $(this);
                 var key = ctx.attr("ksun-bundle-key");
-                let condition = ctx.attr("ksun-condition-key");
-                let operation = ctx.attr("ksun-operation-key");
+                let condition = Number(ctx.attr("ksun-condition-key"));
+                let operation = Number(ctx.attr("ksun-operation-key"));
                 if (key) {
                     var itemParent = ctx.closest(`.${ENVIRONMENT.CssClass.FORM_GROUP}`);
                     key = key.indexOf("$") === 0 ? key.substr(1, key.length - 1) : key;
@@ -558,8 +556,8 @@ var initListeners = function() {
             dataContainer.find("select.autocomplete").each(function() {
                 var ctx = $(this);
                 var key = ctx.attr("ksun-bundle-key");
-                let condition = ctx.attr("ksun-condition-key");
-                let operation = ctx.attr("ksun-operation-key");
+                let condition = Number(ctx.attr("ksun-condition-key"));
+                let operation = Number(ctx.attr("ksun-operation-key"));
                 var itemParent = ctx.closest(`.${ENVIRONMENT.CssClass.FORM_GROUP}`);
                 key = key.indexOf("$") === 0 ? key.substr(1, key.length - 1) : key;
                 var config = ctx.data().select2Config;
@@ -615,8 +613,8 @@ var initListeners = function() {
             dataContainer.find(".file").each(function() {
                 var ctx = $(this);
                 var key = ctx.attr("ksun-bundle-key");
-                const condition = ctx.attr("ksun-condition-key");
-                const operation = ctx.attr("ksun-operation-key");
+                let condition = Number(ctx.attr("ksun-condition-key"));
+                let operation = Number(ctx.attr("ksun-operation-key"));
                 key = key.indexOf("$") === 0 ? key.substr(1, key.length - 1) : key;
                 const maxCount = ctx.attr("ksun-max-count") ? Number(ctx.attr("ksun-max-count")) : 1;
                 if (ctx.next(".files-wrapper").length === 1) {
@@ -649,8 +647,8 @@ var initListeners = function() {
             dataContainer.find("textarea").each(function() {
                 const ctx = $(this);
                 const key = ctx.attr("ksun-bundle-key");
-                const condition = ctx.attr("ksun-condition-key");
-                const operation = ctx.attr("ksun-operation-key");
+                let condition = Number(ctx.attr("ksun-condition-key"));
+                let operation = Number(ctx.attr("ksun-operation-key"));
                 if (ctx.val() && ctx.val() !== null) {
                     gridWheres.add(ctx.attr("ksun-column-key"), ctx.val(), condition, operation);
                 }
@@ -661,8 +659,8 @@ var initListeners = function() {
                 dataContainer.find(".clob").each(function() {
                     var key = $(this).attr("ksun-bundle-key");
                     key = key.indexOf("$") === 0 ? key.substr(1, key.length - 1) : key;
-                    const condition = ctx.attr("ksun-condition-key");
-                    const operation = ctx.attr("ksun-operation-key");
+                    let condition = Number(ctx.attr("ksun-condition-key"));
+                    let operation = Number(ctx.attr("ksun-operation-key"));
                     if (CKEDITOR.instances[this.id] && CKEDITOR.instances[this.id].getData()) {
                         gridWheres.add(ctx.attr("ksun-column-key"),
                             CKEDITOR.instances[this.id].getData(),
@@ -678,15 +676,15 @@ var initListeners = function() {
             dataContainer.find(".objects-list-wrapper").each(function() {
                 const ctx = $(this);
                 const key = ctx.attr("ksun-object-key");
-                const condition = ctx.attr("ksun-condition-key");
-                const operation = ctx.attr("ksun-operation-key");
+                let condition = Number(ctx.attr("ksun-condition-key"));
+                let operation = Number(ctx.attr("ksun-operation-key"));
                 gridWheres.add(ctx.attr("ksun-column-key"), [], condition, operation);
             });
             dataContainer.find(".objects-list-wrapper").each(function() {
                 const ctx = $(this);
                 var key = ctx.attr("ksun-object-key");
-                const condition = ctx.attr("ksun-condition-key");
-                const operation = ctx.attr("ksun-operation-key");
+                let condition = Number(ctx.attr("ksun-condition-key"));
+                let operation = Number(ctx.attr("ksun-operation-key"));
                 var conf = objectsConfig[key];
                 ctx.find(".list-item").each(function() {
                     const elem = $(this);
@@ -1217,20 +1215,17 @@ var showEdit = function(rowData) {
         350); // transition time
 };
 
-var showPageLoading = function() {
-    pageLoadingModal.modal("show");
-};
-var hidePageLoading = function() {
-    setTimeout(function() {
-            pageLoadingModal.modal("hide");
-        },
-        500);
-};
-
 var showConfirmation = function(config) {
     pageConfirmModal.modal("show");
 };
-
+var showPageLoading = function () {
+    pageLoadingModal.modal('show');
+};
+var hidePageLoading = function () {
+    setTimeout(function () {
+        pageLoadingModal.modal('hide');
+    }, 500);
+};
 var onPageReady = function(params) {
     // change page language according to user lang
     $("html").attr("lang", Storage.getUserInfo().lang === 1 ? "FA" : "EN");

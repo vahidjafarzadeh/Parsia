@@ -7,30 +7,24 @@ using DataLayer.Tools;
 using Datalayer.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 
-namespace Parsia.Core.ComboVal
+namespace Parsia.Core.Person
 {
-    public class ComboValFacade : IBaseFacade<ComboValDto>
+    public class PersonFacade : IBaseFacade<PersonDto>
     {
-        private static readonly ComboValFacade Facade = new ComboValFacade();
-        private static readonly ComboValCopier Copier = new ComboValCopier();
-
-        private ComboValFacade()
+        private static readonly PersonFacade Facade = new PersonFacade();
+        private static readonly PersonCopier Copier = new PersonCopier();
+        private PersonFacade()
         {
         }
-
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             try
             {
-                var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.ComboVal.ComboVal>();
-                var queryString =
-                    "select entityId,name,value,code,parentId,fullTitle,createBy,accessKey from (select data.EntityId as entityId,data.Name as name,data.Value as value,data.Code as code,parent.Name as parentId,data.FullTitle as fullTitle,data.Deleted as deleted,data.CreateBy as createBy,data.AccessKey as accessKey from (select EntityId,Name,Value,Code,ParentId,FullTitle,Deleted,AccessKey,CreateBy from " +
-                    tableName + " where Deleted =0) data left join(select EntityId, Name from " + tableName +
-                    " where Deleted = 0) parent on data.ParentId = parent.EntityId ) e  " +
+                var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Person.Person>();
+                var queryString = "select * from (select ROW_NUMBER() OVER (ORDER BY entityId) as rowNumber,entityId,firstName,lastName,NationalCode,fatherName,birthDate,deleted,fullTitle,createBy,accessKey from "+tableName+") e " +
                     QueryUtil.GetWhereClause(bp.Clause,
-                        QueryUtil.GetConstraintForNativeQuery(bp, "ComboVal", false, false, true)) +
+                        QueryUtil.GetConstraintForNativeQuery(bp, "Person", false, false, true)) +
                     QueryUtil.GetOrderByClause(bp.Clause);
-                queryString = QueryUtil.SetPaging(bp.Clause.PageNo,bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
                 {
                     var comboList = unitOfWork.ComboVal.CreateNativeQuery(queryString, x => new[]
@@ -40,12 +34,13 @@ namespace Parsia.Core.ComboVal
                         x[2]?.ToString(),
                         x[3]?.ToString(),
                         x[4]?.ToString(),
-                        x[5]?.ToString()
+                        x[5]?.ToString(),
+                       (Util.GetTimeStamp(string.IsNullOrEmpty(x[6]?.ToString()) ?  (DateTime?) null : Convert.ToDateTime(x[6].ToString())))
                     });
                     if (comboList.Count == 0)
                         return new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکوردی یافت نشد");
                     var list = new List<object>();
-                    var headerTitle = new object[] {"entityId", "name", "value", "code", "parentName"};
+                    var headerTitle = new object[] { "entityId", "firstName", "lastName", "nationalId", "fatherName", "birthDate" };
                     list.Add(headerTitle);
                     list.AddRange(comboList);
                     return new ServiceResult<object>(list, comboList.Count);
@@ -53,38 +48,36 @@ namespace Parsia.Core.ComboVal
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "ComboValFacade.GridView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, "PersonFacade.GridView", bp.UserInfo);
             }
         }
-
-        public ServiceResult<object> Save(BusinessParam bp, ComboValDto dto)
+        public ServiceResult<object> Save(BusinessParam bp, PersonDto dto)
         {
             try
             {
-                DataLayer.Model.Core.ComboVal.ComboVal comboVal;
+                DataLayer.Model.Core.Person.Person person;
                 if (dto.EntityId == 0)
                     using (var unitOfWork = new UnitOfWork())
                     {
-                        comboVal = Copier.GetEntity(dto, bp, true);
-                        unitOfWork.ComboVal.Insert(comboVal);
-                        unitOfWork.ComboVal.Save();
+                        person = Copier.GetEntity(dto, bp, true);
+                        unitOfWork.Person.Insert(person);
+                        unitOfWork.Person.Save();
                     }
                 else
                     using (var unitOfWork = new UnitOfWork())
                     {
-                        comboVal = Copier.GetEntity(dto, bp, false);
-                        unitOfWork.ComboVal.Update(comboVal);
-                        unitOfWork.ComboVal.Save();
+                        person = Copier.GetEntity(dto, bp, false);
+                        unitOfWork.Person.Update(person);
+                        unitOfWork.Person.Save();
                     }
 
-                return new ServiceResult<object>(Copier.GetDto(comboVal), 1);
+                return new ServiceResult<object>(Copier.GetDto(person), 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "ComboVal.Save", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, "PersonFacade.Save", bp.UserInfo);
             }
         }
-
         public ServiceResult<object> ShowRow(BusinessParam bp)
         {
             long entityId = 0;
@@ -113,30 +106,11 @@ namespace Parsia.Core.ComboVal
                                   "where main.EntityId = " + entityId;
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var comboVal = unitOfWork.ComboVal.CreateNativeQuery(queryString, x => new ComboValDto
-                    {
-                        EntityId = Convert.ToInt64(x[0].ToString()),
-                        Name = x[1]?.ToString(),
-                        Value = x[2]?.ToString(),
-                        AdminOnly = Convert.ToBoolean(x[3]?.ToString()),
-                        Active = Convert.ToBoolean(x[4]?.ToString()),
-                        Created = Util.GetTimeStamp(string.IsNullOrEmpty(x[5].ToString()) ? (DateTime?)null : Convert.ToDateTime(x[5]?.ToString())),
-                        Updated = Util.GetTimeStamp(string.IsNullOrEmpty(x[6].ToString()) ? (DateTime?)null : Convert.ToDateTime(x[6]?.ToString())),
-                        Code = x[7]?.ToString(),
-                        Parent = string.IsNullOrEmpty(x[8].ToString())
-                            ? null
-                            : new ComboValDto {EntityId = Convert.ToInt64(x[8].ToString()), Name = x[9]?.ToString()},
-                        CreatedBy = string.IsNullOrEmpty(x[10].ToString())
-                            ? null
-                            : new UserDto {EntityId = Convert.ToInt64(x[10].ToString()), Username = x[11]?.ToString()},
-                        UpdatedBy = string.IsNullOrEmpty(x[12].ToString())
-                            ? null
-                            : new UserDto {EntityId = Convert.ToInt64(x[12].ToString()), Username = x[13]?.ToString()}
-                    });
+                    var comboVal = new LinkedList<string>();
 
                     return comboVal == null
                         ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکورد یافت نشد")
-                        : new ServiceResult<object>(comboVal[0], 1);
+                        : new ServiceResult<object>(comboVal, 1);
                 }
             }
             catch (Exception e)
@@ -155,30 +129,30 @@ namespace Parsia.Core.ComboVal
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "ComboValFacade.Delete",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "PersonFacade.Delete",
                         bp.UserInfo);
-                DataLayer.Model.Core.ComboVal.ComboVal comboVal;
+                DataLayer.Model.Core.Person.Person person;
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    comboVal = unitOfWork.ComboVal.GetRecord(entityId);
+                    person = unitOfWork.Person.GetRecord(entityId);
                 }
 
-                if (comboVal == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "ComboValFacade.Delete",
+                if (person == null)
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "PersonFacade.Delete",
                         bp.UserInfo);
 
-                comboVal.Deleted = comboVal.EntityId;
+                person.Deleted = person.EntityId;
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    unitOfWork.ComboVal.Update(comboVal);
-                    unitOfWork.ComboVal.Save();
+                    unitOfWork.Person.Update(person);
+                    unitOfWork.Person.Save();
                 }
 
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "ComboValFacade.Delete", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, "PersonFacade.Delete", bp.UserInfo);
             }
         }
 
@@ -186,19 +160,17 @@ namespace Parsia.Core.ComboVal
         {
             try
             {
-                var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.ComboVal.ComboVal>();
+                var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Person.Person>();
                 var queryString = "select * from (select EntityId,Name,Value,code,CreateBy,AccessKey,Deleted from " +
                                   tableName + " ) e" +
                                   QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, "ComboVal", false, false, true)) +
+                                      QueryUtil.GetConstraintForNativeQuery(bp, "Person", true, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var comboList = unitOfWork.ComboVal.CreateNativeQuery(queryString, x => new ComboValDto
+                    var comboList = unitOfWork.ComboVal.CreateNativeQuery(queryString, x => new PersonDto
                     {
                         EntityId = Convert.ToInt64(x[0].ToString()),
-                        Name = x[1]?.ToString(),
-                        Value = x[2]?.ToString(),
                         Code = x[3]?.ToString()
                     });
                     return comboList.Count == 0
@@ -214,25 +186,16 @@ namespace Parsia.Core.ComboVal
 
         public ServiceResult<object> GetDtoFromRequest(HttpRequest request)
         {
-            var dto = new ComboValDto();
+            var dto = new PersonDto();
             if (!string.IsNullOrEmpty(request.Form["EntityId"]))
                 dto.EntityId = Convert.ToInt64(request.Form["EntityId"]);
-            if (!string.IsNullOrEmpty(request.Form["Name"]))
-                dto.Name = request.Form["Name"];
-            else
-                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نام را وارد نمایید");
             if (!string.IsNullOrEmpty(request.Form["Code"])) dto.Code = request.Form["Code"];
-            if (!string.IsNullOrEmpty(request.Form["Value"])) dto.Value = request.Form["Value"];
             if (!string.IsNullOrEmpty(request.Form["Active"])) dto.Active = Convert.ToBoolean(request.Form["Active"]);
-            if (!string.IsNullOrEmpty(request.Form["AdminOnly"]))
-                dto.AdminOnly = Convert.ToBoolean(request.Form["AdminOnly"]);
-            if (!string.IsNullOrEmpty(request.Form["Parent"]))
-                dto.Parent = new ComboValDto {EntityId = Convert.ToInt64(request.Form["Parent"])};
             if (!string.IsNullOrEmpty(request.Form["Ticket"])) dto.Ticket = request.Form["Ticket"];
             return new ServiceResult<object>(dto, 1);
         }
 
-        public static ComboValFacade GetInstance()
+        public static PersonFacade GetInstance()
         {
             return Facade;
         }

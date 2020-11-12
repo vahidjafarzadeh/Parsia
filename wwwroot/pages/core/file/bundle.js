@@ -9,6 +9,7 @@
     cancel: "انصراف",
     folderName: "نام پوشه",
     fileName: "نام فایل",
+    bePatient: "شکیبا باشید",
     subTitle: "متن جایگزین",
     description: "توضیحات فایل"
 }

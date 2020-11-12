@@ -28,27 +28,32 @@ $file-item-title-font-size: .8rem;
 $file-item-remove-color: #c8ced4;
 $file-item-remove-hover-color: map_get($danger, 'dark');
 $file-item-remove-margin: .25rem;
-.locker{
-  position: absolute;
-  left: 5px;
-  top: 5px;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  cursor: pointer;
-  z-index: 1000;
-  @include flexBox(flex);
-  @include justifyContent(center);
-  @include flexDirection(column);
-  svg{
-    display: table;
-    margin: auto;
-    color: green;
-    font-size: 16px;
-  }
-  .text-gold{
-    color:gold;
-  }
+.text-transparent{
+    color : transparent !important
+}
+.locker {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    cursor: pointer;
+    z-index: 1000;
+    @include flexBox(flex);
+    @include justifyContent(center);
+    @include flexDirection(column);
+
+    svg {
+        display: table;
+        margin: auto;
+        color: green;
+        font-size: 16px;
+    }
+
+    .text-gold {
+        color: gold;
+    }
 }
 .edit-page {
   background-color: $body-bg;

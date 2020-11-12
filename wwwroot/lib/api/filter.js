@@ -14,8 +14,8 @@
 var Filter = function(where, pageSize, pageNo, orderBy, language, ticket) {
 
     this.wheres = where;
-    this.pageSize = pageSize;
-    this.pageNo = pageNo;
+    this.pageSize = Number(pageSize);
+    this.pageNo = Number(pageNo);
     this.orderBy = orderBy;
     this.language = language;
     this.ticket = ticket;

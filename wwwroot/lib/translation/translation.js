@@ -56,7 +56,8 @@ var Translation = (function() {
                 } catch (e) {
 
                 }
-            } else {
+            } else
+            {
                 try {
                     for (var key in Bundle) {
                         if (ctx.attr("data-toggle") === "tooltip") {

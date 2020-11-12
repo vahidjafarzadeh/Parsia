@@ -12,6 +12,7 @@
     <_ContentIncludedByDefault Remove="compilerconfig.json" />
     <_ContentIncludedByDefault Remove="wwwroot\css\admin\style.css" />
     <_ContentIncludedByDefault Remove="wwwroot\sass\core\core.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\sass\page\edit.min.css" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BuildWebCompiler" Version="1.12.394" />
@@ -34,10 +35,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NodaTime" Version="3.0.3" />
     <PackageReference Include="WebMarkupMin.AspNetCore3" Version="2.8.11" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Person\" />
     <Folder Include="Core\RoleAccessGroup\" />
     <Folder Include="Core\Role\" />
     <Folder Include="Core\UseCaseActionAccessGroup\" />
@@ -50,6 +51,7 @@
     <Folder Include="wwwroot\file\" />
     <Folder Include="wwwroot\pages\core\comboval\" />
     <Folder Include="wwwroot\pages\core\businessaccess\" />
+    <Folder Include="wwwroot\pages\core\entitystate\" />
     <Folder Include="wwwroot\sass\button\" />
   </ItemGroup>
   <ItemGroup>

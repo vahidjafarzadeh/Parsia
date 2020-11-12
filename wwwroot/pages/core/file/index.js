@@ -1,4 +1,5 @@
-﻿let containerFilter,
+﻿"use strict";
+let containerFilter,
     localVariable,
     fileWrapper,
     newFolder,
@@ -14,7 +15,7 @@
     description,
     createNewFile,
     backNewFile,
-    removeFile,
+    removeFile, pageLoadingModal, pageConfirmModal,
     filter;
 const initializeVariable = () => {
     localVariable = {
@@ -51,6 +52,8 @@ const initializeVariable = () => {
     removeFile = $("#context-menu-delete-item");
     filter = $("#file-manager-filter-btn");
     wrapperCreateFolder = $(".create-folder");
+    pageLoadingModal = $("#loading-modal");
+    pageConfirmModal = $("#confirm-modal");
 };
 const getExtensionForView = () => {
     const configData = {
@@ -62,8 +65,6 @@ const getExtensionForView = () => {
         Language: 1
     };
     const handler = new Handler();
-    handler.beforeSend = () => {};
-    handler.complete = () => {};
     handler.success = (data) => {
         if (data.done) {
             $.each(data.result,
@@ -135,9 +136,6 @@ const createFolder = (name, holder, data) => {
             language: 1
         };
         const handler = new Handler();
-        handler.complete = () => {
-            hideLoading();
-        };
         handler.success = (data) => {
             if (data.done) {
                 createFileAndFolder(data.result);
@@ -267,9 +265,6 @@ const getDetailsFile = (data) => {
         };
         const handler = new Handler();
         handler.beforeSend = () => {};
-        handler.complete = () => {
-            hideLoading();
-        };
         handler.success = (resp) => {
             if (resp.done) {
                 removeFile.attr("remove-id", resp.result.entityId);
@@ -401,9 +396,6 @@ const eventListener = () => {
                 language: 1
             };
             const handler = new Handler();
-            handler.complete = () => {
-                hideLoading();
-            };
             handler.success = (data) => {
                 if (data.done) {
                     createFileAndFolder(data.result);
@@ -523,9 +515,6 @@ const eventListener = () => {
                 language: 1
             };
             const handler = new Handler();
-            handler.complete = () => {
-                hideLoading();
-            };
             handler.success = (data) => {
                 if (data.done) {
                     createFileAndFolder(data.result);
@@ -536,7 +525,18 @@ const eventListener = () => {
             Api.post({ url: localVariable.urls.gridView, data: configData, handler: handler });
         });
 };
-gridView = () => {
+var showConfirmation = function (config) {
+    pageConfirmModal.modal("show");
+};
+var showPageLoading = function () {
+    pageLoadingModal.modal('show');
+};
+var hidePageLoading = function () {
+    setTimeout(function () {
+        pageLoadingModal.modal('hide');
+    }, 500);
+};
+var gridView = () => {
     var where = new Wheres();
     where.add("parentId", "null", ENVIRONMENT.Condition.IS_NULL, ENVIRONMENT.Operator.AND);
     where.add("displayInFileManager",
@@ -555,10 +555,12 @@ gridView = () => {
         language: 1
     };
     const handler = new Handler();
-    handler.complete = () => {
-        hideLoading();
-    };
     handler.success = (data) => {
+        if (top.hideLoading) {
+            top.hideLoading();
+        } else if (hidePageLoading) {
+            hidePageLoading();
+        }
         if (data.done) {
             createFileAndFolder(data.result);
         } else {
@@ -570,6 +572,7 @@ gridView = () => {
 $(function() {
     initializeVariable();
     eventListener();
+    Translation.translate();
     getExtensionForView();
     gridView();
 

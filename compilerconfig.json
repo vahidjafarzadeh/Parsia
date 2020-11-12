@@ -26,5 +26,9 @@
   {
     "outputFile": "wwwroot/sass/core/core.css",
     "inputFile": "wwwroot/sass/core/core.scss"
+  },
+  {
+    "outputFile": "wwwroot/sass/page/edit.css",
+    "inputFile": "wwwroot/sass/page/edit.scss"
   }
 ]

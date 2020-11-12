@@ -1,5 +1,4 @@
 ﻿@import "../../../sass/abstract/mixins";
-
 .selected-file {
     span {
         float: right;
@@ -11,7 +10,10 @@
         cursor: default;
     }
 }
-
+.btn-icon {
+    float: left;
+    margin: 0 5px;
+}
 .content-wrapper {
     height: calc(100vh - 30px);
 
@@ -47,6 +49,7 @@
                     padding: 0;
                     font-size: 0.7rem;
                     color: #6c8ffa;
+                    float: left;
                 }
 
                 .wrapper {

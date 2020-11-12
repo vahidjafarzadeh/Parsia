@@ -30,6 +30,7 @@ var localVariables,
     currentData,
     gridRefreshFlag = false,
     ignoreToClear,
+    pageLoadingModal,
     datePickerList = {};
 
 
@@ -45,6 +46,7 @@ var initViews = function() {
     newButton = $("#edit-new");
     refreshButton = $("#edit-refresh");
     submitButton = $("#edit-submit");
+    pageLoadingModal = $('#loading-modal');
     clearButton = $("#edit-clear");
     objectsListAddBtn = $(".objects-list-wrapper").find(".add");
 };
@@ -1326,7 +1328,6 @@ var hidePageLoading = function() {
         },
         500);
 };
-
 var showConfirmation = function(config) {
     pageConfirmModal.modal("show");
 };

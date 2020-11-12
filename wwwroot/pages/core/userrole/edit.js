@@ -9,8 +9,6 @@ var localVariables = {
             getAccess: "comboval/getAccess"
         }
     },
-    lockAble: false,
-    clazzName: "ComboVal",
     ignoreToClear: []
 };
 var initAutoCompletes = function () {

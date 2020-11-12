@@ -1,6 +1,6 @@
 ﻿"use strict";
 //initialise all variable in admin page
-let loading, containerMenu, navMenu, tabContainer, mainSection, next, before, logo, menu, modalInstance;
+let loading, loadingModal, containerMenu, navMenu, tabContainer, mainSection, next, before, logo, menu, modalInstance;
 const initVariable = () => {
     loading = $(".loading");
     tabContainer = $(".tab-container-main");
@@ -11,6 +11,7 @@ const initVariable = () => {
     before = $(".before");
     menu = $(".menu");
     logo = $("#logo");
+    loadingModal = $('#loading-modal');
     modalInstance = Modal.init();
     changeAllBundle();
 };
@@ -169,6 +170,17 @@ const createTab = (data) => {
                         500);
                 }
 
+            },
+            mousedown: (e) => {
+                var keyCode = e.which || e.keyCode;
+                if (keyCode === ENVIRONMENT.KeyCode.MIDDLE_MOUSE) {
+                    e.preventDefault();
+                    li.remove();
+                    tabContainer.find(".active").removeClass("active");
+                    tabContainer.find("li:eq(0)").addClass("active").trigger("click");
+                    mainSection.find(`#${uuid}`).remove();
+                }
+               
             }
         });
     const spanText = $("<span/>", { class: "text", text: data.name });
@@ -196,15 +208,12 @@ const createTab = (data) => {
     tabContainer.append(li);
     li.trigger("click");
 };
-
 function showConfirm(config) {
     modalInstance.showConfirm(config);
 }
-
 function hideConfirm() {
     modalInstance.hideConfirm();
 }
-
 $(function() {
     initVariable();
     initAllEvent();
@@ -322,7 +331,7 @@ $(function() {
         {
             name: "افراد",
             title: "persons",
-            path: "/person/index",
+            path: "/pages/core/person/index.html",
             icon: "<i class='fas fa-user-friends'></i>",
             orderNode: 1,
             parentId: 11,

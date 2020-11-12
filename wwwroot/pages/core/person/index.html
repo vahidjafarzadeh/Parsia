@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- Viewport Meta Tag -->
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-    <title>مقادیر چند گزینه ای</title>
+    <title>افراد</title>
     <base href="/">
     <link rel="stylesheet" href="/sass/core/core.min.css">
     <link rel="stylesheet" href="/sass/page/index.css">
@@ -137,12 +137,12 @@
             <table class="table card-grid-s table-hover table-bordered table-striped thead-stylish main-table has-checkbox mb-0">
                 <thead>
                     <tr>
-                        <th scope="col" style="width: 40px">
+                        <th scope="col">
                             <div class="value event-off">
                                 <span ksun-bundle-key="$rowNum"></span>
                             </div>
                         </th>
-                        <th scope="col" style="width: 110px">
+                        <th scope="col">
                             <div class="value">
                                 <span ksun-bundle-key="entityId"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
@@ -150,25 +150,31 @@
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="name"></span>
+                                <span ksun-bundle-key="firstName"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="value"></span>
+                                <span ksun-bundle-key="lastName"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="code"></span>
+                                <span ksun-bundle-key="nationalId"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="parentName"></span>
+                                <span ksun-bundle-key="fatherName"></span>
+                                <i class="icon unsorted fas fa-sort"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="value">
+                                <span ksun-bundle-key="birthDate"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
@@ -195,10 +201,11 @@
                     <tr class="pattern-row">
                         <td ksun-bundle-key="$rowNum"></td>
                         <td ksun-bundle-key="entityId"></td>
-                        <td ksun-bundle-key="name"></td>
-                        <td ksun-bundle-key="value"></td>
-                        <td ksun-bundle-key="code"></td>
-                        <td ksun-bundle-key="parentName"></td>
+                        <td ksun-bundle-key="firstName"></td>
+                        <td ksun-bundle-key="lastName"></td>
+                        <td ksun-bundle-key="nationalId"></td>
+                        <td ksun-bundle-key="fatherName"></td>
+                        <td ksun-bundle-key="birthDate" ksun-formatter="changeDate"></td>
                         <td ksun-bundle-key="$checkbox" class="hide-in-card-view"></td>
                         <td ksun-bundle-key="$actions" class="hide-in-card-view"></td>
                     </tr>
@@ -305,8 +312,8 @@
     <script src="/lib/translation/general-bundle.js"></script>
     <script src="/lib/translation/translation.js"></script>
     <script src="/lib/modal/modal.js"></script>
-    <script src="/pages/core/comboval/bundle.js"></script>
+    <script src="/pages/core/person/bundle.js"></script>
     <script src="/lib/core/index.js"></script>
-    <script src="/pages/core/comboval/index.js"></script>
+    <script src="/pages/core/person/index.js"></script>
 </body>
 </html>
