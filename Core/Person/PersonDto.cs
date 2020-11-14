@@ -4,6 +4,7 @@ using Parsia.Core.ComboVal;
 using Parsia.Core.File;
 namespace Parsia.Core.Person
 {
+    
     public class PersonDto : BaseDto
     {
         [Display(Name = "شناسه")]
@@ -31,7 +32,7 @@ namespace Parsia.Core.Person
         public string MotherName { get; set; }
         [Display(Name = "تاریخ تولد")]
         [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
-        public long BirthDate { get; set; }
+        public double BirthDate { get; set; }
         [Display(Name = "محل تولد")]
         [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
         [MaxLength(100, ErrorMessage = "حداکثر کاراکتر مجاز برای {0} به میزان {1} کاراکتر می باشد")]
@@ -88,4 +89,5 @@ namespace Parsia.Core.Person
         [Display(Name = "نوع معلولیت")]
         public ComboValDto DisabilityType { get; set; }
     }
+
 }

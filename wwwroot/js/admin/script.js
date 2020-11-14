@@ -43,7 +43,7 @@ const createScrollBar = () => {
 
 };
 const createMenu = (data) => {
-    data.sort(function(a, b) {
+    data.sort(function (a, b) {
         if (a.orderNode !== b.orderNode) {
             return a.orderNode - b.orderNode;
         }
@@ -153,8 +153,8 @@ const createTab = (data) => {
                 if (mainSection.find(`#${uuid}`).length > 0) {
                     mainSection.find("iframe").fadeOut();
                     setTimeout(() => {
-                            mainSection.find(`#${uuid}`).fadeIn();
-                        },
+                        mainSection.find(`#${uuid}`).fadeIn();
+                    },
                         500);
                 } else {
                     var iframe = $("<iframe/>",
@@ -165,8 +165,8 @@ const createTab = (data) => {
                         });
                     mainSection.find("iframe").fadeOut();
                     setTimeout(() => {
-                            mainSection.append(iframe);
-                        },
+                        mainSection.append(iframe);
+                    },
                         500);
                 }
 
@@ -180,7 +180,7 @@ const createTab = (data) => {
                     tabContainer.find("li:eq(0)").addClass("active").trigger("click");
                     mainSection.find(`#${uuid}`).remove();
                 }
-               
+
             }
         });
     const spanText = $("<span/>", { class: "text", text: data.name });
@@ -214,7 +214,7 @@ function showConfirm(config) {
 function hideConfirm() {
     modalInstance.hideConfirm();
 }
-$(function() {
+$(function () {
     initVariable();
     initAllEvent();
     createScrollBar();
@@ -340,7 +340,7 @@ $(function() {
         {
             name: "کاربران سامانه",
             title: "users",
-            path: "/",
+            path: "/pages/core/user/index.html",
             icon: "<i class='fas fa-users'></i>",
             orderNode: 2,
             parentId: 11,
@@ -358,7 +358,7 @@ $(function() {
         {
             name: "گروه دسترسی",
             title: "access",
-            path: "/",
+            path: "/pages/core/accessgroup/index.html",
             icon: "<i class='fas fa-users'></i>",
             orderNode: 3,
             parentId: 12,
@@ -367,7 +367,7 @@ $(function() {
         {
             name: "عملیات",
             title: "actions",
-            path: "/",
+            path: "/pages/core/action/index.html",
             icon: "<i class='fas fa-people-carry'></i>",
             orderNode: 1,
             parentId: 12,
@@ -387,6 +387,24 @@ $(function() {
             title: "organization",
             path: "/",
             icon: "<i class='fas fa-building'></i>",
+            orderNode: 5,
+            parentId: 12,
+            entityId: 19
+        },
+        {
+            name: "دسترسی کارها",
+            title: "business access",
+            path: "/",
+            icon: " <i class='fas fa-universal-access'></i> ",
+            orderNode: 5,
+            parentId: 12,
+            entityId: 19
+        },
+        {
+            name: "وضعیت موجودیت ها",
+            title: "entity state",
+            path: "/",
+            icon: "<i class='fas fa-lock'></i>",
             orderNode: 5,
             parentId: 12,
             entityId: 19
@@ -421,7 +439,7 @@ $(function() {
         {
             name: "فرآیندها",
             title: "use case",
-            path: "/",
+            path: "/pages/core/usecase/index.html",
             icon: "<i class='fas fa-random'></i>",
             orderNode: 2,
             parentId: 12,

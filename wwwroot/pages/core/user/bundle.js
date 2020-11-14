@@ -1,14 +1,13 @@
-var Bundle = {
+const Bundle = {
+    emailCode:"کد فعال سازی ایمیل",
+    phoneCode: "کد فعال سازی موبایل",
+    lastName: "نام خانوادگی",
+    personIdPlaceholder: "شخص را وارد کنید",
     entityId: "کد شناسه",
-    entityForm: "مقادیر چندگزینه ای",
-    name: "عنوان",
-    value: "مقدار",
-    code: "کد",
-    parent: "والد",
-    parentName: "نام والد",
-    parentPlaceholder: "والد را انتخاب کنید",
-    processTitle: "مقادیر چندگزینه ای",
-    adminOnly: "نمایش برای",
-    adminOnlyT: "مدیر سیستم",
-    adminOnlyF: "همه کاربران"
-};
+    firstName: "نام",
+    password: "گذر واژه",
+    username: "نام کاربری",
+    lastVisit: "آخرین بازدید",
+    attempt: "تعداد تلاش ناموفق برای ورود",
+    person: "فرد"
+}

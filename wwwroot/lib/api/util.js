@@ -754,8 +754,53 @@ var Util = (function() {
             return Promise.all(urls.map(scriptImporter.url));
         }
     };
+    const generatePassword = (minLen) => {
+        // create a pwd that is between minLen and ((2 * minLen) + 2) long
+        // don't repeat any characters
+        // require at least one special char and one capital char
+        function rand(max) {
+            return Math.floor(Math.random() * max);
+        }
 
+        function ensurePwdContains(pwd, regexListOfChars, listOfChars) {
+            if (!regexListOfChars.test(pwd)) {
+                var newChar = listOfChars.charAt(rand(listOfChars.length));
+                var pos = rand(pwd.length + 1);
+                pwd = pwd.slice(0, pos) + newChar + pwd.slice(pos);
+            }
+            return pwd;
+        }
+
+        var legalChars = "!#$@*123456789aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ";
+        var specialChars = "!#$@*";
+        var specialRegex = /[!#\$@*]/;
+        var caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var capsRegex = /[A-Z]/;
+        var nums = "123456789";
+        var numRegex = /[1-9]/;
+
+        // make legalChars into an array of chars (easier to deal with)
+        legalChars = legalChars.split("");
+        var pwd = "", len = minLen + rand(minLen), index;
+
+        // ensure len is not too long
+        len = Math.min(legalChars.length, len);
+
+        // now add chars to the pwd string until it is of the desired length
+        while (pwd.length < len) {
+            index = rand(legalChars.length);
+            pwd += legalChars[index];
+            // remove the char we just used
+            legalChars.splice(index, 1);
+        }
+        // ensure we have at least one special character and one caps char and one 1-9
+        pwd = ensurePwdContains(pwd, specialRegex, specialChars);
+        pwd = ensurePwdContains(pwd, capsRegex, caps);
+        pwd = ensurePwdContains(pwd, numRegex, nums);
+        return pwd;
+    }
     return {
+        generatePassword: generatePassword,
         differentTime: diffTime,
         loadScript: loadScript,
         urlParameter: urlParameter,

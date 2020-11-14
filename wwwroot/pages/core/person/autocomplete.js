@@ -1,6 +1,6 @@
 const PersonAutocomplete = {
     dynamicConfig: {
-        text: 'fullTitle',
+        text: 'fullName',
         value: 'entityId',
         minCharacter: 2,
         searchColumn: 'fullTitle'

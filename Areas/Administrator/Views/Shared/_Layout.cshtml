@@ -1,11 +1,11 @@
 ﻿<!DOCTYPE html>
 <html lang="fa">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link href="~/lib/bootstrap/bootstrap.min.css" rel="stylesheet"/>
-    <link href="~/css/admin/style.css" rel="stylesheet"/>
+    <link href="~/lib/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/admin/style.css" rel="stylesheet" />
     @RenderSection("Meta", false)
 </head>
 <body>
@@ -110,7 +110,20 @@
     <div class="d-none">
         @RenderBody()
     </div>
-
+    <!--start fileManager-->
+    <div class="modal fade bd-example-modal-lg" id="file-manager" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <iframe src="/pages/core/file/index.html" id="iframe-file-manager"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm danger material" data-dismiss="modal">انصراف</button>
+                    <button type="button" id="selected-files" class="btn btn-sm success material">تایید</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="~/lib/jquery/jquery-v3.3.1.min.js">
     </script>
@@ -144,9 +157,13 @@
     </script>
     <script src="~/js/admin/admin_bundle.js">
     </script>
+
     <script src="~/lib/modal/modal.js">
+
     </script>
     <script src="~/lib/api/environment.js">
+    </script>
+    <script src="~/lib/api/file-manager.js">
     </script>
     <script src="~/js/admin/script.js">
     </script>

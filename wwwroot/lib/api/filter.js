@@ -11,51 +11,51 @@
  * @param wheres: Array<Filter>
  * @constructor
  */
-var Filter = function(where, pageSize, pageNo, orderBy, language, ticket) {
+var Filter = function (where, pageSize, pageNo, orderBy, language, ticket) {
 
     this.wheres = where;
-    this.pageSize = Number(pageSize);
-    this.pageNo = Number(pageNo);
+    this.pageSize = !pageSize ? 1 : Number(pageSize);
+    this.pageNo = !pageNo ? 1 : Number(pageNo);
     this.orderBy = orderBy;
     this.language = language;
     this.ticket = ticket;
-    this.getWheres = function() {
+    this.getWheres = function () {
         return this.wheres;
     };
-    this.setWheres = function(wheres) {
+    this.setWheres = function (wheres) {
         this.wheres = wheres;
     };
-    this.setPageSize = function(pageSize) {
+    this.setPageSize = function (pageSize) {
         this.pageSize = pageSize;
     };
-    this.getPageSize = function() {
+    this.getPageSize = function () {
         return this.pageSize;
     };
-    this.setPageNumber = function(pageNumber) {
+    this.setPageNumber = function (pageNumber) {
         this.pageNo = pageNumber;
     };
-    this.getPageNumber = function() {
+    this.getPageNumber = function () {
         return this.pageNo;
     };
-    this.setOrdersBy = function(ordersBy) {
+    this.setOrdersBy = function (ordersBy) {
         this.orderBy = ordersBy;
     };
-    this.getOrdersBy = function() {
+    this.getOrdersBy = function () {
         return this.orderBy;
     };
-    this.setLanguage = function(lang) {
+    this.setLanguage = function (lang) {
         this.language = lang;
     };
-    this.getLanguage = function() {
+    this.getLanguage = function () {
         return this.language;
     };
-    this.setTicket = function(ticket) {
+    this.setTicket = function (ticket) {
         this.ticket = ticket;
     };
-    this.getTicket = function() {
+    this.getTicket = function () {
         return this.ticket;
     };
-    this.get = function() {
+    this.get = function () {
         return {
             wheres: this.wheres,
             pageSize: this.pageSize,

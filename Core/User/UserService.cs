@@ -5,18 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace Parsia.Core.User
 {
     [ApiController]
-    public class UserService : ControllerBase, IBaseService<UserDto>
+    public class UserService : ControllerBase
     {
         [HttpPost]
         [Route("service/user/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Users", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Users", "gridView");
             return checkAccess.Done
                 ? UserFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -24,15 +21,16 @@ namespace Parsia.Core.User
 
         [HttpPost]
         [Route("service/user/save")]
-        public ServiceResult<object> Save(UserDto dto)
+        public ServiceResult<object> Save()
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
+            var dtoFromRequest = UserFacade.GetInstance().GetDtoFromRequest(HttpContext.Request);
+            if (!dtoFromRequest.Done)
+                return dtoFromRequest;
+            var dto = (UserDto)dtoFromRequest.Result;
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo);
             var checkAccess = UserSessionManager.CheckAccess(bp, "Users",
-                dto.EntityId == null ? "edit" : "save");
+                dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? UserFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
 
@@ -40,12 +38,9 @@ namespace Parsia.Core.User
         [Route("service/user/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Users", "edit");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Users", "update");
             return checkAccess.Done
                 ? UserFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -54,10 +49,7 @@ namespace Parsia.Core.User
         [HttpPost]
         [Route("service/user/delete")]
         public ServiceResult<object> Delete(Clause clause)
-        {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
+        { 
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "Users", "delete");
@@ -70,12 +62,9 @@ namespace Parsia.Core.User
         [Route("service/user/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Users", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Users", "autocomplete");
             return checkAccess.Done
                 ? UserFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;

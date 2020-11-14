@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- Viewport Meta Tag -->
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-    <title>مقادیر چند گزینه ای</title>
+    <title>کاربران</title>
     <base href="/">
     <link rel="stylesheet" href="/sass/core/core.min.css">
     <link rel="stylesheet" href="/sass/page/index.css">
@@ -54,58 +54,62 @@
                         <div id="collapseOne" class="collapse entity-form visible mb-3" aria-labelledby="headingOne" data-parent="#accordionExample">
                             <div class="card-body row data-container">
                                 <div class="form-group floating-form-group col-12 col-lg-12">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="name"
-                                           ksun-max-length="100" ksun-input-type="text" ksun-bundle-key="name" ksun-column-key="name" ksun-condition-key="7" ksun-operation-key="1">
+                                    <input type="text" class="form-control form-control-sm floating-form-control"
+                                           id="firstName" tabindex="2" ksun-column-key="firstName" ksun-condition-key="7" ksun-operation-key="1"
+                                           ksun-input-type="text" ksun-bundle-key="firstName" ksun-max-length="50">
                                     <span class="floating-form-bar"></span>
-                                    <label for="name" class="floating-label">
-                                        <span ksun-bundle-key="name"></span>
+                                    <label for="firstName" class="floating-label">
+                                        <span ksun-bundle-key="firstName"></span>
                                     </label>
                                     <div class="floating-form-control-msg flex-column">
                                         <div class="d-flex flex-row justify-content-between f-w">
-                                            <span>بیشینه کاراکتر مجاز: 100 </span>
-                                            <span class="character-counter" ksun-max-count="100">0/100</span>
+                                            <span>بیشینه کاراکتر مجاز: 50 </span>
+                                            <span class="character-counter" ksun-max-count="50">0/50</span>
                                         </div>
                                         <div class="col-sm-12 invalid-feedback feedback"></div>
                                     </div>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-12">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="val"
-                                           ksun-max-length="100" ksun-input-type="text" ksun-bundle-key="value" ksun-column-key="value" ksun-condition-key="7" ksun-operation-key="1">
+                                    <input type="text" class="form-control form-control-sm floating-form-control"
+                                           id="lastName" tabindex="3" ksun-column-key="lastName" ksun-condition-key="7" ksun-operation-key="1"
+                                           ksun-input-type="text" ksun-bundle-key="lastName" ksun-max-length="50">
                                     <span class="floating-form-bar"></span>
-                                    <label for="val" class="floating-label">
-                                        <span ksun-bundle-key="value"></span>
+                                    <label for="lastName" class="floating-label">
+                                        <span ksun-bundle-key="lastName"></span>
                                     </label>
                                     <div class="floating-form-control-msg flex-column">
                                         <div class="d-flex flex-row justify-content-between f-w">
-                                            <span>بیشینه کاراکتر مجاز: 100 </span>
-                                            <span class="character-counter" ksun-max-count="100">0/100</span>
+                                            <span>بیشینه کاراکتر مجاز: 50 </span>
+                                            <span class="character-counter" ksun-max-count="50">0/50</span>
                                         </div>
                                         <div class="col-sm-12 invalid-feedback feedback"></div>
                                     </div>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-12">
-                                    <input type="text" class="form-control form-control-sm floating-form-control ltr" id="code"
-                                           ksun-max-length="100" ksun-input-type="text" ksun-bundle-key="code" ksun-column-key="code" ksun-condition-key="7" ksun-operation-key="1">
+                                    <input type="text" class="form-control form-control-sm floating-form-control"
+                                           id="attempt" tabindex="4" ksun-column-key="attempt" ksun-condition-key="7" ksun-operation-key="1"
+                                           ksun-input-type="text" ksun-bundle-key="attempt" ksun-max-length="10">
                                     <span class="floating-form-bar"></span>
-                                    <label for="code" class="floating-label">
-                                        <span ksun-bundle-key="code"></span>
+                                    <label for="attempt" class="floating-label">
+                                        <span ksun-bundle-key="attempt"></span>
                                     </label>
                                     <div class="floating-form-control-msg flex-column">
                                         <div class="d-flex flex-row justify-content-between f-w">
-                                            <span>بیشینه کاراکتر مجاز: 100 </span>
-                                            <span class="character-counter" ksun-max-count="100">0/100</span>
+                                            <span>بیشینه کاراکتر مجاز: 10 </span>
+                                            <span class="character-counter" ksun-max-count="10">0/10</span>
                                         </div>
                                         <div class="col-sm-12 invalid-feedback feedback"></div>
                                     </div>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-12">
-                                    <select type="text" id="parent" ksun-bundle-key="parent"
-                                            class="form-control form-control-sm floating-form-control autocomplete dynamic-autocomplete" ksun-column-key="parentId" ksun-condition-key="1" ksun-operation-key="1">
-                                    </select>
+                                    <input type="text" id="lastVisit" tabindex="6" ksun-column-key="lastVisit" ksun-condition-key="1" ksun-operation-key="1"
+                                           class="form-control form-control-sm floating-form-control date"
+                                           ksun-bundle-key="lastVisit" ksun-has-timepicker="true">
                                     <span class="floating-form-bar"></span>
-                                    <label for="parent" class="floating-label">
-                                        <span ksun-bundle-key="parent"></span>
+                                    <label for="lastVisit" class="floating-label">
+                                        <span ksun-bundle-key="lastVisit"></span>
                                     </label>
+                                    <div class="col-sm-10 invalid-feedback feedback"></div>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-12">
                                     <button class="btn btn-sm indigo filter-search-btn material flex-row justify-content-start">
@@ -137,12 +141,12 @@
             <table class="table card-grid-s table-hover table-bordered table-striped thead-stylish main-table has-checkbox mb-0">
                 <thead>
                     <tr>
-                        <th scope="col" style="width: 40px">
+                        <th scope="col">
                             <div class="value event-off">
                                 <span ksun-bundle-key="$rowNum"></span>
                             </div>
                         </th>
-                        <th scope="col" style="width: 110px">
+                        <th scope="col">
                             <div class="value">
                                 <span ksun-bundle-key="entityId"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
@@ -150,25 +154,31 @@
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="name"></span>
+                                <span ksun-bundle-key="firstName"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="value"></span>
+                                <span ksun-bundle-key="lastName"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="code"></span>
+                                <span ksun-bundle-key="username"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="parentName"></span>
+                                <span ksun-bundle-key="attempt"></span>
+                                <i class="icon unsorted fas fa-sort"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="value">
+                                <span ksun-bundle-key="lastVisit"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
@@ -195,10 +205,11 @@
                     <tr class="pattern-row">
                         <td ksun-bundle-key="$rowNum"></td>
                         <td ksun-bundle-key="entityId"></td>
-                        <td ksun-bundle-key="name"></td>
-                        <td ksun-bundle-key="value"></td>
-                        <td ksun-bundle-key="code"></td>
-                        <td ksun-bundle-key="parentName"></td>
+                        <td ksun-bundle-key="firstName"></td>
+                        <td ksun-bundle-key="lastName"></td>
+                        <td ksun-bundle-key="username"></td>
+                        <td ksun-bundle-key="attempt"></td>
+                        <td ksun-bundle-key="lastVisit"  ksun-formatter="changeDate"></td>
                         <td ksun-bundle-key="$checkbox" class="hide-in-card-view"></td>
                         <td ksun-bundle-key="$actions" class="hide-in-card-view"></td>
                     </tr>
@@ -301,12 +312,13 @@
     <script src="/lib/api/api.js"></script>
     <script src="/lib/ripple/ripple.min.js"></script>
     <script src="/lib/autocomplete/autocomplete.js"></script>
-    <script src="/pages/core/comboval/autocomplete.js"></script>
+    <script src="/pages/core/person/autocomplete.js"></script>
     <script src="/lib/translation/general-bundle.js"></script>
     <script src="/lib/translation/translation.js"></script>
     <script src="/lib/modal/modal.js"></script>
-    <script src="/pages/core/comboval/bundle.js"></script>
+    <script src="/lib/core/core.js"></script>
+    <script src="/pages/core/user/bundle.js"></script>
     <script src="/lib/core/index.js"></script>
-    <script src="/pages/core/comboval/index.js"></script>
+    <script src="/pages/core/user/index.js"></script>
 </body>
 </html>

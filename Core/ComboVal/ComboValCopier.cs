@@ -1,7 +1,6 @@
 ﻿using System;
 using DataLayer.Base;
 using DataLayer.Tools;
-using Parsia.Core.User;
 
 namespace Parsia.Core.ComboVal
 {
@@ -9,12 +8,11 @@ namespace Parsia.Core.ComboVal
     {
         public ComboValDto GetDto(DataLayer.Model.Core.ComboVal.ComboVal entity)
         {
-            var userCopier = new UserCopier();
             var createUser = entity.CreateUserEntity != null
-                ? userCopier.GetDto(entity.CreateUserEntity)
+                ? new UserDto() { EntityId = entity.CreateUserEntity.EntityId, Username = entity.CreateUserEntity.Username }
                 : new UserDto();
-            var updateUser = entity.CreateUserEntity != null
-                ? userCopier.GetDto(entity.CreateUserEntity)
+            var updateUser = entity.UpdateUserEntity != null
+                ? new UserDto() { EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username }
                 : new UserDto();
             var comboValDto = new ComboValDto
             {
@@ -58,6 +56,7 @@ namespace Parsia.Core.ComboVal
         public DataLayer.Model.Core.ComboVal.ComboVal SetMandatoryField(DataLayer.Model.Core.ComboVal.ComboVal comboVal,
             BusinessParam bp, bool setCreate)
         {
+            comboVal.AccessKey = bp.UserInfo.AccessKey;
             comboVal.UpdateBy = bp.UserInfo.UserId;
             comboVal.Updated = DateTime.Now;
             if (!setCreate) return comboVal;

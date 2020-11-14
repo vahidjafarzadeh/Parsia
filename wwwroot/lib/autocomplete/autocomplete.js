@@ -164,7 +164,7 @@ var Autocomplete = function() {
                 };
                 Api.gridView(
                     {
-                        url: config.url ? config.url : "comboval/autocompleteView",
+                        url: config.url ? config.url : "comboval/autocompleteView/parent",
                         filter: staticFilter.get(),
                         handler: staticHandler
                     }
@@ -195,7 +195,7 @@ var Autocomplete = function() {
             };
             Api.gridView(
                 {
-                    url: config.url ? config.url : "comboval/autocompleteView",
+                    url: config.url ? config.url : "comboval/autocompleteView/parent",
                     filter: staticFilter.get(),
                     handler: staticHandler
                 }

@@ -12,7 +12,7 @@ namespace Parsia.Core.ComboVal
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "gridView");
             return checkAccess.Done
                 ? ComboValFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -29,7 +29,7 @@ namespace Parsia.Core.ComboVal
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo);
             var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal",
-                dto.EntityId == null ? "edit" : "save");
+                dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? ComboValFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
 
@@ -39,7 +39,7 @@ namespace Parsia.Core.ComboVal
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "edit");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "update");
             return checkAccess.Done
                 ? ComboValFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -49,9 +49,6 @@ namespace Parsia.Core.ComboVal
         [Route("service/comboVal/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "delete");
@@ -66,12 +63,22 @@ namespace Parsia.Core.ComboVal
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "autocomplete");
             return checkAccess.Done
                 ? ComboValFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
         }
-
+        [HttpPost]
+        [Route("service/comboVal/autocompleteView/parent")]
+        public ServiceResult<object> AutocompleteViewParent(Clause clause)
+        {
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var bp = new BusinessParam(userInfo, clause);
+            var checkAccess = UserSessionManager.CheckAccess(bp, "ComboVal", "autocomplete");
+            return checkAccess.Done
+                ? ComboValFacade.GetInstance().AutocompleteViewParent(bp)
+                : checkAccess;
+        }
 
         [HttpPost]
         [Route("service/comboVal/getAccess")]

@@ -12,7 +12,7 @@ namespace Parsia.Core.Person
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Person", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Person", "gridView");
             return checkAccess.Done
                 ? PersonFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -29,7 +29,7 @@ namespace Parsia.Core.Person
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo);
             var checkAccess = UserSessionManager.CheckAccess(bp, "Person",
-                dto.EntityId == null ? "edit" : "save");
+                dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? PersonFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
 
@@ -39,7 +39,7 @@ namespace Parsia.Core.Person
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Person", "edit");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Person", "update");
             return checkAccess.Done
                 ? PersonFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -49,9 +49,6 @@ namespace Parsia.Core.Person
         [Route("service/person/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "Person", "delete");
@@ -66,21 +63,11 @@ namespace Parsia.Core.Person
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Person", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Person", "autocomplete");
             return checkAccess.Done
                 ? PersonFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
         }
 
-
-        [HttpPost]
-        [Route("service/person/getAccess")]
-        public ServiceResult<bool> GetAccess(Clause clause)
-        {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
-            return SystemConfig.IsUnlimitedRole(userInfo.RoleId, false)
-                ? new ServiceResult<bool>(true, 1)
-                : new ServiceResult<bool>(false, 1);
-        }
     }
 }

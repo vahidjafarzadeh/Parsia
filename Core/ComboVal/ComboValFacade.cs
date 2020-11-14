@@ -6,6 +6,7 @@ using DataLayer.Model.Core.User;
 using DataLayer.Tools;
 using Datalayer.UnitOfWork;
 using Microsoft.AspNetCore.Http;
+using Parsia.Core.Elastic;
 
 namespace Parsia.Core.ComboVal
 {
@@ -76,7 +77,7 @@ namespace Parsia.Core.ComboVal
                         unitOfWork.ComboVal.Update(comboVal);
                         unitOfWork.ComboVal.Save();
                     }
-
+                Elastic<ComboValDto, DataLayer.Model.Core.ComboVal.ComboVal>.SaveToElastic(comboVal, "ComboVal", bp);
                 return new ServiceResult<object>(Copier.GetDto(comboVal), 1);
             }
             catch (Exception e)
@@ -173,7 +174,7 @@ namespace Parsia.Core.ComboVal
                     unitOfWork.ComboVal.Update(comboVal);
                     unitOfWork.ComboVal.Save();
                 }
-
+                Elastic<ComboValDto, DataLayer.Model.Core.ComboVal.ComboVal>.SaveToElastic(comboVal, "ComboVal", bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
@@ -190,6 +191,33 @@ namespace Parsia.Core.ComboVal
                 var queryString = "select * from (select EntityId,Name,Value,code,CreateBy,AccessKey,Deleted from " +
                                   tableName + " ) e" +
                                   QueryUtil.GetWhereClause(bp.Clause,
+                                      QueryUtil.GetConstraintForNativeQuery(bp, "ComboVal", false, false, true)) +
+                                  QueryUtil.GetOrderByClause(bp.Clause);
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var comboList = unitOfWork.ComboVal.CreateNativeQuery(queryString, x => new ComboValDto
+                    {
+                        EntityId = Convert.ToInt64(x[0].ToString()),
+                        Name = x[1]?.ToString(),
+                        Value = x[2]?.ToString(),
+                        Code = x[3]?.ToString()
+                    });
+                    return comboList.Count == 0
+                        ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکوردی یافت نشد")
+                        : new ServiceResult<object>(comboList, comboList.Count);
+                }
+            }
+            catch (Exception ex)
+            {
+                return ExceptionUtil.ExceptionHandler(ex, "ComboValFacade.AutocompleteView", bp.UserInfo);
+            }
+        }
+        public ServiceResult<object> AutocompleteViewParent(BusinessParam bp)
+        {
+            try
+            {
+                var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.ComboVal.ComboVal>();
+                var queryString = $"SELECT * FROM(SELECT e1.EntityId AS entityId,e1.Name AS name,e1.Value AS value,e1.code AS code,e2.Name AS parentName,e2.code AS parentCode,e1.Deleted,e1.FullTitle AS fullTitle,e1.AccessKey,e1.CreateBy FROM {tableName} e1 LEFT JOIN {tableName} e2 on e1.ParentId = e2.EntityId where e1.Deleted = 0 and e2.Deleted = 0) e" + QueryUtil.GetWhereClause(bp.Clause,
                                       QueryUtil.GetConstraintForNativeQuery(bp, "ComboVal", false, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())

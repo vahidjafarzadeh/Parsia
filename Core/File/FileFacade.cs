@@ -20,23 +20,28 @@ namespace Parsia.Core.File
     {
         private static readonly FileFacade Facade = new FileFacade();
         private static readonly FileCopier Copier = new FileCopier();
-        private readonly ParsiContext _context = new ParsiContext();
-        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
 
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             try
             {
-                var queryString = "select * from (SELECT * FROM [CO].[File]) e" +
+                var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.File.File>();
+                var queryString = $"select * from (SELECT * FROM {tableName}) e" +
                                   QueryUtil.GetWhereClause(bp.Clause,
                                       QueryUtil.GetConstraintForNativeQuery(bp, "File", false, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
-                var files = _context.File.FromSqlRaw(queryString).OrderBy(x => x.Extension)
-                    .ThenByDescending(x => x.Created).ToList();
-                var lstData = files.Select(file => Copier.GetDto(file)).ToList();
-                return lstData.Count <= 0
-                    ? new ServiceResult<object>(new List<FileDto>(), 0)
-                    : new ServiceResult<object>(lstData, lstData.Count);
+
+                using (var content = new ParsiContext())
+                {
+                    var files = content.File.FromSqlRaw(queryString).OrderBy(x => x.Extension)
+                        .ThenByDescending(x => x.Created).ToList();
+                    var lstData = files.Select(file => Copier.GetDto(file)).ToList();
+                    return lstData.Count <= 0
+                        ? new ServiceResult<object>(new List<FileDto>(), 0)
+                        : new ServiceResult<object>(lstData, lstData.Count);
+                }
+
+                
             }
             catch (Exception e)
             {
@@ -62,14 +67,17 @@ namespace Parsia.Core.File
                 if (bp.Clause?.Wheres != null && bp.Clause.Wheres.Count > 0)
                     foreach (var item in bp.Clause.Wheres.Where(item => item.Key.Equals("entityId")))
                         entityId = long.Parse(item.Value);
-
-                var record = _unitOfWork.File.GetRecord(entityId);
-                if (record == null)
-                    return new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "فایل مورد نظر یافت نشد");
-                record.Deleted = record.EntityId;
-                _unitOfWork.File.Update(record);
-                _unitOfWork.File.Save();
-                return new ServiceResult<object>(Copier.GetDto(record), 1);
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var record = unitOfWork.File.GetRecord(entityId);
+                    if (record == null)
+                        return new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "فایل مورد نظر یافت نشد");
+                    record.Deleted = record.EntityId;
+                    unitOfWork.File.Update(record);
+                    unitOfWork.File.Save();
+                    return new ServiceResult<object>(Copier.GetDto(record), 1);
+                }
+                
             }
             catch (Exception e)
             {
@@ -86,11 +94,14 @@ namespace Parsia.Core.File
         {
             try
             {
-                var extensionList = _unitOfWork.File.Get().Select(p => p.Extension).Distinct().ToList();
-                return extensionList.Count <= 0
-                    ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound,
-                        "پسوندی برای نمایش در قسمت فیلترها یافت نشد یافت نشد")
-                    : new ServiceResult<object>(extensionList, extensionList.Count);
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var extensionList = unitOfWork.File.Get().Select(p => p.Extension).Distinct().ToList();
+                    return extensionList.Count <= 0
+                        ? new ServiceResult<object>(0, 1)
+                        : new ServiceResult<object>(extensionList, extensionList.Count);
+                }
+               
             }
             catch (Exception e)
             {
@@ -162,15 +173,18 @@ namespace Parsia.Core.File
                     Title = dto.FolderName
                 };
                 var file = Copier.GetEntity(fileDto, bp, true);
-                var done = _unitOfWork.File.Insert(file);
-                _unitOfWork.File.Save();
-                if (!done)
-                    return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", "FileFacade.CreateFolder",
-                        bp.UserInfo);
-                Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToHistory(fileDto, file, file.EntityId, bp);
-                Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(fileDto, "File", file.EntityId, bp);
-                fileDto.EntityId = file.EntityId;
-                return new ServiceResult<object>(fileDto, 1);
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var done = unitOfWork.File.Insert(file);
+                    unitOfWork.File.Save();
+                    if (!done)
+                        return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", "FileFacade.CreateFolder",
+                            bp.UserInfo);
+                    Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(file, "File", bp);
+                    fileDto.EntityId = file.EntityId;
+                    return new ServiceResult<object>(fileDto, 1);
+                }
+                
             }
             catch (Exception e)
             {
@@ -240,15 +254,18 @@ namespace Parsia.Core.File
                 }
 
                 var file = Copier.GetEntity(fileDto, bp, true);
-                var done = _unitOfWork.File.Insert(file);
-                _unitOfWork.File.Save();
-                if (!done)
-                    return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", "FileFacade.CreateFile",
-                        bp.UserInfo);
-                Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToHistory(fileDto, file, file.EntityId, bp);
-                Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(fileDto, "File", file.EntityId, bp);
-                fileDto.EntityId = file.EntityId;
-                return new ServiceResult<object>(fileDto, 1);
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var done = unitOfWork.File.Insert(file);
+                    unitOfWork.File.Save();
+                    if (!done)
+                        return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", "FileFacade.CreateFile",
+                            bp.UserInfo);
+                    Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(file, "File", bp);
+                    fileDto.EntityId = file.EntityId;
+                    return new ServiceResult<object>(fileDto, 1);
+                }
+                
             }
             catch (Exception e)
             {
@@ -265,8 +282,11 @@ namespace Parsia.Core.File
         {
             try
             {
-                var file = _unitOfWork.File.GetRecord(entityId);
-                return Copier.GetDto(file);
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var file = unitOfWork.File.GetRecord(entityId);
+                    return Copier.GetDto(file);
+                }
             }
             catch (Exception ex)
             {
@@ -311,15 +331,17 @@ namespace Parsia.Core.File
                 dto.DisplayInFileManager = false;
                 dto.Path = dto.Thumbnail;
                 var file = Copier.GetEntity(dto, bp, true);
-                var done = _unitOfWork.File.Insert(file);
-                _unitOfWork.File.Save();
-                if (!done)
-                    return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", "FileFacade.CreateFile",
-                        bp.UserInfo);
-                Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToHistory(dto, file, file.EntityId, bp);
-                Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(dto, "File", file.EntityId, bp);
-                dto.EntityId = file.EntityId;
-                return new ServiceResult<object>(dto, 1);
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var done = unitOfWork.File.Insert(file);
+                    unitOfWork.File.Save();
+                    if (!done)
+                        return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", "FileFacade.CreateFile",
+                            bp.UserInfo);
+                    Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(file, "File", bp);
+                    dto.EntityId = file.EntityId;
+                    return new ServiceResult<object>(dto, 1);
+                }
             }
             catch (Exception e)
             {
@@ -351,7 +373,7 @@ namespace Parsia.Core.File
             return JsonConvert.DeserializeObject<JsonFileDto>(data);
         }
 
-        public async Task<IActionResult> Download(string file, BusinessParam bp, bool tumbnail)
+        public async Task<IActionResult> Download(string file, BusinessParam bp, bool thumbnail)
         {
             try
             {
@@ -360,7 +382,7 @@ namespace Parsia.Core.File
                 var jsonFileDto = GetJsonDto(Encryption.Decryption(FileRepositoryFacade.ReplaceValidCharacter(link)));
                 var fileDto = GetFileFromDataBaseWithId(jsonFileDto.EntityId, null);
                 var path = bp.Environment.WebRootPath + fileDto.Path;
-                if (tumbnail)
+                if (thumbnail)
                 {
                     var lastIndexOf = path.LastIndexOf(".", StringComparison.Ordinal);
                     var substring = path.Substring(0, lastIndexOf);

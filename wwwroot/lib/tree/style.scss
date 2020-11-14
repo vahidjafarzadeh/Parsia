@@ -1,0 +1,363 @@
+body {
+  overflow: auto !important;
+}
+.usecase {
+    color: #f41c77;
+    float: right;
+    margin: 2px;
+}
+.v_tree {
+    background-color: white;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px #eee;
+    padding: 10px 0;
+    height: calc(100vh - 100px);
+    overflow: auto;
+
+    .text-title {
+        color: #676767;
+        font-size: 0.8rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: right;
+        margin: 0;
+        border-bottom: 1px solid #ececec;
+        padding: 0 0 5px 0;
+        position: relative;
+
+        .span {
+            margin: 8px 5px 0;
+        }
+
+        svg, i {
+            width: 25px;
+            height: 25px;
+            color: #3d5afe;
+            fill: #3d5afe;
+            margin: 0 5px;
+        }
+
+        .search-tree {
+            position: absolute;
+            left: 0;
+            border: 1px solid #d3d3d3;
+            border-radius: 5px;
+            width: 200px;
+            padding: 2px 5px;
+            font-size: 0.8rem;
+            color: #959595;
+            box-shadow: 0 2px 5px #ececec70;
+        }
+
+        .icon-search {
+            position: absolute;
+            font-size: 0.7rem;
+            width: 15px;
+            height: 15px;
+            top: 6px;
+            left: 3px;
+            color: #3d5afe;
+            cursor: pointer;
+
+            svg {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .content-tree {
+        padding-bottom: 10px;
+
+        .root-tree {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .item {
+                width: 100%;
+                list-style-type: none;
+                display: flex;
+                flex-direction: column;
+
+                .container-item {
+                    padding: 0 0 0 5px;
+                    cursor: pointer;
+                    float: left;
+                    margin: 10px 0 0;
+                    width: 200px;
+                    position: relative;
+
+                    .tree-open {
+                        border: 1px solid #d3d3d3;
+                        width: 15px;
+                        height: 15px;
+                        position: absolute;
+                        right: -7px;
+                        top: 9px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        cursor: pointer;
+
+                        &:before {
+                            content: "+";
+                            display: block;
+                            margin: -7px 2px 0 0;
+                            font-size: 1rem;
+                            height: 15px;
+                            width: 15px;
+                            font-weight: bold;
+                            color: #3d5afe;
+                        }
+                    }
+
+                    .down {
+                        &:before {
+                            content: "-";
+                            margin: -10px 4px 0 0;
+                        }
+                    }
+
+                    .floating-form-group {
+                        padding: 0;
+                        margin: 0 13px 0 0;
+                        width: 100% !important;
+
+                        .floating-form-checkbox-wrapper {
+                            background: #f5f5f5;
+                            border: 1px solid #d3d3d3;
+                            border-radius: 5px;
+                            padding: 3px 5px 3px 25px;
+                            width: 100% !important;
+                            position: relative;
+                        }
+
+                        .floating-form-checkbox {
+                            background: white;
+
+                            &:after {
+                                color: #00c886 !important;
+                            }
+                        }
+
+                        .floating-form-checkbox-wrapper input:checked ~ .floating-form-radio, .floating-form-checkbox-wrapper input:checked ~ .floating-form-checkbox {
+                            border-color: #00c886 !important;
+                        }
+
+                        .floating-form-checkbox-label {
+                            font-size: 0.7rem;
+                            font-weight: bold;
+                            max-width: 140px;
+                            word-wrap: break-word;
+                            word-break: break-all;
+                        }
+                    }
+
+                    .text {
+                        color: #676767;
+                        font-size: 0.8rem;
+                        padding: 3px 5px;
+                        margin: 0;
+                        float: right;
+                    }
+                }
+            }
+        }
+    }
+
+    .child-tree {
+        margin: 5px 10px 0 0;
+        padding: 0 15px 0 0;
+        border-right: 1px solid #d3d3d3;
+
+        .item {
+            .container-item {
+                margin: 0 !important;
+                position: relative;
+
+                &:before {
+                    content: "_";
+                    position: absolute;
+                    right: -16px;
+                    top: -2px;
+                    color: #d3d3d3;
+                }
+            }
+        }
+    }
+
+    .loading-item {
+        position: absolute;
+        left: 5px;
+        top: 10px;
+        width: 15px;
+        height: 15px;
+        background: transparent;
+        border: 2px solid #757474;
+        border-radius: 30px;
+        border-left: 2px solid transparent;
+        animation: rotateItemLoading 2s infinite;
+        display: none;
+    }
+
+    @keyframes rotateItemLoading {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .content-check {
+        display: block;
+        width: 100%;
+        border: 1px solid #d3d3d3;
+        border-radius: 5px;
+        margin: 10px 0;
+        background: #f5f5f5;
+        font-size: 0.7rem;
+        font-weight: bold;
+        color: #757575;
+        padding: 2px 5px 2px 18px;
+        position: relative;
+        word-break: break-all;
+
+        .close {
+            float: left;
+            width: 20px;
+            height: 20px;
+            font-size: 14px;
+            color: #d6101a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: absolute;
+            left: 0;
+            top: 1px;
+            opacity: 1;
+            text-shadow: 0 0 0 transparent;
+
+            svg {
+                display: table;
+                margin: auto;
+                color: #d5104b;
+                fill: #d5104b;
+                opacity: 1;
+                z-index: 1000;
+            }
+        }
+    }
+
+    .btn-icon {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        transition: all 0.25s;
+
+        svg {
+            width: 100% !important;
+            margin: auto;
+            height: 100%;
+            display: table;
+            cursor: pointer;
+            color: #bfbcbc;
+            transition: all 0.25s;
+        }
+    }
+
+    .btn-icon-add {
+        left: 31px;
+        top: 6px;
+
+        &:hover svg {
+            color: #0ddd0d;
+        }
+    }
+
+    .btn-icon-edit {
+        left: 18px;
+        top: 6px;
+
+        &:hover svg {
+            color: #eeca0a;
+        }
+    }
+
+    .btn-icon-remove {
+        left: 3px;
+        top: 6px;
+
+        &:hover svg {
+            color: #f46b6b;
+        }
+    }
+
+    .main-frame {
+        background-color: #fafafa;
+        border: 0;
+        width: 100%;
+        height: 100%;
+        min-height: calc(100vh - 200px);
+    }
+
+    .close-modal {
+        margin-left: 0 !important;
+        float: right;
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 5px;
+        color: red;
+        opacity: 1 !important;
+        text-shadow: unset !important;
+
+        &:focus {
+            outline: 0 dotted !important;
+        }
+    }
+
+    .btn-refresh {
+        float: left;
+        position: absolute;
+        right: 50%;
+        background: white;
+        border: 1px solid #3d5afe;
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        border-radius: 30px;
+        top: -5px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        cursor: pointer;
+
+        .icon-refresh {
+            width: 100% !important;
+            height: 100% !important;
+            display: table;
+            margin: auto !important;
+        }
+    }
+}
+
+
+
+
+
+
+

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using DataLayer.Base;
 using DataLayer.Tools;
 
@@ -14,7 +16,10 @@ namespace Parsia.Core.Action
                 ActionName = entity.ActionName
             };
         }
-
+        public List<ActionDto> GetDto(List<DataLayer.Model.Core.Action.Action> entity)
+        {
+            return entity.Select(action => new ActionDto {EntityId = action.EntityId, ActionName = action.ActionName, ActionEnName = action.ActionEnName}).ToList();
+        }
         public DataLayer.Model.Core.Action.Action GetEntity(ActionDto dto, BusinessParam bp, bool setCreate)
         {
             var action = new DataLayer.Model.Core.Action.Action
@@ -32,6 +37,7 @@ namespace Parsia.Core.Action
         public DataLayer.Model.Core.Action.Action SetMandatoryField(DataLayer.Model.Core.Action.Action action,
             BusinessParam bp, bool setCreate)
         {
+            action.AccessKey = bp.UserInfo.AccessKey;
             action.UpdateBy = bp.UserInfo.UserId;
             action.Updated = DateTime.Now;
             if (!setCreate) return action;

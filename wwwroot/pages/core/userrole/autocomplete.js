@@ -1,8 +1,8 @@
-var ComboValAutocomplete = {
+var UserAutocomplete = {
     dynamicConfig: {
-        text: "name",
+        text: "username",
         value: "entityId",
         minCharacter: 3,
-        searchColumn: "name"
+        searchColumn: "fullTitle"
     }
 };

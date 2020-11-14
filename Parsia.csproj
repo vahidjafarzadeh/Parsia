@@ -11,6 +11,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="compilerconfig.json" />
     <_ContentIncludedByDefault Remove="wwwroot\css\admin\style.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\lib\tree\style.min.css" />
     <_ContentIncludedByDefault Remove="wwwroot\sass\core\core.css" />
     <_ContentIncludedByDefault Remove="wwwroot\sass\page\edit.min.css" />
   </ItemGroup>
@@ -41,17 +42,18 @@
   <ItemGroup>
     <Folder Include="Core\RoleAccessGroup\" />
     <Folder Include="Core\Role\" />
-    <Folder Include="Core\UseCaseActionAccessGroup\" />
-    <Folder Include="Core\UseCaseAction\" />
     <Folder Include="Core\UserRoleAccess\" />
     <Folder Include="Core\UserRole\" />
     <Folder Include="wwwroot\images\system\icons\" />
     <Folder Include="wwwroot\lib\core\" />
+    <Folder Include="wwwroot\lib\editor\" />
     <Folder Include="wwwroot\lib\scrollbar\" />
-    <Folder Include="wwwroot\file\" />
     <Folder Include="wwwroot\pages\core\comboval\" />
     <Folder Include="wwwroot\pages\core\businessaccess\" />
     <Folder Include="wwwroot\pages\core\entitystate\" />
+    <Folder Include="wwwroot\pages\core\action\" />
+    <Folder Include="wwwroot\pages\core\role\" />
+    <Folder Include="wwwroot\pages\core\usecase\" />
     <Folder Include="wwwroot\sass\button\" />
   </ItemGroup>
   <ItemGroup>

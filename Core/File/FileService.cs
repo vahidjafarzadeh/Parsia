@@ -21,7 +21,7 @@ namespace Parsia.Core.File
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "gridView");
             return checkAccess.Done
                 ? FileFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -36,7 +36,7 @@ namespace Parsia.Core.File
                     Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", dto.EntityId == null ? "edit" : "save");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "File", dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? FileFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
 
@@ -49,7 +49,7 @@ namespace Parsia.Core.File
                     Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "edit");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "update");
             return checkAccess.Done
                 ? FileFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -76,7 +76,7 @@ namespace Parsia.Core.File
                     Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "autocomplete");
             return checkAccess.Done
                 ? FileFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
@@ -89,7 +89,7 @@ namespace Parsia.Core.File
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "gridView");
             return checkAccess.Done
                 ? FileFacade.GetInstance().GetAllExtension(bp)
                 : checkAccess;
@@ -101,7 +101,7 @@ namespace Parsia.Core.File
         {
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo, _hostEnvironment);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "save");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "insert");
             return checkAccess.Done
                 ? FileFacade.GetInstance().CreateFolder(bp, dto)
                 : checkAccess;
@@ -115,7 +115,7 @@ namespace Parsia.Core.File
             var ticket = Request.Form["ticket"];
             var userInfo = UserSessionManager.GetUserInfo(ticket);
             var bp = new BusinessParam(userInfo, _hostEnvironment);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "save");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "insert");
             return checkAccess.Done
                 ? FileFacade.GetInstance().CreateFile(bp, Request).Result
                 : checkAccess;
@@ -127,7 +127,7 @@ namespace Parsia.Core.File
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "gridView");
             return checkAccess.Done
                 ? FileFacade.GetInstance().GetDetails(bp)
                 : checkAccess;

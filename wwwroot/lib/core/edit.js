@@ -456,11 +456,11 @@ var initListeners = function() {
         Util.setSelect2ValidationListener($(this));
     });
     // file
-    $(".file").each(function() {
+    $(".file").each(function () {
         const ctx = $(this);
         const acceptFormats = ctx.attr("ksun-accept-format") ? ctx.attr("ksun-accept-format").split(";") : "*";
         const maxCount = ctx.attr("ksun-max-count") ? Number(ctx.attr("ksun-max-count")) : 1;
-        const maxSize = ctx.attr("ksun-max-size") ? Number(ctx.attr("ksun-max-size")) : 2000;
+        const maxSize = ctx.attr("ksun-max-size") ? Number(ctx.attr("ksun-max-size"))*10000 : 20*10000;
         var fileManagerConfig = {
             acceptFormats: acceptFormats,
             maxCount: maxCount,
@@ -510,7 +510,6 @@ var initScrollBar = function() {
 };
 
 var onFileManagerConfirm = function(listOfFiles, element) {
-
     const parentElem = element.closest(".form-group");
     parentElem.find(".feedback").remove();
 
@@ -678,7 +677,6 @@ var clearForm = function() {
 var fillForm = function(rowData, callback) {
     $("[ksun-bundle-key]").each(function() {
         var ctx = $(this);
-        debugger;
         var bundleKey = ctx.attr("ksun-bundle-key");
         bundleKey = bundleKey.indexOf("$") === 0 ? bundleKey.substr(1, bundleKey.length - 1) : bundleKey;
         for (var key in rowData) {

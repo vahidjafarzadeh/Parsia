@@ -509,30 +509,34 @@
       -ms-flex: none;
       -moz-box-flex: none;
       flex: none; } }
-  .edit-page .files-wrapper .item {
-    background: #fff;
-    margin: 0.25rem 0.25rem 0 0;
-    padding: 0.25rem;
-    font-size: 0.85rem;
-    border: 1px solid #d3dde9;
-    color: #78838f;
-    -moz-border-radius: 0.25rem;
-    -webkit-border-radius: 0.25rem;
-    border-radius: 0.25rem; }
-    .edit-page .files-wrapper .item .title {
-      font-size: 0.8rem;
-      direction: ltr !important; }
-    .edit-page .files-wrapper .item .file-remove-svg-holder {
-      cursor: pointer;
-      color: #c8ced4;
-      margin-left: 0.25rem;
-      -webkit-transition: 350ms;
-      -moz-transition: 350ms;
-      -ms-transition: 350ms;
-      -o-transition: 350ms;
-      transition: 350ms; }
-      .edit-page .files-wrapper .item .file-remove-svg-holder:hover {
-        color: #ff5a5a; }
+  .edit-page .files-wrapper {
+    width: 100%; }
+    .edit-page .files-wrapper .item {
+      background: #fff;
+      margin: 0.25rem 0.25rem 0 0;
+      padding: 0.25rem;
+      font-size: 0.85rem;
+      border: 1px solid #d3dde9;
+      color: #78838f;
+      width: 100%;
+      -moz-border-radius: 0.25rem;
+      -webkit-border-radius: 0.25rem;
+      border-radius: 0.25rem; }
+      .edit-page .files-wrapper .item .title {
+        font-size: 0.8rem;
+        direction: ltr !important; }
+      .edit-page .files-wrapper .item .file-remove-svg-holder {
+        cursor: pointer;
+        color: #c8ced4;
+        float: left;
+        margin-left: 5px;
+        -webkit-transition: 350ms;
+        -moz-transition: 350ms;
+        -ms-transition: 350ms;
+        -o-transition: 350ms;
+        transition: 350ms; }
+        .edit-page .files-wrapper .item .file-remove-svg-holder:hover {
+          color: #ff5a5a; }
   .edit-page .btn-wrapper {
     margin: 1rem auto;
     max-width: 400px;

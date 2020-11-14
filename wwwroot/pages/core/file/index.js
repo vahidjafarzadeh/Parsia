@@ -80,7 +80,7 @@ const getExtensionForView = () => {
                     }
                 });
         } else {
-            handler.configError(data);
+            errorHandler(data);
         }
     };
     Api.post({ url: localVariable.urls.getAllExtension, data: configData, handler: handler });
@@ -140,7 +140,7 @@ const createFolder = (name, holder, data) => {
             if (data.done) {
                 createFileAndFolder(data.result);
             } else {
-                handler.configError(data);
+                errorHandler(data);
             }
         };
         Api.post({ url: localVariable.urls.gridView, data: configData, handler: handler });
@@ -272,7 +272,7 @@ const getDetailsFile = (data) => {
                 $("#container-link").val(resp.result.path);
                 $("#download-link").attr("href", resp.result.path);
             } else {
-                handler.configError(resp);
+                errorHandler(resp);
             }
         };
         Api.post({ url: localVariable.urls.getDetails, data: configData, handler: handler });
@@ -355,12 +355,12 @@ const eventListener = () => {
                         createFolder(data.result.name, fileWrapper, data.result);
                         backFolder.click();
                     } else {
-                        handler.configError(data);
+                        errorHandler(data);
                     }
                 };
                 Api.post({ url: localVariable.urls.createFolder, data: configData, handler: handler });
             } else {
-                handler.configError({ done: false, errorDesc: "لطفا نام پوشه را وارد نمایید" });
+                errorHandler({ done: false, errorDesc: "لطفا نام پوشه را وارد نمایید" });
             }
         });
     prevFolder.on("click",
@@ -400,7 +400,7 @@ const eventListener = () => {
                 if (data.done) {
                     createFileAndFolder(data.result);
                 } else {
-                    handler.configError(data);
+                    errorHandler(data);
                 }
             };
             Api.post({ url: localVariable.urls.gridView, data: configData, handler: handler });
@@ -435,7 +435,7 @@ const eventListener = () => {
                         createFile(data.result.name, fileWrapper, data.result);
                         backNewFile.click();
                     } else {
-                        handler.configError(data);
+                        errorHandler(data);
                     }
                 };
                 Api.postForm({
@@ -445,7 +445,7 @@ const eventListener = () => {
                     handler: handler
                 });
             } else {
-                handler.configError({ done: false, errorDesc: "لطفا نام فایل را وارد نمایید" });
+                errorHandler({ done: false, errorDesc: "لطفا نام فایل را وارد نمایید" });
             }
         });
     removeFile.on("click",
@@ -456,7 +456,7 @@ const eventListener = () => {
                     $("#details").modal("hide");
                     $(`[entity-id="${resp.result.entityId}"]`).fadeOut("slow");
                 } else {
-                    handler.configError(resp);
+                    errorHandler(resp);
                 }
             };
             var where = new Wheres();
@@ -519,7 +519,7 @@ const eventListener = () => {
                 if (data.done) {
                     createFileAndFolder(data.result);
                 } else {
-                    handler.configError(data);
+                    errorHandler(data);
                 }
             };
             Api.post({ url: localVariable.urls.gridView, data: configData, handler: handler });
@@ -536,6 +536,17 @@ var hidePageLoading = function () {
         pageLoadingModal.modal('hide');
     }, 500);
 };
+var initialData = (config) => {
+    if (config) {
+        localVariable.allowExtensionSelect = config.allowExtensionSelect;
+        localVariable.countSelectFile = config.countSelectFile;
+        localVariable.maxSelectFileLength = config.maxSelectFileLength;
+    }
+
+};
+var getAllFileSelected = ()=> {
+    return localVariable.lstSelectFile;
+}
 var gridView = () => {
     var where = new Wheres();
     where.add("parentId", "null", ENVIRONMENT.Condition.IS_NULL, ENVIRONMENT.Operator.AND);
@@ -564,7 +575,7 @@ var gridView = () => {
         if (data.done) {
             createFileAndFolder(data.result);
         } else {
-            handler.configError(data);
+            errorHandler(data);
         }
     };
     Api.post({ url: localVariable.urls.gridView, data: configData, handler: handler });

@@ -6,34 +6,25 @@ function setLocalVariables() {
     localVariables = {
         URLs: {
             services: {
-                gridView: "comboval/gridView",
-                delete: "comboval/delete"
+                gridView: 'user/gridView',
+                delete: 'user/delete'
             }
         },
-        clazzName: "ComboVal"
+        clazzName: "Users"
     };
 }
-
-var initAutoCompletes = function() {
-
-    const parentAutocomplete = new Autocomplete();
-    parentAutocomplete.init({
-        element: $("#parent"),
-        placeholder: "parentPlaceholder",
-        type: ENVIRONMENT.Autocomplete.TYPE.DYNAMIC,
-        dropdownCssClass: "form-control-sm floating",
-        url: "comboval/autocompleteView",
-        dynamicConfig: ComboValAutocomplete.dynamicConfig
-    });
-};
-
 function localPageReady() {
     setLocalVariables();
     initLocalVariables(localVariables);
-    initAutoCompletes();
     onPageReady();
 }
-
-$(document).ready(function() {
+const changeDate = (res) => {
+    if (res) {
+        return new persianDate(Number(res)).format("dddd YYYY/MM/DD HH:mm:ss");
+    } else {
+        return "-";
+    }
+}
+$(document).ready(function () {
     localPageReady();
 });
