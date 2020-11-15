@@ -26,7 +26,7 @@ namespace Parsia.Core.AccessGroup
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.AccessGroup.AccessGroup>();
-            var queryString =$"select entityId,name,deleted,fullTitle,createBy,accessKey from (select EntityId as entityId,Name as name,Deleted as deleted,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey from {tableName}) e  " +
+            var queryString =$"select entityId,name,deleted,fullTitle,createBy,accessKey from (select EntityId as entityId,Name as name,Deleted as deleted,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey from {tableName} where code <> 'ADMIN') e  " +
                 QueryUtil.GetWhereClause(bp.Clause,
                     QueryUtil.GetConstraintForNativeQuery(bp, "AccessGroup", false, false, true)) +
                 QueryUtil.GetOrderByClause(bp.Clause);
@@ -171,6 +171,22 @@ namespace Parsia.Core.AccessGroup
                 return ExceptionUtil.ExceptionHandler(e, "AccessGroupFacade.Delete", bp.UserInfo);
             }
         }
+        
+        public ServiceResult<object> GetAllData(BusinessParam bp)
+        {
+            try
+            {
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var accessGroups = unitOfWork.AccessGroup.Get(p=>p.EntityId != 1).ToList();
+                    return new ServiceResult<object>(Copier.GetDto(accessGroups),accessGroups.Count);
+                }
+            }
+            catch (Exception e)
+            {
+                return ExceptionUtil.ExceptionHandler(e, "AccessGroupFacade.Delete", bp.UserInfo);
+            }
+        }
 
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
@@ -178,7 +194,7 @@ namespace Parsia.Core.AccessGroup
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.AccessGroup.AccessGroup>();
                 var queryString = "select * from (select EntityId,Name,code,CreateBy,AccessKey,Deleted from " +
-                                  tableName + " ) e" +
+                                  tableName + "  where code <> 'ADMIN') e" +
                                   QueryUtil.GetWhereClause(bp.Clause,
                                       QueryUtil.GetConstraintForNativeQuery(bp, "AccessGroup", false, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);

@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <title>نقش کاربر</title>
+    <base href="/">
+    <link rel="stylesheet" href="/sass/core/core.min.css">
+    <link rel="stylesheet" href="/sass/page/edit.css">
+    <style>
+        .seperator {
+            width: 100%;
+        }
+
+        .seperator::before {
+            content: "گروه های دسترسی";
+            position: relative;
+            top: -15px;
+            right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-page">
+        <div class="scroll-container">
+            <header class="d-flex flex-row justify-content-between align-items-center border-bottom pb-2">
+                <button class="btn material outline orange btn-sm icon-btn btn-icon" id="edit-return">
+                    <span class="icon-holder">
+                        <i class="icon fas fa-arrow-circle-left ml-1"></i>
+                    </span>
+                    <span ksun-bundle-key="$return"></span>
+                </button>
+                <h6 id="process-title" class="w-100 mb-0 text-transparent" ksun-bundle-key="processTitle"></h6>
+                <button class="btn material deep-purple btn-sm icon-btn" id="edit-refresh" disabled>
+                    <span class="icon-holder">
+                        <i class="icon fas fa-sync-alt ml-1"></i>
+                    </span>
+                    <span ksun-bundle-key="$refresh"></span>
+                </button>
+                <button class="btn material indigo btn-sm icon-btn btn-icon" id="edit-new">
+                    <span class="icon-holder">
+                        <i class="icon fas fa-plus ml-1"></i>
+                    </span>
+                    <span ksun-bundle-key="$new"></span>
+                </button>
+            </header>
+            <div class="container-fluid data-wrapper pt-4">
+                <fieldset id="data-container" class="edit-fieldset p-2 pt-3">
+                    <div class="edit-form-container">
+                        <form class="entity-form visible mb-3" novalidate enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="form-group floating-form-group col-12 col-lg-6 " data-secure="true">
+                                    <input class="form-control form-control-sm floating-form-control"
+                                           id="entityId" tabindex="1"
+                                           ksun-input-type="number" ksun-bundle-key="entityId" readonly>
+                                    <span class="floating-form-bar"></span>
+                                    <label for="entityId" class="floating-label">
+                                        <span ksun-bundle-key="entityId"></span>
+                                    </label>
+                                    <div class="floating-form-control-msg flex-column">
+                                        <div class="d-flex flex-row justify-content-between f-w">
+                                            <span>بیشینه کاراکتر مجاز: 19 </span>
+                                            <span class="character-counter" ksun-max-count="19">0/19</span>
+                                        </div>
+                                        <div class="col-sm-12 invalid-feedback feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group floating-form-group col-12 col-lg-6 mandatory">
+                                    <input type="text" class="form-control form-control-sm floating-form-control"
+                                           id="roleName"
+                                           ksun-input-type="text" ksun-bundle-key="roleName" ksun-max-length="100">
+                                    <span class="floating-form-bar"></span>
+                                    <label for="roleName" class="floating-label">
+                                        <span ksun-bundle-key="roleName"></span><span class="star">*</span>
+                                    </label>
+                                    <div class="floating-form-control-msg flex-column">
+                                        <div class="d-flex flex-row justify-content-between f-w">
+                                            <span>بیشینه کاراکتر مجاز: 100 </span>
+                                            <span class="character-counter" ksun-max-count="100">0/100</span>
+                                        </div>
+                                        <div class="col-sm-12 invalid-feedback feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group floating-form-group col-12 col-lg-6 mandatory">
+                                    <input type="text" class="form-control form-control-sm floating-form-control"
+                                           id="expireMinute"
+                                           ksun-input-type="text" ksun-bundle-key="expireMinute" ksun-max-length="19">
+                                    <span class="floating-form-bar"></span>
+                                    <label for="expireMinute" class="floating-label">
+                                        <span ksun-bundle-key="expireMinute"></span><span class="star">*</span>
+                                    </label>
+                                    <div class="floating-form-control-msg flex-column">
+                                        <div class="d-flex flex-row justify-content-between f-w">
+                                            <span>بیشینه کاراکتر مجاز: 19 </span>
+                                            <span class="character-counter" ksun-max-count="19">0/19</span>
+                                        </div>
+                                        <div class="col-sm-12 invalid-feedback feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group floating-form-group col-12 col-lg-6">
+                                    <input type="text" class="form-control form-control-sm floating-form-control" id="created-by"
+                                           ksun-text-format="{username}" ksun-bundle-key="$createdBy" tabindex="9" readonly>
+                                    <span class="floating-form-bar"></span>
+                                    <label for="created-by" class="floating-label" ksun-bundle-key="$createdBy"></label>
+                                </div>
+                                <div class="form-group floating-form-group col-12 col-lg-6">
+                                    <input type="text" class="form-control form-control-sm floating-form-control" id="created"
+                                           ksun-bundle-key="$created" tabindex="10" readonly>
+                                    <span class="floating-form-bar"></span>
+                                    <label for="created" class="floating-label" ksun-bundle-key="$created"></label>
+                                </div>
+                                <div class="form-group floating-form-group col-12 col-lg-6">
+                                    <input type="text" class="form-control form-control-sm floating-form-control" id="updated-by"
+                                           ksun-text-format="{username}" ksun-bundle-key="$updatedBy" tabindex="11" readonly>
+                                    <span class="floating-form-bar"></span>
+                                    <label for="updated-by" class="floating-label" ksun-bundle-key="$updatedBy"></label>
+                                </div>
+                                <div class="form-group floating-form-group col-12 col-lg-6">
+                                    <input type="text" class="form-control form-control-sm floating-form-control" id="updated"
+                                           ksun-bundle-key="$updated" tabindex="12" readonly>
+                                    <span class="floating-form-bar"></span>
+                                    <label for="updated" class="floating-label" ksun-bundle-key="$updated"></label>
+                                </div>
+                                <div class="form-group floating-form-group col-12 col-lg-6">
+                                    <label class="floating-label" ksun-bundle-key="$activationStatus"></label>
+                                    <div class="floating-form-checkbox-wrapper">
+                                        <input type="radio" class="form-control form-control-sm floating-form-control"
+                                               ksun-bundle-key="$active" name="active" tabindex="13" id="active" data-value="true" checked>
+                                        <label for="active" class="floating-form-radio"></label>
+                                        <label for="active" class="floating-form-checkbox-label" ksun-bundle-key="$active"></label>
+                                    </div>
+                                    <div class="floating-form-checkbox-wrapper">
+                                        <input type="radio" class="form-control form-control-sm floating-form-control"
+                                               ksun-bundle-key="$active" name="active" tabindex="14" id="inactive" data-value="false">
+                                        <label for="inactive" class="floating-form-radio"></label>
+                                        <label for="inactive" class="floating-form-checkbox-label" ksun-bundle-key="$inactive"></label>
+                                    </div>
+                                </div>
+                                <hr class="seperator" />
+                                <div class="form-group floating-form-group col-12 col-lg-12 p-0">
+                                    <div class="row m-0" id="checkbox-container">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn-wrapper">
+                                <button type="button" class="btn material deep-purple" id="edit-submit" ksun-bundle-key="$submit"></button>
+                                <button type="button" class="btn material orange" id="edit-clear" ksun-bundle-key="$clear"></button>
+                            </div>
+                        </form>
+                    </div>
+                </fieldset>
+
+
+            </div>
+        </div>
+    </div>
+    <!-- Loading modal -->
+    <div class="modal fade" id="loading-modal" tabindex="-1" role="dialog" aria-labelledby="loading-modal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-loading modal-dialog-centered modal-dialog-top-md-down" role="document">
+            <div class="modal-content">
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="loading-content-wrapper">
+                        <i class="fas fa-circle-notch icon"></i>
+                        <span class="content" ksun-bundle-key="$bePatient"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm modal -->
+    <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-modal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-top-md-down" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+    <script src="/lib/jquery/jquery-v3.3.1.min.js"></script>
+    <script src="/lib/api/config.js"></script>
+    <script src="/lib/polyfill/promise.min.js"></script>
+    <script src="/lib/api/environment.js"></script>
+    <script src="/lib/api/util.js"></script>
+    <script src="/lib/api/storage.js"></script>
+    <script src="/lib/api/cookie.js"></script>
+    <script src="/lib/fontawesome/fontawesome-all.min.js" data-auto-add-css="false"></script>
+    <script src="/lib/hammer/hammer-v2.0.8.js"></script>
+    <script src="/lib/select2/select2.full.min.js"></script>
+    <script src="/lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/lib/floating-form/floating-form.js"></script>
+    <script src="/lib/persiandate/persian-date-0.1.8b.min.js"></script>
+    <script src="/lib/persiandate/persian-datepicker.min.js"></script>
+    <script src="/lib/scrollbar/simplebar.js"></script>
+    <script src="/lib/api/filter.js"></script>
+    <script src="/lib/api/order-by.js"></script>
+    <script src="/lib/api/where.js"></script>
+    <script src="/lib/api/handler.js"></script>
+    <script src="/lib/api/api.js"></script>
+    <script src="/lib/ripple/ripple.min.js"></script>
+    <script src="/lib/autocomplete/autocomplete.js"></script>
+    <script src="/pages/core/person/autocomplete.js"></script>
+    <script src="/lib/translation/general-bundle.js"></script>
+    <script src="/lib/translation/translation.js"></script>
+    <script src="/lib/modal/modal.js"></script>
+    <script src="/pages/core/role/bundle.js"></script>
+    <script src="/lib/shortkey/mousetrap.min.js"></script>
+    <script src="/lib/core/core.js"></script>
+    <script src="/lib/core/edit.js"></script>
+    <script src="/pages/core/role/edit.js"></script>
+</body>
+</html>

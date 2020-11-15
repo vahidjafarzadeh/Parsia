@@ -239,15 +239,6 @@ $(function () {
             entityId: 2
         },
         {
-            name: "منو ها",
-            title: "menu",
-            path: "/",
-            icon: "<i class='fas fa-bars'></i>",
-            orderNode: 3,
-            parentId: -1,
-            entityId: 3
-        },
-        {
             name: "تنظیمات سامانه",
             title: "base setting",
             path: "/",
@@ -291,15 +282,14 @@ $(function () {
             orderNode: 3,
             parentId: 4,
             entityId: 8
-        },
-        {
-            name: "تنظیمات سایت",
-            title: "site setting",
-            path: "/",
-            icon: "<i class='fab fa-weebly'></i>",
-            orderNode: 1,
-            parentId: 5,
-            entityId: 9
+        },{
+            name: "اماکن",
+            title: "icons",
+            path: "/pages/core/location/index.html",
+            icon: "<i class='fas fa-location-arrow''></i>",
+            orderNode: 3,
+            parentId: 4,
+            entityId: 8
         },
         {
             name: "تنظیمات پویا",
@@ -376,7 +366,7 @@ $(function () {
         {
             name: "نقش ها",
             title: "roles",
-            path: "/",
+            path: "/pages/core/role/index.html",
             icon: "<i class='fas fa-user-circle'></i>",
             orderNode: 4,
             parentId: 12,
@@ -385,7 +375,7 @@ $(function () {
         {
             name: "سازمان ها",
             title: "organization",
-            path: "/",
+            path: "/pages/core/organization/index.html",
             icon: "<i class='fas fa-building'></i>",
             orderNode: 5,
             parentId: 12,
@@ -410,21 +400,12 @@ $(function () {
             entityId: 19
         },
         {
-            name: "منوها مدیریت",
-            title: "menu admin",
-            path: "/",
-            icon: "<i class='fas fa-ellipsis-v'></i>",
-            orderNode: 1,
-            parentId: 20,
-            entityId: 23
-        },
-        {
             name: "مدیریت منوها",
             title: "menu management",
             path: "/",
             icon: "<i class='fas fa-users'></i>",
-            orderNode: 1,
-            parentId: 3,
+            orderNode: 3,
+            parentId: 1,
             entityId: 20
         },
         {
@@ -432,7 +413,7 @@ $(function () {
             title: "menu site",
             path: "/",
             icon: "<i class='fas fa-th-list'></i>",
-            orderNode: 2,
+            orderNode: 1,
             parentId: 20,
             entityId: 21
         },

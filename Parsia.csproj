@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\RoleAccessGroup\" />
-    <Folder Include="Core\Role\" />
     <Folder Include="Core\UserRoleAccess\" />
     <Folder Include="Core\UserRole\" />
     <Folder Include="wwwroot\images\system\icons\" />
@@ -52,6 +51,8 @@
     <Folder Include="wwwroot\pages\core\businessaccess\" />
     <Folder Include="wwwroot\pages\core\entitystate\" />
     <Folder Include="wwwroot\pages\core\action\" />
+    <Folder Include="wwwroot\pages\core\location\" />
+    <Folder Include="wwwroot\pages\core\organization\" />
     <Folder Include="wwwroot\pages\core\role\" />
     <Folder Include="wwwroot\pages\core\usecase\" />
     <Folder Include="wwwroot\sass\button\" />

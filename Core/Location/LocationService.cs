@@ -10,12 +10,9 @@ namespace Parsia.Core.Location
         [Route("service/location/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Location", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Location", "gridView");
             return checkAccess.Done
                 ? LocationFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -23,15 +20,16 @@ namespace Parsia.Core.Location
 
         [HttpPost]
         [Route("service/location/save")]
-        public ServiceResult<object> Save(LocationDto dto)
+        public ServiceResult<object> Save()
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
+            var dtoFromRequest = LocationFacade.GetInstance().GetDtoFromRequest(HttpContext.Request);
+            if (!dtoFromRequest.Done)
+                return dtoFromRequest;
+            var dto = (LocationDto)dtoFromRequest.Result;
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo);
             var checkAccess = UserSessionManager.CheckAccess(bp, "Location",
-                dto.EntityId == null ? "edit" : "save");
+                dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? LocationFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
 
@@ -39,12 +37,9 @@ namespace Parsia.Core.Location
         [Route("service/location/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Location", "edit");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Location", "update");
             return checkAccess.Done
                 ? LocationFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -54,9 +49,6 @@ namespace Parsia.Core.Location
         [Route("service/location/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "Location", "delete");
@@ -69,12 +61,9 @@ namespace Parsia.Core.Location
         [Route("service/location/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Location", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Location", "autocomplete");
             return checkAccess.Done
                 ? LocationFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;

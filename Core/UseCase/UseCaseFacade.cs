@@ -27,7 +27,7 @@ namespace Parsia.Core.UseCase
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.UseCase.UseCase>();
-                var queryString = $"select entityId,useCaseName,clazz,tableName,uName as parent,ParentId,createBy,accessKey,fullTitle,deleted from (select * from (select EntityId as entityId, UseCaseName as useCaseName, Clazz as clazz, TableName as tableName, ParentId, CreateBy as createBy, FullTitle as fullTitle, AccessKey As accessKey, Deleted as deleted from {tableName}) as currentUseCase left join(select EntityId as eId, UseCaseName as uName from {tableName}) as parentUseCase on currentUseCase.ParentId = parentUseCase.eId) e" +
+                var queryString = $"select entityId,useCaseName,clazz,tableName,uName as parent,ParentId,createBy,accessKey,fullTitle,deleted from (select * from (select EntityId as entityId, UseCaseName as useCaseName, Clazz as clazz, TableName as tableName, ParentId, CreateBy as createBy, FullTitle as fullTitle, AccessKey As accessKey, Deleted as deleted from {tableName} where code <> 'ADMIN') as currentUseCase left join(select EntityId as eId, UseCaseName as uName from {tableName}) as parentUseCase on currentUseCase.ParentId = parentUseCase.eId) e" +
                     QueryUtil.GetWhereClause(bp.Clause,
                         QueryUtil.GetConstraintForNativeQuery(bp, "UseCase", false, false, true)) +
                     QueryUtil.GetOrderByClause(bp.Clause);
@@ -62,7 +62,11 @@ namespace Parsia.Core.UseCase
         {
             try
             {
-                DataLayer.Model.Core.UseCase.UseCase useCase;
+                if (dto.Parent == null)
+                {
+                    dto.Parent = new UseCaseDto() { EntityId = 1 };
+                }
+                var useCase = new DataLayer.Model.Core.UseCase.UseCase();
                 if (dto.EntityId == 0)
                 {
                     using (var unitOfWork = new UnitOfWork())
@@ -71,15 +75,17 @@ namespace Parsia.Core.UseCase
                         unitOfWork.UseCase.Insert(useCase);
                         unitOfWork.UseCase.Save();
                     }
-
-                    foreach (var item in dto.UseCaseActions)
+                    if (dto.UseCaseActions != null)
                     {
-                        item.UseCase = new UseCaseDto() { EntityId = useCase.EntityId };
-                    }
-                    var serviceResult = UseCaseActionFacade.GetInstance().SaveList(bp, dto.UseCaseActions);
-                    if (!serviceResult.Done)
-                    {
-                        return serviceResult;
+                        foreach (var item in dto.UseCaseActions)
+                        {
+                            item.UseCase = new UseCaseDto() { EntityId = useCase.EntityId };
+                        }
+                        var serviceResult = UseCaseActionFacade.GetInstance().SaveList(bp, dto.UseCaseActions);
+                        if (!serviceResult.Done)
+                        {
+                            return serviceResult;
+                        }
                     }
                 }
                 else
@@ -87,24 +93,28 @@ namespace Parsia.Core.UseCase
                     var deletedList = UseCaseActionFacade.GetInstance().DeletedList(bp, dto.EntityId);
                     if (deletedList.Done)
                     {
-                        foreach (var item in dto.UseCaseActions)
+                        if (dto.UseCaseActions != null)
                         {
-                            item.UseCase = new UseCaseDto() { EntityId = dto.EntityId };
-                        }
-                        var serviceResult = UseCaseActionFacade.GetInstance().SaveList(bp, dto.UseCaseActions);
-                        if (serviceResult.Done)
-                        {
-                            using (var unitOfWork = new UnitOfWork())
+                            foreach (var item in dto.UseCaseActions)
                             {
-                                useCase = Copier.GetEntity(dto, bp, false);
-                                unitOfWork.UseCase.Update(useCase);
-                                unitOfWork.UseCase.Save();
+                                item.UseCase = new UseCaseDto() { EntityId = dto.EntityId };
+                            }
+                            var serviceResult = UseCaseActionFacade.GetInstance().SaveList(bp, dto.UseCaseActions);
+                            if (serviceResult.Done)
+                            {
+                                using (var unitOfWork = new UnitOfWork())
+                                {
+                                    useCase = Copier.GetEntity(dto, bp, false);
+                                    unitOfWork.UseCase.Update(useCase);
+                                    unitOfWork.UseCase.Save();
+                                }
+                            }
+                            else
+                            {
+                                return serviceResult;
                             }
                         }
-                        else
-                        {
-                            return serviceResult;
-                        }
+                           
                     }
                     else
                     {
@@ -194,7 +204,7 @@ namespace Parsia.Core.UseCase
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.UseCase.UseCase>();
-                var queryString = $"select * from (select EntityId as entityId,UseCaseName as useCaseName,Clazz as clazz,TableName as tableName,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey,Deleted as deleted from {tableName} ) e" +
+                var queryString = $"select * from (select EntityId as entityId,UseCaseName as useCaseName,Clazz as clazz,TableName as tableName,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey,Deleted as deleted from {tableName}  where code <> 'ADMIN') e" +
                                   QueryUtil.GetWhereClause(bp.Clause,
                                       QueryUtil.GetConstraintForNativeQuery(bp, "UseCase", false, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);

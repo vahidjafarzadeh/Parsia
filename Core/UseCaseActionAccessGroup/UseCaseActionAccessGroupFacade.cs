@@ -32,8 +32,12 @@ namespace Parsia.Core.UseCaseActionAccessGroup
                         using (var unitOfWork = new UnitOfWork())
                         {
                             caseActionAccessGroup = Copier.GetEntity(dto, bp, true);
-                            unitOfWork.UseCaseActionAccessGroup.Insert(caseActionAccessGroup);
-                            unitOfWork.UseCaseActionAccessGroup.Save();
+                            if (caseActionAccessGroup.UseCaseAction != -1)
+                            {
+                                unitOfWork.UseCaseActionAccessGroup.Insert(caseActionAccessGroup);
+                                unitOfWork.UseCaseActionAccessGroup.Save();
+                            }
+                           
                         }
                     else
                         using (var unitOfWork = new UnitOfWork())

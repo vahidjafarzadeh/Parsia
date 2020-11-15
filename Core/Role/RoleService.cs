@@ -1,75 +1,73 @@
 ﻿using DataLayer.Tools;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Parsia.Core.Organization
+namespace Parsia.Core.Role
 {
     [ApiController]
-    public class OrganizationService : ControllerBase
+    public class RoleService : ControllerBase
     {
         [HttpPost]
-        [Route("service/organization/gridView")]
+        [Route("service/role/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Organization", "gridView");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Role", "gridView");
             return checkAccess.Done
-                ? OrganizationFacade.GetInstance().GridView(bp)
+                ? RoleFacade.GetInstance().GridView(bp)
                 : checkAccess;
         }
 
         [HttpPost]
-        [Route("service/organization/save")]
+        [Route("service/role/save")]
         public ServiceResult<object> Save()
         {
-            var dtoFromRequest = OrganizationFacade.GetInstance().GetDtoFromRequest(HttpContext.Request);
+            var dtoFromRequest = RoleFacade.GetInstance().GetDtoFromRequest(HttpContext.Request);
             if (!dtoFromRequest.Done)
                 return dtoFromRequest;
-            var dto = (OrganizationDto)dtoFromRequest.Result;
+            var dto = (RoleDto) dtoFromRequest.Result;
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Organization",
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Role",
                 dto.EntityId == 0 ? "insert" : "update");
-            return checkAccess.Done ? OrganizationFacade.GetInstance().Save(bp, dto) : checkAccess;
+            return checkAccess.Done ? RoleFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
 
         [HttpPost]
-        [Route("service/organization/showRow")]
+        [Route("service/role/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Organization", "update");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Role", "update");
             return checkAccess.Done
-                ? OrganizationFacade.GetInstance().ShowRow(bp)
+                ? RoleFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
         }
 
         [HttpPost]
-        [Route("service/organization/delete")]
+        [Route("service/role/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Organization", "delete");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Role", "delete");
             return checkAccess.Done
-                ? OrganizationFacade.GetInstance().Delete(bp)
+                ? RoleFacade.GetInstance().Delete(bp)
                 : checkAccess;
         }
 
         [HttpPost]
-        [Route("service/organization/autocompleteView")]
+        [Route("service/role/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Organization", "autocomplete");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Role", "autocomplete");
             return checkAccess.Done
-                ? OrganizationFacade.GetInstance().AutocompleteView(bp)
+                ? RoleFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
         }
-    
 
-       
     }
 }

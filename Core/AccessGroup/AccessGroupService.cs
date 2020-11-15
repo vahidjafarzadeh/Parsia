@@ -70,5 +70,17 @@ namespace Parsia.Core.AccessGroup
                 ? AccessGroupFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
         }
+        
+        [HttpPost]
+        [Route("service/accessGroup/getAllData")]
+        public ServiceResult<object> GetAllData(Clause clause)
+        {
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var bp = new BusinessParam(userInfo, clause);
+            var checkAccess = UserSessionManager.CheckAccess(bp, "AccessGroup", "gridView");
+            return checkAccess.Done
+                ? AccessGroupFacade.GetInstance().GetAllData(bp)
+                : checkAccess;
+        }
     }
 }

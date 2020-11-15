@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DataLayer.Base;
 using DataLayer.Tools;
 using Parsia.Core.Action;
@@ -36,8 +37,8 @@ namespace Parsia.Core.AccessGroup
                 {
                     var dto = new UseCaseActionDto()
                     {
-                        Action = new ActionDto() { EntityId = item.CurrentUseCaseAction.CurrentAction.EntityId , ActionName = item.CurrentUseCaseAction.CurrentAction.ActionName },
-                        UseCase = new UseCaseDto() { EntityId = item.CurrentUseCaseAction.UseCase.Value}
+                        Action = new ActionDto() { EntityId = item.CurrentUseCaseAction.CurrentAction.EntityId, ActionName = item.CurrentUseCaseAction.CurrentAction.ActionName },
+                        UseCase = new UseCaseDto() { EntityId = item.CurrentUseCaseAction.UseCase.Value }
                     };
                     list.Add(dto);
                 }
@@ -46,7 +47,18 @@ namespace Parsia.Core.AccessGroup
             }
             return data;
         }
-
+        public List<AccessGroupDto> GetDto(List<DataLayer.Model.Core.AccessGroup.AccessGroup> lstData)
+        {
+            return lstData.Select(entity => new AccessGroupDto
+            {
+                EntityId = entity.EntityId,
+                Name = entity.Name,
+                Created = Util.GetTimeStamp(entity.Created),
+                Updated = Util.GetTimeStamp(entity.Updated),
+                Active = entity.Active,
+                Code = entity.Code
+            }).ToList();
+        }
         public DataLayer.Model.Core.AccessGroup.AccessGroup GetEntity(AccessGroupDto dto, BusinessParam bp,
             bool setCreate)
         {
