@@ -10,12 +10,9 @@ namespace Parsia.Core.Menu
         [Route("service/menu/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Menu", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Menu", "gridView");
             return checkAccess.Done
                 ? MenuFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -23,15 +20,16 @@ namespace Parsia.Core.Menu
 
         [HttpPost]
         [Route("service/menu/save")]
-        public ServiceResult<object> Save(MenuDto dto)
+        public ServiceResult<object> Save()
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
+            var dtoFromRequest = MenuFacade.GetInstance().GetDtoFromRequest(HttpContext.Request);
+            if (!dtoFromRequest.Done)
+                return dtoFromRequest;
+            var dto = (MenuDto)dtoFromRequest.Result;
             var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
             var bp = new BusinessParam(userInfo);
             var checkAccess = UserSessionManager.CheckAccess(bp, "Menu",
-                dto.EntityId == null ? "edit" : "save");
+                dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? MenuFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
 
@@ -39,12 +37,9 @@ namespace Parsia.Core.Menu
         [Route("service/menu/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Menu", "edit");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Menu", "update");
             return checkAccess.Done
                 ? MenuFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -54,9 +49,6 @@ namespace Parsia.Core.Menu
         [Route("service/menu/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "Menu", "delete");
@@ -69,12 +61,9 @@ namespace Parsia.Core.Menu
         [Route("service/menu/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Menu", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, "Menu", "autocomplete");
             return checkAccess.Done
                 ? MenuFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;

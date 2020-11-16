@@ -97,6 +97,10 @@ namespace Parsia.Core.UseCase
                 TableName = dto.TableName,
                 Clazz = dto.Clazz
             };
+            if (string.IsNullOrEmpty(useCase.Code))
+            {
+                useCase.Code = "-";
+            }
             return SetMandatoryField(useCase, bp, setCreate);
         }
 

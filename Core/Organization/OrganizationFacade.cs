@@ -28,6 +28,21 @@ namespace Parsia.Core.Organization
             return Facade;
         }
 
+        public string GetOrgAccess(long orgId)
+        {
+            try
+            {
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    return unitOfWork.Organization.Get(p => p.EntityId == orgId).Select(p => p.AccessKey).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.ExceptionHandler(ex, "OrganizationFacade.GetOrgAccess", null);
+                return "";
+            }
+        }
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             try

@@ -34,5 +34,9 @@
   {
     "outputFile": "wwwroot/lib/tree/style.css",
     "inputFile": "wwwroot/lib/tree/style.scss"
+  },
+  {
+    "outputFile": "wwwroot/sass/page/index.css",
+    "inputFile": "wwwroot/sass/page/index.scss"
   }
 ]

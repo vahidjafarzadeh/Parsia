@@ -1,5 +1,7 @@
 ﻿'use strict';
 var localVariables = {
+    lockAble: true,
+    clazzName: "Location",
     URLs: {
         services: {
             showRow: 'location/showRow',

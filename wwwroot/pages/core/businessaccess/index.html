@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <!-- Viewport Meta Tag -->
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <title>دسترسی کارهای سامانه</title>
+    <base href="/">
+    <link rel="stylesheet" href="/sass/core/core.min.css">
+    <link rel="stylesheet" href="/sass/page/index.css">
+</head>
+<body>
+    <div class="index">
+        <div class="scroll-container">
+            <nav class="search-bar d-flex flex-column flex-s-row">
+                <button class="search-bar-btn btn material purple icon-btn btn-sm mt-2 mt-s-0 ml-2 btn-filter d-none" type="button" data-toggle="collapse"
+                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <i class="fas fa-filter"></i><span ksun-bundle-key="$filter"></span>
+                </button>
+                <div id="simple-search-wrapper" class="input-group justify-content-start">
+                    <div class="input-group-item-wrapper outline-input-group blue-grey d-flex align-items-center">
+                        <div class="input-group-prepend">
+                            <span id="simple-search-btn" class="input-group-text input-btn text-muted" role="button">
+                                <i class="fas fa-search"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-sm" id="simple-search"
+                               ksun-bundle-key="$simpleSearch">
+                    </div>
+                </div>
+                <button id="advance-search"
+                        class="search-bar-btn btn material deep-purple icon-btn btn-sm mt-2 mt-s-0 d-none">
+                    <span class="icon-holder">
+                        <i class="fas fa-filter"></i>
+                    </span>
+                    <span ksun-bundle-key="$advanceSearch"></span>
+                </button>
+                <button id="new" class="search-bar-btn btn material indigo icon-btn btn-sm mt-2 mt-s-0">
+                    <span class="icon-holder">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span ksun-bundle-key="$new"></span>
+                </button>
+                <button id="business-access" class="search-bar-btn btn material danger icon-btn btn-sm mt-2 mt-s-0 d-none">
+                    <span class="icon-holder">
+                        <i class="fas fa-universal-access"></i>
+                    </span>
+                    <span ksun-bundle-key="$businessAccess"></span>
+                </button>
+            </nav>
+            <div class="search_filter">
+                <div class="accordion container-search" id="accordionExample">
+                    <div class="card">
+                        <div id="collapseOne" class="collapse entity-form visible mb-3" aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div class="card-body row data-container">
+                                <div class="form-group floating-form-group col-12 col-lg-12">
+                                    <button class="btn btn-sm indigo filter-search-btn material flex-row justify-content-start">
+                                        <span>جستجو</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="d-sm-none card-grid-header">
+                <div class="form-group mb-1">
+                    <select class="form-control form-control-sm" id="sorted-column"></select>
+                </div>
+                <div class="form-group mb-0">
+                    <select class="form-control form-control-sm" id="order-type">
+                        <option value="-1" ksun-bundle-key="$orderType" selected disabled></option>
+                        <option value="ASC" ksun-bundle-key="$ASC"></option>
+                        <option value="DESC" ksun-bundle-key="$DESC"></option>
+                    </select>
+                </div>
+                <div class="badges-wrapper"></div>
+                <button id="select-all" class="btn btn-primary btn-sm btn-block mb-2 mt-1"
+                        ksun-bundle-key="$selectAll">
+                </button>
+            </section>
+
+            <table class="table card-grid-s table-hover table-bordered table-striped thead-stylish main-table has-checkbox mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 40px">
+                            <div class="value event-off">
+                                <span ksun-bundle-key="$rowNum"></span>
+                            </div>
+                        </th>
+                        <th scope="col" style="width: 110px">
+                            <div class="value">
+                                <span ksun-bundle-key="entityId"></span>
+                                <i class="icon unsorted fas fa-sort"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="value">
+                                <span ksun-bundle-key="organizationName"></span>
+                                <i class="icon unsorted fas fa-sort"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="value">
+                                <span ksun-bundle-key="roleRoleName"></span>
+                                <i class="icon unsorted fas fa-sort"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="value">
+                                <span ksun-bundle-key="useCase"></span>
+                                <i class="icon unsorted fas fa-sort"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="col-wrapper">
+                                <div class="form-group floating-form-group col-12 floating-form-checkbox-wrapper d-rtl p-0 m-0">
+                                    <input class="form-control form-control-sm floating-form-control input floating-mode"
+                                           type="checkbox" id="header-checkbox" ksun-bundle-key="$selected">
+                                    <label class="floating-form-checkbox lbl lbl-checkbox" for="header-checkbox"></label>
+                                    <label class="floating-form-checkbox-label lbl lbl-text text-white mr-1"
+                                           for="header-checkbox" ksun-bundle-key="$selected">
+                                    </label>
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="actions">
+                                <span ksun-bundle-key="$actionGrid" style="display: table; margin: auto"></span>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="pattern-row">
+                        <td ksun-bundle-key="$rowNum"></td>
+                        <td ksun-bundle-key="entityId"></td>
+                        <td ksun-bundle-key="organizationName"></td>
+                        <td ksun-bundle-key="roleRoleName"></td>
+                        <td ksun-bundle-key="usecase"></td>
+                        <td ksun-bundle-key="$checkbox" class="hide-in-card-view"></td>
+                        <td ksun-bundle-key="$actions" class="hide-in-card-view"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="ksun-pagination-wrapper d-flex justify-content-end align-content-center">
+                <div class="number-wrapper">
+                    <div class="form-group">
+                        <label for="page-size" class="col-form-label text-muted" ksun-bundle-key="$countInPage"></label>
+                        <select class="form-control form-control-sm" id="page-size">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="page-number" class="col-form-label text-muted" ksun-bundle-key="$page"></label>
+                        <div class="input-group-item-wrapper outline-input-group deep-purple">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text input-btn text-muted">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                            <input type="text" class="form-control text-center" id="page-number">
+                        </div>
+                    </div>
+                </div>
+                <ul class="pagination">
+                    <li class="page-item" data-pagination-key="prev" ksun-bundle-key="$prevPage"
+                        data-toggle="tooltip">
+                        <a class="page-link btn material outline indigo" href="javascript:void(0)">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item" data-pagination-key="next" ksun-bundle-key="$nextPage" data-toggle="tooltip">
+                        <a class="page-link btn material outline indigo" href="javascript:void(0)">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Edit -->
+            <section class="edit-frame-wrapper">
+                <iframe class="edit-frame"></iframe>
+            </section>
+
+        </div>
+    </div>
+    <!-- Loading modal -->
+    <div class="modal fade" id="loading-modal" tabindex="-1" role="dialog" aria-labelledby="loading-modal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-loading modal-dialog-centered modal-dialog-top-md-down" role="document">
+            <div class="modal-content">
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="loading-content-wrapper">
+                        <i class="fas fa-circle-notch icon"></i>
+                        <span class="content" ksun-bundle-key="$bePatient"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm modal -->
+    <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-modal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-top-md-down" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+    <script src="/lib/jquery/jquery-v3.3.1.min.js"></script>
+    <script src="/lib/api/config.js"></script>
+    <script src="/lib/polyfill/promise.min.js"></script>
+    <script src="/lib/api/environment.js"></script>
+    <script src="/lib/api/util.js"></script>
+    <script src="/lib/api/storage.js"></script>
+    <script src="/lib/api/cookie.js"></script>
+    <script src="/lib/fontawesome/fontawesome-all.min.js" data-auto-add-css="false"></script>
+    <script src="/lib/hammer/hammer-v2.0.8.js"></script>
+    <script src="/lib/select2/select2.full.min.js"></script>
+    <script src="/lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/lib/floating-form/floating-form.js"></script>
+    <script src="/lib/persiandate/persian-date-0.1.8b.min.js"></script>
+    <script src="/lib/persiandate/persian-datepicker.min.js"></script>
+    <script src="/lib/scrollbar/simplebar.js"></script>
+    <script src="/lib/api/filter.js"></script>
+    <script src="/lib/api/order-by.js"></script>
+    <script src="/lib/api/where.js"></script>
+    <script src="/lib/api/handler.js"></script>
+    <script src="/lib/api/api.js"></script>
+    <script src="/lib/ripple/ripple.min.js"></script>
+    <script src="/lib/autocomplete/autocomplete.js"></script>
+    <script src="/pages/core/organization/autocomplete.js"></script>
+    <script src="/lib/translation/general-bundle.js"></script>
+    <script src="/lib/translation/translation.js"></script>
+    <script src="/lib/modal/modal.js"></script>
+    <script src="/lib/core/core.js"></script>
+    <script src="/pages/core/businessaccess/bundle.js"></script>
+    <script src="/lib/core/index.js"></script>
+    <script src="/pages/core/businessaccess/index.js"></script>
+</body>
+</html>

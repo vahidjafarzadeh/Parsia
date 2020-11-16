@@ -1,8 +1,8 @@
-var UserAutocomplete = {
+var UserRoleAutocomplete = {
     dynamicConfig: {
-        text: "username",
-        value: "entityId",
-        minCharacter: 3,
-        searchColumn: "fullTitle"
+        text: 'fullTitle',
+        value: 'entityId',
+        minCharacter: 2,
+        searchColumn: 'fullTitle'
     }
 };

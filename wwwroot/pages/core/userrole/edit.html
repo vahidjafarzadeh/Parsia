@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-    <title>مقادیر چند گزینه ای</title>
+    <title>نقش کاربران</title>
     <base href="/">
     <link rel="stylesheet" href="/sass/core/core.min.css">
     <link rel="stylesheet" href="/sass/page/edit.css">
@@ -37,87 +37,76 @@
                     <div class="edit-form-container">
                         <form class="entity-form visible mb-3" novalidate enctype="multipart/form-data">
                             <div class="row">
-                                <div class="form-group floating-form-group col-12 col-lg-6" data-secure="true">
-                                    <input type="text" class="form-control form-control-sm floating-form-control"
-                                           id="entityId" ksun-input-type="number" ksun-bundle-key="entityId" readonly>
+                                <div class="form-group floating-form-group col-12 col-lg-6 " data-secure="true">
+                                    <input class="form-control form-control-sm floating-form-control"
+                                           id="entityId" tabindex="1"
+                                           ksun-input-type="number" ksun-bundle-key="entityId" readonly>
                                     <span class="floating-form-bar"></span>
-                                    <label for="entityId" class="floating-label" ksun-bundle-key="entityId"></label>
-                                </div>
-                                <div class="form-group floating-form-group mandatory col-12 col-lg-6">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="name"
-                                           ksun-max-length="100" ksun-input-type="text" ksun-bundle-key="name">
-                                    <span class="floating-form-bar"></span>
-                                    <label for="name" class="floating-label">
-                                        <span ksun-bundle-key="name"></span><span class="star">*</span>
+                                    <label for="entityId" class="floating-label">
+                                        <span ksun-bundle-key="entityId"></span>
                                     </label>
                                     <div class="floating-form-control-msg flex-column">
                                         <div class="d-flex flex-row justify-content-between f-w">
-                                            <span>بیشینه کاراکتر مجاز: 100 </span>
-                                            <span class="character-counter" ksun-max-count="100">0/100</span>
+                                            <span>بیشینه کاراکتر مجاز: 19 </span>
+                                            <span class="character-counter" ksun-max-count="19">0/19</span>
                                         </div>
                                         <div class="col-sm-12 invalid-feedback feedback"></div>
                                     </div>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-6">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="val"
-                                           ksun-max-length="100" ksun-input-type="text" ksun-bundle-key="value">
+                                    <select id="user"
+                                            class="autocomplete form-control form-control-sm floating-form-control select2-hidden-accessible"
+                                            ksun-bundle-key="user" tabindex="3"
+                                            tabindex="-1" aria-hidden="true"></select>
                                     <span class="floating-form-bar"></span>
-                                    <label for="val" class="floating-label">
-                                        <span ksun-bundle-key="value"></span>
+                                    <label for="user" class="floating-label">
+                                        <span ksun-bundle-key="user"></span>
                                     </label>
-                                    <div class="floating-form-control-msg flex-column">
-                                        <div class="d-flex flex-row justify-content-between f-w">
-                                            <span>بیشینه کاراکتر مجاز: 100 </span>
-                                            <span class="character-counter" ksun-max-count="100">0/100</span>
-                                        </div>
-                                        <div class="col-sm-12 invalid-feedback feedback"></div>
-                                    </div>
+                                    <div class="col-sm-10 invalid-feedback feedback"></div>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-6">
-                                    <input type="text" class="form-control form-control-sm floating-form-control ltr" id="code"
-                                           ksun-max-length="100" ksun-input-type="text" ksun-bundle-key="code">
+                                    <select id="role"
+                                            class="autocomplete form-control form-control-sm floating-form-control select2-hidden-accessible"
+                                            ksun-bundle-key="role" tabindex="3"
+                                            tabindex="-1" aria-hidden="true"></select>
                                     <span class="floating-form-bar"></span>
-                                    <label for="code" class="floating-label">
-                                        <span ksun-bundle-key="code"></span>
+                                    <label for="role" class="floating-label">
+                                        <span ksun-bundle-key="role"></span>
                                     </label>
-                                    <div class="floating-form-control-msg flex-column">
-                                        <div class="d-flex flex-row justify-content-between f-w">
-                                            <span>بیشینه کاراکتر مجاز: 100 </span>
-                                            <span class="character-counter" ksun-max-count="100">0/100</span>
-                                        </div>
-                                        <div class="col-sm-12 invalid-feedback feedback"></div>
-                                    </div>
+                                    <div class="col-sm-10 invalid-feedback feedback"></div>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-6">
-                                    <select type="text" id="parent" ksun-bundle-key="parent"
-                                            class="form-control form-control-sm floating-form-control autocomplete dynamic-autocomplete">
-                                    </select>
+                                    <select id="organization"
+                                            class="autocomplete form-control form-control-sm floating-form-control select2-hidden-accessible"
+                                            ksun-bundle-key="organization" tabindex="3"
+                                            tabindex="-1" aria-hidden="true"></select>
                                     <span class="floating-form-bar"></span>
-                                    <label for="parent" class="floating-label">
-                                        <span ksun-bundle-key="parent"></span>
+                                    <label for="organization" class="floating-label">
+                                        <span ksun-bundle-key="organization"></span>
                                     </label>
+                                    <div class="col-sm-10 invalid-feedback feedback"></div>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-6">
                                     <input type="text" class="form-control form-control-sm floating-form-control" id="created-by"
-                                           ksun-text-format="{username}" ksun-bundle-key="$createdBy" readonly>
+                                           ksun-text-format="{username}" ksun-bundle-key="$createdBy" tabindex="9" readonly>
                                     <span class="floating-form-bar"></span>
                                     <label for="created-by" class="floating-label" ksun-bundle-key="$createdBy"></label>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-6">
                                     <input type="text" class="form-control form-control-sm floating-form-control" id="created"
-                                           ksun-bundle-key="$created" readonly>
+                                           ksun-bundle-key="$created" tabindex="10" readonly>
                                     <span class="floating-form-bar"></span>
                                     <label for="created" class="floating-label" ksun-bundle-key="$created"></label>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-6">
                                     <input type="text" class="form-control form-control-sm floating-form-control" id="updated-by"
-                                           ksun-text-format="{username}" ksun-bundle-key="$updatedBy" readonly>
+                                           ksun-text-format="{username}" ksun-bundle-key="$updatedBy" tabindex="11" readonly>
                                     <span class="floating-form-bar"></span>
                                     <label for="updated-by" class="floating-label" ksun-bundle-key="$updatedBy"></label>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-6">
                                     <input type="text" class="form-control form-control-sm floating-form-control" id="updated"
-                                           ksun-bundle-key="$updated" readonly>
+                                           ksun-bundle-key="$updated" tabindex="12" readonly>
                                     <span class="floating-form-bar"></span>
                                     <label for="updated" class="floating-label" ksun-bundle-key="$updated"></label>
                                 </div>
@@ -125,30 +114,15 @@
                                     <label class="floating-label" ksun-bundle-key="$activationStatus"></label>
                                     <div class="floating-form-checkbox-wrapper">
                                         <input type="radio" class="form-control form-control-sm floating-form-control"
-                                               ksun-bundle-key="$active" name="active" id="active" data-value="true" checked>
+                                               ksun-bundle-key="$active" name="active" tabindex="13" id="active" data-value="true" checked>
                                         <label for="active" class="floating-form-radio"></label>
                                         <label for="active" class="floating-form-checkbox-label" ksun-bundle-key="$active"></label>
                                     </div>
                                     <div class="floating-form-checkbox-wrapper">
                                         <input type="radio" class="form-control form-control-sm floating-form-control"
-                                               ksun-bundle-key="$active" name="active" id="inactive" data-value="false">
+                                               ksun-bundle-key="$active" name="active" tabindex="14" id="inactive" data-value="false">
                                         <label for="inactive" class="floating-form-radio"></label>
                                         <label for="inactive" class="floating-form-checkbox-label" ksun-bundle-key="$inactive"></label>
-                                    </div>
-                                </div>
-                                <div id="adminOnlyDiv" class="form-group floating-form-group col-12 col-lg-6 d-none">
-                                    <label class="floating-label" ksun-bundle-key="adminOnly"></label>
-                                    <div class="floating-form-checkbox-wrapper">
-                                        <input type="radio" class="form-control form-control-sm floating-form-control"
-                                               ksun-bundle-key="adminOnly" name="adminOnly" id="adminOnlyT" data-value="true" checked>
-                                        <label for="adminOnlyT" class="floating-form-radio"></label>
-                                        <label for="adminOnlyT" class="floating-form-checkbox-label" ksun-bundle-key="adminOnlyT"></label>
-                                    </div>
-                                    <div class="floating-form-checkbox-wrapper">
-                                        <input type="radio" class="form-control form-control-sm floating-form-control"
-                                               ksun-bundle-key="adminOnly" name="adminOnly" id="adminOnlyF" data-value="false">
-                                        <label for="adminOnlyF" class="floating-form-radio"></label>
-                                        <label for="adminOnlyF" class="floating-form-checkbox-label" ksun-bundle-key="adminOnlyF"></label>
                                     </div>
                                 </div>
                             </div>
@@ -163,38 +137,38 @@
 
             </div>
         </div>
-</div>
-<!-- Loading modal -->
-<div class="modal fade" id="loading-modal" tabindex="-1" role="dialog" aria-labelledby="loading-modal"
-     aria-hidden="true">
-    <div class="modal-dialog modal-loading modal-dialog-centered modal-dialog-top-md-down" role="document">
-        <div class="modal-content">
-            <div class="modal-body d-flex align-items-center justify-content-center">
-                <div class="loading-content-wrapper">
-                    <i class="fas fa-circle-notch icon"></i>
-                    <span class="content" ksun-bundle-key="$bePatient"></span>
+    </div>
+    <!-- Loading modal -->
+    <div class="modal fade" id="loading-modal" tabindex="-1" role="dialog" aria-labelledby="loading-modal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-loading modal-dialog-centered modal-dialog-top-md-down" role="document">
+            <div class="modal-content">
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="loading-content-wrapper">
+                        <i class="fas fa-circle-notch icon"></i>
+                        <span class="content" ksun-bundle-key="$bePatient"></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Confirm modal -->
-<div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-modal"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-top-md-down" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- Confirm modal -->
+    <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-modal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-top-md-down" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer"></div>
             </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer"></div>
         </div>
     </div>
-</div>
     <script src="/lib/jquery/jquery-v3.3.1.min.js"></script>
     <script src="/lib/api/config.js"></script>
     <script src="/lib/polyfill/promise.min.js"></script>
@@ -217,14 +191,18 @@
     <script src="/lib/api/api.js"></script>
     <script src="/lib/ripple/ripple.min.js"></script>
     <script src="/lib/autocomplete/autocomplete.js"></script>
-    <script src="/pages/core/comboval/autocomplete.js"></script>
+    <script src="/pages/core/user/autocomplete.js"></script>
+    <script src="/pages/core/role/autocomplete.js"></script>
+    <script src="/pages/core/organization/autocomplete.js"></script>
     <script src="/lib/translation/general-bundle.js"></script>
     <script src="/lib/translation/translation.js"></script>
     <script src="/lib/modal/modal.js"></script>
-    <script src="/pages/core/comboval/bundle.js"></script>
+    <script src="/pages/core/userrole/bundle.js"></script>
     <script src="/lib/shortkey/mousetrap.min.js"></script>
     <script src="/lib/core/core.js"></script>
     <script src="/lib/core/edit.js"></script>
-    <script src="/pages/core/comboval/edit.js"></script>
+    <script src="/pages/core/userrole/edit.js"></script>
 </body>
 </html>
+
+

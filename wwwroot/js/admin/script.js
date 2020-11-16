@@ -294,7 +294,7 @@ $(function () {
         {
             name: "تنظیمات پویا",
             title: "dynamic setting",
-            path: "/",
+            path: "/pages/core/systemconfig/edit.html?eID=1",
             icon: "<i class='fas fa-chart-line'></i>",
             orderNode: 2,
             parentId: 5,
@@ -339,7 +339,7 @@ $(function () {
         {
             name: "نقش کاربران",
             title: "user role",
-            path: "/",
+            path: "/pages/core/userrole/index.html",
             icon: "<i class='fas fa-user-cog'></i>",
             orderNode: 3,
             parentId: 11,
@@ -384,7 +384,7 @@ $(function () {
         {
             name: "دسترسی کارها",
             title: "business access",
-            path: "/",
+            path: "/pages/core/businessaccess/index.html",
             icon: " <i class='fas fa-universal-access'></i> ",
             orderNode: 5,
             parentId: 12,
@@ -393,7 +393,7 @@ $(function () {
         {
             name: "وضعیت موجودیت ها",
             title: "entity state",
-            path: "/",
+            path: "/pages/core/entitystate/index.html",
             icon: "<i class='fas fa-lock'></i>",
             orderNode: 5,
             parentId: 12,
@@ -411,7 +411,7 @@ $(function () {
         {
             name: "منوهای سایت",
             title: "menu site",
-            path: "/",
+            path: "/pages/core/menu/index.html",
             icon: "<i class='fas fa-th-list'></i>",
             orderNode: 1,
             parentId: 20,

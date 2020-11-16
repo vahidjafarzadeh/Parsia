@@ -274,10 +274,9 @@ fillForm = function (rowData, callback) {
         callback.apply(null, []);
     }
     if (localVariables.lockAble) {
-        const data = {
-            tblName: localVariables.clazzName,
-            tblEntityId: rowData.entityId
-        };
+        var formData = new FormData();
+        formData.append("tblName", localVariables.clazzName);
+        formData.append("tblEntityId", rowData.entityId);
         const handler = new Handler();
         handler.beforeSend = () => {
         };
@@ -321,14 +320,14 @@ fillForm = function (rowData, callback) {
                 if (top.hideLoading) {
                     top.hideLoading();
                 }
-                errorHandler(data);
+                if (data.errorCode !== 8) {
+                    errorHandler(data);
+                }
+
             }
         };
-        Api.post({
-            url: "coentitystate/getState",
-            data: data,
-            handler: handler
-        });
+        var requestConfig = { url: "entityState/getState", formData: formData, handler: handler };
+        Api.postForm(requestConfig);
     }
     var lstTreeFiller = [];
     $.each(rowData.useCaseActionList, (i, v) => {

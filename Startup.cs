@@ -38,6 +38,7 @@ namespace Parsia
             SystemConfig.SystemRoleId = long.Parse(section["SystemRoleId"]);
             SystemConfig.SystemAdminRoleId = long.Parse(section["SystemAdminRoleId"]);
             SystemConfig.ApplicationAdminRoleId = long.Parse(section["ApplicationAdminRoleId"]);
+            SystemConfig.AdminValidIp = section["AdminValidIp"];
         }
 
         #endregion

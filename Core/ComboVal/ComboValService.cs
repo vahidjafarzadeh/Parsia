@@ -85,7 +85,7 @@ namespace Parsia.Core.ComboVal
         public ServiceResult<bool> GetAccess(Clause clause)
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
-            return SystemConfig.IsUnlimitedRole(userInfo.RoleId, false)
+            return DataLayer.Tools.SystemConfig.IsUnlimitedRole(userInfo.RoleId, false)
                 ? new ServiceResult<bool>(true, 1)
                 : new ServiceResult<bool>(false, 1);
         }

@@ -14,6 +14,7 @@
     <_ContentIncludedByDefault Remove="wwwroot\lib\tree\style.min.css" />
     <_ContentIncludedByDefault Remove="wwwroot\sass\core\core.css" />
     <_ContentIncludedByDefault Remove="wwwroot\sass\page\edit.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\sass\page\index.min.css" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BuildWebCompiler" Version="1.12.394" />
@@ -40,8 +41,9 @@
     <PackageReference Include="WebMarkupMin.AspNetCore3" Version="2.8.11" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\BusinessAccess\" />
+    <Folder Include="Core\EntityState\" />
     <Folder Include="Core\RoleAccessGroup\" />
-    <Folder Include="Core\UserRoleAccess\" />
     <Folder Include="Core\UserRole\" />
     <Folder Include="wwwroot\images\system\icons\" />
     <Folder Include="wwwroot\lib\core\" />
@@ -52,6 +54,7 @@
     <Folder Include="wwwroot\pages\core\entitystate\" />
     <Folder Include="wwwroot\pages\core\action\" />
     <Folder Include="wwwroot\pages\core\location\" />
+    <Folder Include="wwwroot\pages\core\menu\" />
     <Folder Include="wwwroot\pages\core\organization\" />
     <Folder Include="wwwroot\pages\core\role\" />
     <Folder Include="wwwroot\pages\core\usecase\" />

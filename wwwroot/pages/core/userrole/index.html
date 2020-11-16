@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- Viewport Meta Tag -->
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-    <title>مقادیر چند گزینه ای</title>
+    <title>نقش کاربران</title>
     <base href="/">
     <link rel="stylesheet" href="/sass/core/core.min.css">
     <link rel="stylesheet" href="/sass/page/index.css">
@@ -13,7 +13,7 @@
     <div class="index">
         <div class="scroll-container">
             <nav class="search-bar d-flex flex-column flex-s-row">
-                <button class="search-bar-btn btn material purple icon-btn btn-sm mt-2 mt-s-0 ml-2 btn-filter" type="button" data-toggle="collapse"
+                <button class="search-bar-btn btn material purple icon-btn btn-sm mt-2 mt-s-0 ml-2 btn-filter d-none" type="button" data-toggle="collapse"
                         data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                     <i class="fas fa-filter"></i><span ksun-bundle-key="$filter"></span>
                 </button>
@@ -54,60 +54,6 @@
                         <div id="collapseOne" class="collapse entity-form visible mb-3" aria-labelledby="headingOne" data-parent="#accordionExample">
                             <div class="card-body row data-container">
                                 <div class="form-group floating-form-group col-12 col-lg-12">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="name"
-                                           ksun-max-length="100" ksun-input-type="text" ksun-bundle-key="name" ksun-column-key="name" ksun-condition-key="7" ksun-operation-key="1">
-                                    <span class="floating-form-bar"></span>
-                                    <label for="name" class="floating-label">
-                                        <span ksun-bundle-key="name"></span>
-                                    </label>
-                                    <div class="floating-form-control-msg flex-column">
-                                        <div class="d-flex flex-row justify-content-between f-w">
-                                            <span>بیشینه کاراکتر مجاز: 100 </span>
-                                            <span class="character-counter" ksun-max-count="100">0/100</span>
-                                        </div>
-                                        <div class="col-sm-12 invalid-feedback feedback"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group floating-form-group col-12 col-lg-12">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="val"
-                                           ksun-max-length="100" ksun-input-type="text" ksun-bundle-key="value" ksun-column-key="value" ksun-condition-key="7" ksun-operation-key="1">
-                                    <span class="floating-form-bar"></span>
-                                    <label for="val" class="floating-label">
-                                        <span ksun-bundle-key="value"></span>
-                                    </label>
-                                    <div class="floating-form-control-msg flex-column">
-                                        <div class="d-flex flex-row justify-content-between f-w">
-                                            <span>بیشینه کاراکتر مجاز: 100 </span>
-                                            <span class="character-counter" ksun-max-count="100">0/100</span>
-                                        </div>
-                                        <div class="col-sm-12 invalid-feedback feedback"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group floating-form-group col-12 col-lg-12">
-                                    <input type="text" class="form-control form-control-sm floating-form-control ltr" id="code"
-                                           ksun-max-length="100" ksun-input-type="text" ksun-bundle-key="code" ksun-column-key="code" ksun-condition-key="7" ksun-operation-key="1">
-                                    <span class="floating-form-bar"></span>
-                                    <label for="code" class="floating-label">
-                                        <span ksun-bundle-key="code"></span>
-                                    </label>
-                                    <div class="floating-form-control-msg flex-column">
-                                        <div class="d-flex flex-row justify-content-between f-w">
-                                            <span>بیشینه کاراکتر مجاز: 100 </span>
-                                            <span class="character-counter" ksun-max-count="100">0/100</span>
-                                        </div>
-                                        <div class="col-sm-12 invalid-feedback feedback"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group floating-form-group col-12 col-lg-12">
-                                    <select type="text" id="parent" ksun-bundle-key="parent"
-                                            class="form-control form-control-sm floating-form-control autocomplete dynamic-autocomplete" ksun-column-key="parentId" ksun-condition-key="1" ksun-operation-key="1">
-                                    </select>
-                                    <span class="floating-form-bar"></span>
-                                    <label for="parent" class="floating-label">
-                                        <span ksun-bundle-key="parent"></span>
-                                    </label>
-                                </div>
-                                <div class="form-group floating-form-group col-12 col-lg-12">
                                     <button class="btn btn-sm indigo filter-search-btn material flex-row justify-content-start">
                                         <span>جستجو</span>
                                     </button>
@@ -137,12 +83,12 @@
             <table class="table card-grid-s table-hover table-bordered table-striped thead-stylish main-table has-checkbox mb-0">
                 <thead>
                     <tr>
-                        <th scope="col" style="width: 40px">
+                        <th scope="col">
                             <div class="value event-off">
                                 <span ksun-bundle-key="$rowNum"></span>
                             </div>
                         </th>
-                        <th scope="col" style="width: 110px">
+                        <th scope="col">
                             <div class="value">
                                 <span ksun-bundle-key="entityId"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
@@ -150,25 +96,19 @@
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="name"></span>
+                                <span ksun-bundle-key="userName"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="value"></span>
+                                <span ksun-bundle-key="role"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
                         <th scope="col">
                             <div class="value">
-                                <span ksun-bundle-key="code"></span>
-                                <i class="icon unsorted fas fa-sort"></i>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="value">
-                                <span ksun-bundle-key="parentName"></span>
+                                <span ksun-bundle-key="organization"></span>
                                 <i class="icon unsorted fas fa-sort"></i>
                             </div>
                         </th>
@@ -195,10 +135,9 @@
                     <tr class="pattern-row">
                         <td ksun-bundle-key="$rowNum"></td>
                         <td ksun-bundle-key="entityId"></td>
-                        <td ksun-bundle-key="name"></td>
-                        <td ksun-bundle-key="value"></td>
-                        <td ksun-bundle-key="code"></td>
-                        <td ksun-bundle-key="parentName"></td>
+                        <td ksun-bundle-key="userName"></td>
+                        <td ksun-bundle-key="role"></td>
+                        <td ksun-bundle-key="organization"></td>
                         <td ksun-bundle-key="$checkbox" class="hide-in-card-view"></td>
                         <td ksun-bundle-key="$actions" class="hide-in-card-view"></td>
                     </tr>
@@ -300,13 +239,12 @@
     <script src="/lib/api/handler.js"></script>
     <script src="/lib/api/api.js"></script>
     <script src="/lib/ripple/ripple.min.js"></script>
-    <script src="/lib/autocomplete/autocomplete.js"></script>
-    <script src="/pages/core/comboval/autocomplete.js"></script>
-    <script src="/lib/translation/general-bundle.js"></script>
+<script src="/lib/translation/general-bundle.js"></script>
     <script src="/lib/translation/translation.js"></script>
     <script src="/lib/modal/modal.js"></script>
-    <script src="/pages/core/comboval/bundle.js"></script>
+    <script src="/lib/core/core.js"></script>
+    <script src="/pages/core/userrole/bundle.js"></script>
     <script src="/lib/core/index.js"></script>
-    <script src="/pages/core/comboval/index.js"></script>
+    <script src="/pages/core/userrole/index.js"></script>
 </body>
 </html>

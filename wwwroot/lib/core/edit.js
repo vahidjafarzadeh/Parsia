@@ -308,10 +308,9 @@ var initListeners = function() {
                 html: `<i class="fas fa-lock"></i>`,
                 click: () => {
                     if ($(`[ksun-bundle-key="entityId"]`).val()) {
-                        const formData = {
-                            tblName: localVariables.clazzName,
-                            tblEntityId: $(`[ksun-bundle-key="entityId"]`).val()
-                        };
+                        var formData = new FormData();
+                        formData.append("tblName", localVariables.clazzName);
+                        formData.append("tblEntityId", $(`[ksun-bundle-key="entityId"]`).val());
                         if (lockBtn.find("svg").hasClass("text-gold")) {
                             const handler = new Handler();
                             handler.success = (data) => {
@@ -346,11 +345,8 @@ var initListeners = function() {
                                     errorHandler(data);
                                 }
                             };
-                            Api.post({
-                                url: "coentitystate/deleteLock",
-                                data: formData,
-                                handler: handler
-                            });
+                            var requestConfig = { url: "entityState/deleteLock", formData: formData, handler: handler };
+                            Api.postForm(requestConfig);
                         } else if (lockBtn.find("svg").hasClass("text-danger")) {
                             $(".locker").find("svg").addClass("text-danger");
                             if (top.showConfirm) {
@@ -404,11 +400,8 @@ var initListeners = function() {
                                     errorHandler(data);
                                 }
                             };
-                            Api.post({
-                                url: "coentitystate/lock",
-                                data: formData,
-                                handler: handler
-                            });
+                            var requestConfig = { url: "entityState/lock", formData: formData, handler: handler };
+                            Api.postForm(requestConfig);
                         }
                     } else {
                         if (top.showConfirm) {
@@ -852,10 +845,9 @@ var fillForm = function(rowData, callback) {
         callback.apply(null, []);
     }
     if (localVariables.lockAble) {
-        const data = {
-            tblName: localVariables.clazzName,
-            tblEntityId: rowData.entityId
-        };
+        var formData = new FormData();
+        formData.append("tblName", localVariables.clazzName);
+        formData.append("tblEntityId", rowData.entityId);
         const handler = new Handler();
         handler.beforeSend = () => {
         };
@@ -879,18 +871,18 @@ var fillForm = function(rowData, callback) {
                         $("#edit-clear").remove();
                         $(".locker").data({ text: data.result });
                         if (top.showConfirm) {
-                            setTimeout(function() {
-                                    top.showConfirm({
-                                        title: "پیام سیستمی",
-                                        body: "موجودیت جاری قفل می باشد",
-                                        confirmButton: {
-                                            hidden: true
-                                        },
-                                        declineButton: {
-                                            text: GeneralBundle.$close
-                                        }
-                                    });
-                                },
+                            setTimeout(function () {
+                                top.showConfirm({
+                                    title: "پیام سیستمی",
+                                    body: "موجودیت جاری قفل می باشد",
+                                    confirmButton: {
+                                        hidden: true
+                                    },
+                                    declineButton: {
+                                        text: GeneralBundle.$close
+                                    }
+                                });
+                            },
                                 450);
                         }
                     }
@@ -899,14 +891,14 @@ var fillForm = function(rowData, callback) {
                 if (top.hideLoading) {
                     top.hideLoading();
                 }
-                errorHandler(data);
+                if (data.errorCode !== 8) {
+                   errorHandler(data); 
+                }
+                
             }
         };
-        Api.post({
-            url: "coentitystate/getState",
-            data: data,
-            handler: handler
-        });
+        var requestConfig = { url: "entityState/getState", formData: formData, handler: handler };
+        Api.postForm(requestConfig);
     }
 };
 

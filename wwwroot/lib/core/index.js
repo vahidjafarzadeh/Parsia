@@ -403,6 +403,14 @@ var initListeners = function() {
                                 });
                             iframe.contents().find("#1020427247163600").val(ids.substring(0, ids.length - 1));
                             iframe.contents().find("#1020427247150500").val(localVariables.clazzName);
+                            iframe.contents().find("#entityId").closest(".form-group").addClass("d-none");
+                            iframe.contents().find("#1020427247150500").closest(".form-group").addClass("d-none");
+                            iframe.contents().find("#1020427247163600").closest(".form-group").addClass("d-none");
+                            iframe.contents().find("#created-by").closest(".form-group").addClass("d-none");
+                            iframe.contents().find("#created").closest(".form-group").addClass("d-none");
+                            iframe.contents().find("#updated-by").closest(".form-group").addClass("d-none");
+                            iframe.contents().find("#updated").closest(".form-group").addClass("d-none");
+                            iframe.contents().find("#wrapper-active").addClass("d-none");
                         });
                     body.append(iframe);
                     modalContent.append(header, body);

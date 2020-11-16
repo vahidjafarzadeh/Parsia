@@ -8,7 +8,8 @@ namespace Parsia.Core.Menu
 {
     public class MenuDto : BaseDto
     {
-        [Display(Name = "شناسه")] public long EntityId { get; set; }
+        [Display(Name = "شناسه")] 
+        public long EntityId { get; set; }
 
         [Display(Name = "نام")]
         [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
@@ -31,14 +32,19 @@ namespace Parsia.Core.Menu
         [MaxLength(300, ErrorMessage = "حداکثر کاراکتر مجاز برای {0} به میزان {1} کاراکتر می باشد")]
         public string Icon { get; set; }
 
-        [Display(Name = "اولویت")] public int OrderNode { get; set; }
+        [Display(Name = "اولویت")] 
+        public int OrderNode { get; set; }
 
-        [Display(Name = "تصویر")] public FileDto File { get; set; }
+        [Display(Name = "تصویر")] 
+        public FileDto File { get; set; }
 
-        [Display(Name = "دسترسی")] public UseCaseDto UseCase { get; set; }
+        [Display(Name = "دسترسی")] 
+        public UseCaseDto UseCase { get; set; }
 
-        [Display(Name = "والد")] public long? ParentId { get; set; }
+        [Display(Name = "والد")] 
+        public MenuDto Parent { get; set; }
 
-        [Display(Name = "نحوه نمایش")] public ComboValDto Target { get; set; }
+        [Display(Name = "نحوه نمایش")]
+        public ComboValDto Target { get; set; }
     }
 }

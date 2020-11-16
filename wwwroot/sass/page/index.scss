@@ -24,6 +24,7 @@ $simple-search-wrapper-width: 150px;
       .data-container {
         overflow: auto;
         height: calc(100vh - 70px);
+        @include alignContent(start);
       }
     }
   }
