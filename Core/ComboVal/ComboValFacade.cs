@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DataLayer.Base;
 using DataLayer.Model.Core.User;
@@ -10,10 +11,15 @@ using Parsia.Core.Elastic;
 
 namespace Parsia.Core.ComboVal
 {
+    [ClassDetails(Clazz = "ComboVal",Facade = "ComboValFacade")]
     public class ComboValFacade : IBaseFacade<ComboValDto>
     {
         private static readonly ComboValFacade Facade = new ComboValFacade();
         private static readonly ComboValCopier Copier = new ComboValCopier();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(ComboValFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+
+
 
         private ComboValFacade()
         {
@@ -21,6 +27,7 @@ namespace Parsia.Core.ComboVal
 
         public ServiceResult<object> GridView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.ComboVal.ComboVal>();
@@ -29,7 +36,7 @@ namespace Parsia.Core.ComboVal
                     tableName + " where Deleted =0) data left join(select EntityId, Name from " + tableName +
                     " where Deleted = 0) parent on data.ParentId = parent.EntityId ) e  " +
                     QueryUtil.GetWhereClause(bp.Clause,
-                        QueryUtil.GetConstraintForNativeQuery(bp, "ComboVal", false, false, true)) +
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
                     QueryUtil.GetOrderByClause(bp.Clause);
                 queryString = QueryUtil.SetPaging(bp.Clause.PageNo,bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
@@ -54,7 +61,7 @@ namespace Parsia.Core.ComboVal
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "ComboValFacade.GridView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade+ methodName, bp.UserInfo);
             }
         }
 
