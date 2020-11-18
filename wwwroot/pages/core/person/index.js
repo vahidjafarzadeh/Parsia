@@ -185,7 +185,11 @@ function localPageReady() {
     initAutoCompletes();
     onPageReady();
 }
-
-$(document).ready(function() {
-    localPageReady();
+$(document).ready(function () {
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        localPageReady();
+    }
 });

@@ -17,7 +17,7 @@ namespace Parsia.Core.BusinessAccess
             var updateUser = entity.UpdateUserEntity != null
                 ? new UserDto() { EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username }
                 : new UserDto();
-            var location = new BusinessAccessDto
+            var businessAccess = new BusinessAccessDto
             {
                 EntityId = entity.EntityId,
                 Active = entity.Active,
@@ -33,13 +33,13 @@ namespace Parsia.Core.BusinessAccess
             };
             if (entity.CurrentRole != null)
             {
-                location.Role = new RoleDto() { EntityId = entity.CurrentRole.EntityId, RoleName = entity.CurrentRole.RoleName, FullTitle = entity.CurrentRole.FullTitle };
+                businessAccess.Role = new RoleDto() { EntityId = entity.CurrentRole.EntityId, RoleName = entity.CurrentRole.RoleName, FullTitle = entity.CurrentRole.FullTitle };
             }
             if (entity.CurrentOrganization != null)
             {
-                location.Organization = new OrganizationDto() { EntityId = entity.CurrentOrganization.EntityId, Name = entity.CurrentOrganization.Name, FullTitle = entity.CurrentOrganization.FullTitle };
+                businessAccess.Organization = new OrganizationDto() { EntityId = entity.CurrentOrganization.EntityId, Name = entity.CurrentOrganization.Name, FullTitle = entity.CurrentOrganization.FullTitle };
             }
-            return location;
+            return businessAccess;
         }
 
         public DataLayer.Model.Core.BusinessAccess.BusinessAccess GetEntity(BusinessAccessDto dto, BusinessParam bp, bool setCreate)

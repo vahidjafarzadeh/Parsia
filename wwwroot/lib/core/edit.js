@@ -1340,7 +1340,7 @@ var panelRelatedActions = function() {
 
 var onPageReady = function() {
     // change page language according to user lang
-    $("html").attr("lang", Storage.getUserInfo().lang === 1 ? "FA" : "EN");
+    $("html").attr("lang", Storage.getUserInfo().lang === 1 ? "FA" : "FA");
     initViews();
     initInstances();
     initListeners();

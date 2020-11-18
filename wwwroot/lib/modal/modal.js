@@ -224,7 +224,8 @@ var Modal = (function() {
             if (config.script) {
                 config.script.apply(null, []);
             }
-        } else {
+        }
+        else {
             confirmModalConfig.modalHeader.modalTitle.element.html("پیام سیستمی");
             confirmModalConfig.modalBody.element.html("آیا مطمئن هستید؟");
             confirmModalConfig.modalFooter.buttonWrapper.confirmButton.element.text(GeneralBundle.$confirm)

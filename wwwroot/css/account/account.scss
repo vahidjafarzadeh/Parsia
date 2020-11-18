@@ -1,0 +1,451 @@
+﻿@import "../../sass/abstract/_persian-fonts.scss";
+@import "../../sass/abstract/mixins";
+@import "../../sass/abstract/variables";
+$floating-form-base-color: $base-color;
+@import "../../sass/component/floating-form";
+@import "../../sass/component/floating-form-region";
+$floating-form-select-base-color: $base-color;
+@import "../../sass/component/floating-form-select2";
+@import "../../sass/component/material-ckeditor";
+body {
+    font-family: iran !important;
+    padding: 0 !important;
+}
+
+.login-page {
+    background-color: #00BCD4;
+    padding-left: 0;
+    max-width: 360px;
+    margin: 5% auto;
+    overflow-x: hidden;
+    overflow-y:auto;
+}
+
+.login-page .login-box .msg {
+    color: #555;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.login-page .login-box a {
+    font-size: 14px;
+    text-decoration: none;
+    color: #00BCD4;
+}
+
+
+.login-page .login-box .logo a {
+    font-size: 36px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+}
+
+.login-page .login-box .logo small {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #9f07a9;
+    margin-top: -5px;
+}
+
+/* Sign Up Page ================================ */
+.signup-page {
+    background-color: #00BCD4;
+    padding-left: 0;
+    max-width: 360px;
+    margin: 5% auto;
+    overflow-x: hidden;
+}
+
+.signup-page .signup-box .msg {
+    color: #555;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.signup-page .signup-box a {
+    font-size: 14px;
+    text-decoration: none;
+    color: #00BCD4;
+}
+
+.signup-page .signup-box .logo {
+    margin-bottom: 20px;
+}
+
+.signup-page .signup-box .logo a {
+    font-size: 36px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+}
+
+.signup-page .signup-box .logo small {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    margin-top: -5px;
+}
+
+/* Forgot Password Page ======================== */
+.fp-page {
+    background-color: #00BCD4;
+    padding-left: 0;
+    max-width: 360px;
+    margin: 5% auto;
+    overflow-x: hidden;
+}
+
+.fp-page .fp-box .msg {
+    color: #555;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.fp-page .fp-box a {
+    font-size: 14px;
+    text-decoration: none;
+    color: #00BCD4;
+}
+
+.fp-page .fp-box .logo {
+    margin-bottom: 20px;
+}
+
+.fp-page .fp-box .logo a {
+    font-size: 36px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+}
+
+.fp-page .fp-box .logo small {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    margin-top: -5px;
+}
+.page-loader-wrapper {
+    z-index: 99999999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: #eee;
+    overflow: hidden;
+    text-align: center;
+}
+
+.page-loader-wrapper p {
+    font-size: 13px;
+    margin-top: 16px;
+    font-weight: normal;
+    color: #444;
+    float: left;
+}
+.page-loader-wrapper .loader {
+    position: relative;
+    top: calc(50% - 30px);
+    width: 20%;
+    margin: auto;
+}
+
+.md-preloader .pl-red {
+    stroke: #F44336;
+}
+
+.preloader {
+    display: inline-block;
+    position: relative;
+    width: 50px;
+    height: 50px;
+    -webkit-animation: container-rotate 1568ms linear infinite;
+    -moz-animation: container-rotate 1568ms linear infinite;
+    -o-animation: container-rotate 1568ms linear infinite;
+    animation: container-rotate 1568ms linear infinite;
+}
+
+.login-page {
+    .login-box {
+        direction: rtl;
+        font-family: iran;
+
+        .logo {
+            a {
+                font-size: 30px !important;
+
+                b {
+                    font-weight: bold;
+                    font-size: 36px;
+                    margin: 0 5px;
+                    color: #eee;
+                }
+            }
+
+            small {
+                margin-top: 5px;
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+
+
+.btn:not(.btn-link):not(.btn-circle) {
+    font-size: 13px;
+    padding: 5px 0;
+}
+
+
+.login-logo {
+    width: 88px;
+    height: 57px;
+    display: table;
+    margin: 10px auto 15px;
+}
+
+.log-image {
+    width: 90px;
+    height: 90px;
+    @include objectFit(contain);
+   
+}
+
+.cursor-defult {
+    cursor: default
+}
+
+.full-width {
+    width: 100%;
+}
+
+.fs-12 {
+    font-size: 12px !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.login-page .login-box a {
+    display: table;
+}
+
+button, input, select, a {
+    outline: none !important;
+}
+
+[type="checkbox"].filled-in + label::before, [type="checkbox"].filled-in + label::after {
+    content: '';
+    right: 0;
+    left: unset;
+    margin-right: 8px;
+}
+
+[type="checkbox"].filled-in:checked + label::before {
+    margin-right: 18px;
+}
+
+[type="checkbox"] + label {
+    padding-right: 36px;
+}
+
+.captcha-container {
+    position: relative;
+    width: auto;
+    display: inline-block;
+    margin: 18px 0 0 0;
+    height: 40px;
+}
+
+.captcha-container svg {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    cursor: pointer;
+    color: rgb(33, 150, 243) !important;
+}
+
+.captcha-container img {
+    width: 100px;
+    height: 36px;
+    object-fit: cover;
+}
+
+.input-group label.error {
+    display: block;
+    margin-top: 5px;
+    font-weight: normal;
+    color: #F44336;
+    position: absolute;
+    bottom: -24px;
+    right: 0;
+    direction: rtl;
+    font-size: 0.5rem;
+}
+
+
+.swal-button {
+    color: white;
+    background-color: #009688;
+    font-size: 10px;
+    font-family: iran;
+    font-weight: normal;
+}
+
+.swal-button:hover {
+    color: white !important;
+    background-color: #009688 !important;
+}
+
+.swal-title:not(:last-child) {
+    margin-bottom: 13px;
+    font-size: 15px;
+    font-weight: normal;
+    direction: rtl;
+    color: #e64942;
+}
+
+.swal-text {
+    font-family: iran !important;
+    font-size: 12px;
+    text-align: right;
+    direction: rtl;
+}
+
+.swal-button--danger {
+    background-color: #e64942;
+    font-family: iran;
+    font-weight: normal;
+    font-size: 10px;
+    text-align: right;
+    direction: rtl;
+}
+
+.swal-button--danger:hover {
+    color: white !important;
+    background-color: #e64942 !important;
+}
+
+.swal-button--cancel {
+    color: white;
+    background-color: #009688;
+    font-size: 10px;
+    font-family: iran;
+    font-weight: normal;
+}
+
+.swal-button--cancel:hover {
+    color: white !important;
+    background-color: #009688 !important;
+}
+
+.svg-upgrade {
+    width: 100px;
+    height: 100px;
+    display: table;
+    margin: auto;
+}
+
+.text-loading {
+    font-size: 0.8rem !important;
+    margin: 20px auto 10px !important;
+}
+
+.modal.in {
+    @include opacity(1);
+}
+
+.modal-backdrop.in {
+    @include opacity(0.5);
+}
+
+.modal .modal-header {
+    border: none;
+    padding: 5px;
+}
+
+.modal .modal-header .modal-title {
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.modal-col-red .modal-footer .btn-link {
+    color: #fff !important;
+    font-size: 0.8rem !important;
+}
+
+.modal .modal-content .modal-body {
+    padding: 15px !important;
+    text-align: right !important;
+    font-size: 0.8rem !important;
+}
+
+.input-group {
+    width: 100%;
+    margin-bottom: 20px;
+    overflow: hidden !important;
+}
+.icon {
+    margin: 0 5px;
+}
+[type="checkbox"] + label {
+    padding-right: 0;
+}
+.f-w{
+    width:100%;
+}
+.btn-icon {
+    font-size: 15px;
+    margin: 0 5px;
+    position: relative;
+    top: 2px;
+}
+.btn-title {
+    font-size: .8rem;
+    text-align: right;
+}
+.teal {
+    background: #e0f2f1;
+}
+.o-h{
+    overflow:hidden !important;
+}
+.role-manager {
+    color: red;
+
+    svg {
+        float: right;
+        font-size: 18px;
+        margin: 2px 10px;
+    }
+
+    .org {
+        float: right;
+        margin: 0 2px;
+
+        &::after {
+            content: "-";
+            margin: 0 2px;
+        }
+    }
+
+    .role {
+        float: right;
+        margin: 0;
+    }
+}

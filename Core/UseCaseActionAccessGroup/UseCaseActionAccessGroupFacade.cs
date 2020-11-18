@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DataLayer.Tools;
 using Datalayer.UnitOfWork;
@@ -7,10 +8,12 @@ using Parsia.Core.Elastic;
 
 namespace Parsia.Core.UseCaseActionAccessGroup
 {
+    [ClassDetails(Clazz = "UseCaseActionAccessGroup", Facade = "UseCaseActionAccessGroupFacade")]
     public class UseCaseActionAccessGroupFacade
     {
         private static readonly UseCaseActionAccessGroupFacade Facade = new UseCaseActionAccessGroupFacade();
         private static readonly UseCaseActionAccessGroupCopier Copier = new UseCaseActionAccessGroupCopier();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(UseCaseActionAccessGroupFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         public static UseCaseActionAccessGroupFacade GetInstance()
         {
@@ -22,6 +25,7 @@ namespace Parsia.Core.UseCaseActionAccessGroup
 
         public ServiceResult<object> SaveList(BusinessParam bp, List<UseCaseActionAccessGroupDto> lstDto)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
 
@@ -52,11 +56,12 @@ namespace Parsia.Core.UseCaseActionAccessGroup
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UseCaseActionAccessGroupFacade.Save", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
         public ServiceResult<object> DeletedList(BusinessParam bp, long accessGroupId)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 using (var unitOfWork = new UnitOfWork())
@@ -73,7 +78,7 @@ namespace Parsia.Core.UseCaseActionAccessGroup
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UseCaseActionAccessGroupFacade.DeletedList", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 

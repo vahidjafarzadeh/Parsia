@@ -38,7 +38,7 @@
                         <form class="entity-form visible mb-3" novalidate enctype="multipart/form-data">
                             <div class="row">
                                 <div class="form-group floating-form-group col-12 col-lg-12 mandatory">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="adminTitlePage"
+                                    <input type="text" class="form-control form-control-sm floating-form-control text-left" id="adminTitlePage"
                                            ksun-input-type="text" ksun-bundle-key="adminTitlePage">
                                     <span class="floating-form-bar"></span>
                                     <label for="adminTitlePage" class="floating-label">
@@ -46,7 +46,7 @@
                                     </label>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-12 mandatory">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="root"
+                                    <input type="text" class="form-control form-control-sm floating-form-control text-left" id="root"
                                            ksun-input-type="text" ksun-bundle-key="root">
                                     <span class="floating-form-bar"></span>
                                     <label for="root" class="floating-label">
@@ -54,7 +54,7 @@
                                     </label>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-12 mandatory">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="apiHashEncryption"
+                                    <input type="text" class="form-control form-control-sm floating-form-control text-left" id="apiHashEncryption"
                                            ksun-input-type="text" ksun-bundle-key="apiHashEncryption">
                                     <span class="floating-form-bar"></span>
                                     <label for="apiHashEncryption" class="floating-label">
@@ -62,7 +62,7 @@
                                     </label>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-12 mandatory">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="systemRoleId"
+                                    <input type="text" class="form-control form-control-sm floating-form-control text-left" id="systemRoleId"
                                            ksun-input-type="text" ksun-bundle-key="systemRoleId">
                                     <span class="floating-form-bar"></span>
                                     <label for="systemRoleId" class="floating-label">
@@ -70,27 +70,27 @@
                                     </label>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-12 mandatory">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="systemAdminRoleId"
-                                           ksun-input-type="text" ksun-bundle-key="systemAdminRoleId">
+                                    <input type="text" class="form-control form-control-sm floating-form-control text-left" id="userRoleId"
+                                           ksun-input-type="text" ksun-bundle-key="userRoleId">
                                     <span class="floating-form-bar"></span>
-                                    <label for="systemAdminRoleId" class="floating-label">
-                                        <span ksun-bundle-key="systemAdminRoleId"></span><span class="star">*</span>
+                                    <label for="userRoleId" class="floating-label">
+                                        <span ksun-bundle-key="userRoleId"></span><span class="star">*</span>
                                     </label>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-12 mandatory">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="applicationAdminRoleId"
-                                           ksun-input-type="text" ksun-bundle-key="applicationAdminRoleId">
-                                    <span class="floating-form-bar"></span>
-                                    <label for="applicationAdminRoleId" class="floating-label">
-                                        <span ksun-bundle-key="applicationAdminRoleId"></span><span class="star">*</span>
-                                    </label>
-                                </div>
-                                <div class="form-group floating-form-group col-12 col-lg-12 mandatory">
-                                    <input type="text" class="form-control form-control-sm floating-form-control" id="adminValidIp"
+                                    <input type="text" class="form-control form-control-sm floating-form-control text-left" id="adminValidIp"
                                            ksun-input-type="text" ksun-bundle-key="adminValidIp">
                                     <span class="floating-form-bar"></span>
                                     <label for="adminValidIp" class="floating-label">
                                         <span ksun-bundle-key="adminValidIp"></span><span class="star">*</span>
+                                    </label>
+                                </div>
+                                <div class="form-group floating-form-group col-12 col-lg-12 mandatory">
+                                    <input type="text" class="form-control form-control-sm floating-form-control text-left" id="applicationUrl"
+                                           ksun-input-type="text" ksun-bundle-key="applicationUrl">
+                                    <span class="floating-form-bar"></span>
+                                    <label for="applicationUrl" class="floating-label">
+                                        <span ksun-bundle-key="applicationUrl"></span><span class="star">*</span>
                                     </label>
                                 </div>
                             </div>
@@ -164,7 +164,7 @@
     <script src="/pages/core/systemconfig/bundle.js"></script>
     <script src="/lib/shortkey/mousetrap.min.js"></script>
     <script src="/lib/core/core.js"></script>
-    <script src="/lib/core/edit.js"></script>
+    <script src="/lib/core/edit.js"></script><script src="/lib/api/sso.js"></script>
     <script src="/pages/core/systemconfig/edit.js"></script>
 </body>
 </html>

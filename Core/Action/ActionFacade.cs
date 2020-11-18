@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DataLayer.Base;
 using DataLayer.Tools;
 using Datalayer.UnitOfWork;
-using Exception = System.Exception;
 
 namespace Parsia.Core.Action
 {
+    [ClassDetails(Clazz = "Action", Facade = "ActionFacade")]
     public class ActionFacade : IBaseFacade<ActionDto>
     {
         private static readonly ActionFacade Facade = new ActionFacade();
         private static readonly ActionCopier Copier = new ActionCopier();
-        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(ActionFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         private ActionFacade()
         {
@@ -20,36 +21,37 @@ namespace Parsia.Core.Action
 
         public ServiceResult<object> GridView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Action.Action>();
                 var queryString =
                     $"select * from (select EntityId as entityId,ActionName as actionName,ActionEnName as actionEnName,FullTitle as fullTitle,Deleted as deleted,AccessKey as accessKey,CreateBy as createBy from {tableName}) e  " +
                     QueryUtil.GetWhereClause(bp.Clause,
-                        QueryUtil.GetConstraintForNativeQuery(bp, "Action", false, false, true)) +
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
                     QueryUtil.GetOrderByClause(bp.Clause);
                 queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var comboList = unitOfWork.ComboVal.CreateNativeQuery(queryString, x => new[]
+                    var actionList = unitOfWork.Action.CreateNativeQuery(queryString, x => new[]
                     {
                         x[0] != null ? Convert.ToInt32(x[0]) : (object) null,
                         x[1] != null ? Convert.ToInt64(x[1]) : (object) null,
                         x[2]?.ToString(),
                         x[3]?.ToString()
                     });
-                    if (comboList.Count == 0)
-                        return new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکوردی یافت نشد");
+                    if (actionList.Count == 0)
+                        return new ServiceResult<object>(new List<ActionDto>(), 0);
                     var list = new List<object>();
-                    var headerTitle = new object[] { "entityId", "actionName", "actionEnName"};
+                    var headerTitle = new object[] { "entityId", "actionName", "actionEnName" };
                     list.Add(headerTitle);
-                    list.AddRange(comboList);
-                    return new ServiceResult<object>(list, comboList.Count);
+                    list.AddRange(actionList);
+                    return new ServiceResult<object>(list, actionList.Count);
                 }
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "ActionFacade.GridView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
@@ -74,18 +76,19 @@ namespace Parsia.Core.Action
         }
         public ServiceResult<object> GetAllList(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 List<DataLayer.Model.Core.Action.Action> myAction;
                 using (var unitOfWork = new UnitOfWork())
                 {
-                     myAction = unitOfWork.Action.Get().ToList();
+                    myAction = unitOfWork.Action.Get().ToList();
                 }
-                return new ServiceResult<object>(Copier.GetDto(myAction),myAction.Count);
+                return new ServiceResult<object>(Copier.GetDto(myAction), myAction.Count);
             }
             catch (Exception ex)
             {
-                return ExceptionUtil.ExceptionHandler(ex, "ActionFacade.GetAllList", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 

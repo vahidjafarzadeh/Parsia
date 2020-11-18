@@ -4,15 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace Parsia.Core.Action
 {
     [ApiController]
+    [ClassDetails(Clazz = "Action", Facade = "ActionService")]
     public class ActionService : ControllerBase
     {
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(ActionService).GetCustomAttributes(typeof(ClassDetails), true);
+
         [HttpPost]
         [Route("service/action/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Action", "gridView");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
                 ? ActionFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -22,13 +25,10 @@ namespace Parsia.Core.Action
         [Route("service/action/save")]
         public ServiceResult<object> Save(ActionDto dto)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
-            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket, Request);
             var bp = new BusinessParam(userInfo);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Action",
-                dto.EntityId == null ? "edit" : "save");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz,
+                dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? ActionFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
 
@@ -36,12 +36,9 @@ namespace Parsia.Core.Action
         [Route("service/action/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
-                    Enumerator.ErrorCode.ModelNotValid.GetDescription());
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Action", "edit");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "update");
             return checkAccess.Done
                 ? ActionFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -51,9 +48,9 @@ namespace Parsia.Core.Action
         [Route("service/action/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Action", "delete");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "delete");
             return checkAccess.Done
                 ? ActionFacade.GetInstance().Delete(bp)
                 : checkAccess;
@@ -63,9 +60,9 @@ namespace Parsia.Core.Action
         [Route("service/action/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Action", "search");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "autocomplete");
             return checkAccess.Done
                 ? ActionFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
@@ -75,9 +72,9 @@ namespace Parsia.Core.Action
         [Route("service/action/getAllData")]
         public ServiceResult<object> GetAllList(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "Action", "gridView");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
                 ? ActionFacade.GetInstance().GetAllList(bp)
                 : checkAccess;

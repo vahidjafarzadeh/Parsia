@@ -10,7 +10,7 @@ namespace Parsia.Core.UserRole
         [Route("service/userRole/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "UserRole", "gridView");
             return checkAccess.Done
@@ -26,7 +26,7 @@ namespace Parsia.Core.UserRole
             if (!dtoFromRequest.Done)
                 return dtoFromRequest;
             var dto = (UserRoleDto) dtoFromRequest.Result;
-            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket, Request);
             var bp = new BusinessParam(userInfo);
             var checkAccess = UserSessionManager.CheckAccess(bp, "UserRole",
                 dto.EntityId == 0 ? "insert" : "update");
@@ -37,7 +37,7 @@ namespace Parsia.Core.UserRole
         [Route("service/userRole/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "UserRole", "update");
             return checkAccess.Done
@@ -49,7 +49,7 @@ namespace Parsia.Core.UserRole
         [Route("service/userRole/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "UserRole", "delete");
             return checkAccess.Done
@@ -61,7 +61,7 @@ namespace Parsia.Core.UserRole
         [Route("service/userRole/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = UserSessionManager.CheckAccess(bp, "UserRole", "autocomplete");
             return checkAccess.Done

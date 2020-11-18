@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace Parsia.Core.File
 {
     [ApiController]
+    [ClassDetails(Clazz = "File", Facade = "FileService")]
     public class FileService : ControllerBase
     {
         private readonly IWebHostEnvironment _hostEnvironment;
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(FileService).GetCustomAttributes(typeof(ClassDetails), true);
 
         public FileService(IWebHostEnvironment environment)
         {
@@ -19,9 +21,9 @@ namespace Parsia.Core.File
         [Route("service/file/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "gridView");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
                 ? FileFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -34,9 +36,9 @@ namespace Parsia.Core.File
             if (!ModelState.IsValid)
                 return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
                     Enumerator.ErrorCode.ModelNotValid.GetDescription());
-            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket, Request);
             var bp = new BusinessParam(userInfo);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", dto.EntityId == 0 ? "insert" : "update");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? FileFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
 
@@ -47,9 +49,9 @@ namespace Parsia.Core.File
             if (!ModelState.IsValid)
                 return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
                     Enumerator.ErrorCode.ModelNotValid.GetDescription());
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "update");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "update");
             return checkAccess.Done
                 ? FileFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -59,9 +61,9 @@ namespace Parsia.Core.File
         [Route("service/file/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "delete");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "delete");
             return checkAccess.Done
                 ? FileFacade.GetInstance().Delete(bp)
                 : checkAccess;
@@ -74,9 +76,9 @@ namespace Parsia.Core.File
             if (!ModelState.IsValid)
                 return new ServiceResult<object>(Enumerator.ErrorCode.ModelNotValid,
                     Enumerator.ErrorCode.ModelNotValid.GetDescription());
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "autocomplete");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "autocomplete");
             return checkAccess.Done
                 ? FileFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
@@ -87,9 +89,9 @@ namespace Parsia.Core.File
         [Route("service/file/getAllExtension")]
         public ServiceResult<object> GetAllExtension(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "gridView");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
                 ? FileFacade.GetInstance().GetAllExtension(bp)
                 : checkAccess;
@@ -99,9 +101,9 @@ namespace Parsia.Core.File
         [Route("service/file/createFolder")]
         public ServiceResult<object> CreateFolder(FolderDto dto)
         {
-            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket, Request);
             var bp = new BusinessParam(userInfo, _hostEnvironment);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "insert");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "insert");
             return checkAccess.Done
                 ? FileFacade.GetInstance().CreateFolder(bp, dto)
                 : checkAccess;
@@ -113,9 +115,9 @@ namespace Parsia.Core.File
         public ServiceResult<object> CreateFile()
         {
             var ticket = Request.Form["ticket"];
-            var userInfo = UserSessionManager.GetUserInfo(ticket);
+            var userInfo = UserSessionManager.GetUserInfo(ticket, Request);
             var bp = new BusinessParam(userInfo, _hostEnvironment);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "insert");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "insert");
             return checkAccess.Done
                 ? FileFacade.GetInstance().CreateFile(bp, Request).Result
                 : checkAccess;
@@ -125,9 +127,9 @@ namespace Parsia.Core.File
         [Route("service/file/getDetails")]
         public ServiceResult<object> GetDetails(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "File", "gridView");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
                 ? FileFacade.GetInstance().GetDetails(bp)
                 : checkAccess;

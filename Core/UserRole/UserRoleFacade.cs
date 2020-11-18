@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DataLayer.Base;
 using DataLayer.Context;
@@ -13,15 +14,19 @@ using Parsia.Core.Role;
 
 namespace Parsia.Core.UserRole
 {
+    [ClassDetails(Clazz = "UserRole", Facade = "UserRoleFacade")]
     public class UserRoleFacade : IBaseFacade<UserRoleDto>
     {
         private static readonly UserRoleFacade Facade = new UserRoleFacade();
         private static readonly UserRoleCopier Copier = new UserRoleCopier();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(UserRoleFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
         private UserRoleFacade()
         {
         }
         public ServiceResult<object> GridView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tblUserRole = Util.GetSqlServerTableName<DataLayer.Model.Core.UserRole.UserRole>();
@@ -30,12 +35,12 @@ namespace Parsia.Core.UserRole
                 var tblOrganization = Util.GetSqlServerTableName<DataLayer.Model.Core.Organization.Organization>();
                 var queryString = $"select entityId,userName,role,organization,deleted,fullTitle,accessKey,createBy from ( select EntityId as entityId,currentRole.roleName as role,currentOrganization.orgName as organization,currentUser.userName as userName,Deleted as deleted,AccessKey as accessKey,CreateBy as createBy,FullTitle as fullTitle from {tblUserRole} mainData left join (select EntityId as roleEntityId,RoleName as roleName from {tblRole}) as currentRole on currentRole.roleEntityId = mainData.RoleId left join (select EntityId as orgId, Name as orgName from {tblOrganization}) as currentOrganization on currentOrganization.orgId = mainData.OrganizationId left join (select EntityId as userId,Username as userName from {tblUser}) as currentUser on currentUser.userId = mainData.UserId ) e " +
                                   QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, "UserRole", false, false, true)) +
+                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
                 queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var comboList = unitOfWork.UserRole.CreateNativeQuery(queryString, x => new[]
+                    var userRoleList = unitOfWork.UserRole.CreateNativeQuery(queryString, x => new[]
                     {
                         x[0] != null ? Convert.ToInt32(x[0]) : (object) null,
                         x[1] != null ? Convert.ToInt64(x[1]) : (object) null,
@@ -43,22 +48,23 @@ namespace Parsia.Core.UserRole
                         x[3]?.ToString(),
                         x[4]?.ToString()
                     });
-                    if (comboList.Count == 0)
+                    if (userRoleList.Count == 0)
                         return new ServiceResult<object>(new List<UserRoleDto>(), 0);
                     var list = new List<object>();
                     var headerTitle = new object[] { "entityId", "userName", "role","organization" };
                     list.Add(headerTitle);
-                    list.AddRange(comboList);
-                    return new ServiceResult<object>(list, comboList.Count);
+                    list.AddRange(userRoleList);
+                    return new ServiceResult<object>(list, userRoleList.Count);
                 }
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UserRoleFacade.GridView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
         public ServiceResult<object> Save(BusinessParam bp, UserRoleDto dto)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 DataLayer.Model.Core.UserRole.UserRole userRole;
@@ -83,16 +89,17 @@ namespace Parsia.Core.UserRole
                     }
                 }
 
-                Elastic<UserRoleDto, DataLayer.Model.Core.UserRole.UserRole>.SaveToElastic(userRole, "UserRoleFacade", bp);
+                Elastic<UserRoleDto, DataLayer.Model.Core.UserRole.UserRole>.SaveToElastic(userRole, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(Copier.GetDto(userRole), 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UserRoleFacade.Save", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
         public ServiceResult<object> ShowRow(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             long entityId = 0;
             foreach (var where in bp.Clause.Wheres.Where(where =>
                 where.Key.Equals("entityId") && where.Value != null && !where.Value.Equals("")))
@@ -101,7 +108,7 @@ namespace Parsia.Core.UserRole
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "UserRoleFacade.ShowRow",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var context = new ParsiContext())
                 {
@@ -111,18 +118,20 @@ namespace Parsia.Core.UserRole
                         .Include(p => p.CurrentRole)
                         .Include(p => p.CurrentOrganization)
                         .Include(p => p.CurrentUsers)
+                        .IgnoreQueryFilters()
                         .ToList();
                     return new ServiceResult<object>(Copier.GetDto(userRole[0]), 1);
                 }
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UserRoleFacade.ShowRow", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> Delete(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             long entityId = 0;
             foreach (var where in bp.Clause.Wheres.Where(where =>
                 where.Key.Equals("entityId") && where.Value != null && !where.Value.Equals("")))
@@ -131,7 +140,7 @@ namespace Parsia.Core.UserRole
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "UserRoleFacade.Delete",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 DataLayer.Model.Core.UserRole.UserRole userRole;
                 using (var unitOfWork = new UnitOfWork())
@@ -140,7 +149,7 @@ namespace Parsia.Core.UserRole
                 }
 
                 if (userRole == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "UserRoleFacade.Delete",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
                 userRole.Deleted = userRole.EntityId;
@@ -149,39 +158,40 @@ namespace Parsia.Core.UserRole
                     unitOfWork.UserRole.Update(userRole);
                     unitOfWork.UserRole.Save();
                 }
-                Elastic<UserRoleDto, DataLayer.Model.Core.UserRole.UserRole>.SaveToElastic(userRole, "UserRole", bp);
+                Elastic<UserRoleDto, DataLayer.Model.Core.UserRole.UserRole>.SaveToElastic(userRole, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UserRoleFacade.Delete", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.UserRole.UserRole>();
                 var queryString = $"select * from (select EntityId as entityId,FullTitle as fullTitle,Deleted as deleted,AccessKey as accessKey,CreateBy as createBy from {tableName}) e " +
                                   QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, "UserRole", true, false, true)) +
+                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, true, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var comboList = unitOfWork.Person.CreateNativeQuery(queryString, x => new Dictionary<string, object>()
+                    var userRoleList = unitOfWork.UserRole.CreateNativeQuery(queryString, x => new Dictionary<string, object>()
                     {
                         {"entityId",Convert.ToInt64(x[0].ToString()) },
                         {"fullTitle",x[1]?.ToString() }
                     });
-                    return comboList.Count == 0
+                    return userRoleList.Count == 0
                         ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکوردی یافت نشد")
-                        : new ServiceResult<object>(comboList, comboList.Count);
+                        : new ServiceResult<object>(userRoleList, userRoleList.Count);
                 }
             }
             catch (Exception ex)
             {
-                return ExceptionUtil.ExceptionHandler(ex, "UserRoleFacade.AutocompleteView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 

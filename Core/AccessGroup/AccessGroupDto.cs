@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using DataLayer.Base;
 using Parsia.Core.UseCaseAction;
 
@@ -7,14 +6,8 @@ namespace Parsia.Core.AccessGroup
 {
     public class AccessGroupDto : BaseDto
     {
-        [Display(Name = "شناسه")] public long EntityId { get; set; }
-
-        [Display(Name = "نام گروه دسترسی")]
-        [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
-        [MaxLength(50, ErrorMessage = "حداکثر کاراکتر مجاز برای {0} به میزان {1} کاراکتر می باشد")]
-
+        public long EntityId { get; set; }
         public string Name { get; set; }
-
         public List<UseCaseActionDto> UseCaseActionList { get; set; }
     }
 }

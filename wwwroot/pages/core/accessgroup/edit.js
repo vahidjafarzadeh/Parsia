@@ -22,62 +22,6 @@ accessHandler.complete = () => { };
 accessHandler.success = function (result) {
 
 };
-$(document).ready(function () {
-    initLocalVariables(localVariables);
-    initAutoCompletes();
-    onPageReady();
-    Mousetrap.bind('ctrl+s', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        saveOrUpdate();
-    });
-    Mousetrap.bind('f6', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        clearForm();
-    });
-    Mousetrap.bind('esc', function (e) {
-        try {
-            e.stopPropagation();
-            e.preventDefault();
-            parent.editFrameWrapper.removeClass("visible");
-            if (gridRefreshFlag) {
-                parent.retrieveData();
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    });
-    Mousetrap.bind('f5', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        showRow(currentData);
-    });
-    Mousetrap.bind('ctrl+m', function (e) {
-        showRow();
-    });
-    tree.init({
-        serviceUrl: 'usecase/getTotalUseCase',
-        removeService: '',
-        dependencies: {
-            link: [`/lib/sweetalert/sweetalert.css`, `/lib/tree/style.css`],
-            script: [`/lib/sweetalert/sweetalert.min.js`]
-        },
-        urlEditPage: '',
-        title: "فرآیندها",
-        getTotal: true,
-        showCrud: false,
-        showField: "fullTitle",
-        functionData: ``,
-        rootValue: [1],
-        childKey: "parent",
-        selectAllChildWhenSelectParent: true,
-        openWholeTreeInGetTotal: true,
-        selectState: 1,
-        elementIdInEditPageForFillParent: "#tree"
-    });
-    new SimpleBar($(".scroll-container")[1]);
-});
 saveOrUpdate = function () {
     const formData = new FormData();
     formData.append("entityId", $("#entityId").val());
@@ -341,3 +285,64 @@ fillForm = function (rowData, callback) {
     tree.setCheckedList(lstTreeFiller);
 
 };
+$(document).ready(function () {
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initLocalVariables(localVariables);
+        initAutoCompletes();
+        onPageReady();
+        Mousetrap.bind('ctrl+s', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            saveOrUpdate();
+        });
+        Mousetrap.bind('f6', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            clearForm();
+        });
+        Mousetrap.bind('esc', function (e) {
+            try {
+                e.stopPropagation();
+                e.preventDefault();
+                parent.editFrameWrapper.removeClass("visible");
+                if (gridRefreshFlag) {
+                    parent.retrieveData();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        });
+        Mousetrap.bind('f5', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            showRow(currentData);
+        });
+        Mousetrap.bind('ctrl+m', function (e) {
+            showRow();
+        });
+        tree.init({
+            serviceUrl: 'usecase/getTotalUseCase',
+            removeService: '',
+            dependencies: {
+                link: [`/lib/sweetalert/sweetalert.css`, `/lib/tree/style.css`],
+                script: [`/lib/sweetalert/sweetalert.min.js`]
+            },
+            urlEditPage: '',
+            title: "فرآیندها",
+            getTotal: true,
+            showCrud: false,
+            showField: "fullTitle",
+            functionData: ``,
+            rootValue: [1],
+            childKey: "parent",
+            selectAllChildWhenSelectParent: true,
+            openWholeTreeInGetTotal: true,
+            selectState: 1,
+            elementIdInEditPageForFillParent: "#tree"
+        });
+        new SimpleBar($(".scroll-container")[1]);
+    }
+});

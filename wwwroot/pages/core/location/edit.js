@@ -1,6 +1,6 @@
 ﻿'use strict';
 var localVariables = {
-    lockAble: true,
+    lockAble: false,
     clazzName: "Location",
     URLs: {
         services: {
@@ -33,7 +33,12 @@ var initAutoCompletes = function () {
     });
 };
 $(document).ready(function () {
-    initLocalVariables(localVariables);
-    initAutoCompletes();
-    onPageReady();
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initLocalVariables(localVariables);
+        initAutoCompletes();
+        onPageReady();
+    }
 });

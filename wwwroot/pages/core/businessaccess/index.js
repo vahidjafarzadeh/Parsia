@@ -10,8 +10,8 @@ function setLocalVariables() {
                 delete: 'cobusinessaccess/delete'
             }
 
-        }
-        , clazzName: 'CoBusinessAccess'
+        },
+        clazzName: 'BusinessAccess'
     };
 }
 
@@ -21,7 +21,11 @@ function localPageReady() {
     initLocalVariables(localVariables);
     onPageReady();
 }
-
 $(document).ready(function () {
-    localPageReady();
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        localPageReady();
+    }
 });

@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="compilerconfig.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\account\account.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\admin\style.css" />
     <_ContentIncludedByDefault Remove="wwwroot\lib\tree\style.min.css" />
     <_ContentIncludedByDefault Remove="wwwroot\sass\core\core.css" />
@@ -18,6 +19,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BuildWebCompiler" Version="1.12.394" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
@@ -38,6 +41,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NodaTime" Version="3.0.3" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
     <PackageReference Include="WebMarkupMin.AspNetCore3" Version="2.8.11" />
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +52,7 @@
     <Folder Include="wwwroot\images\system\icons\" />
     <Folder Include="wwwroot\lib\core\" />
     <Folder Include="wwwroot\lib\editor\" />
+    <Folder Include="wwwroot\lib\bundle\" />
     <Folder Include="wwwroot\lib\scrollbar\" />
     <Folder Include="wwwroot\pages\core\comboval\" />
     <Folder Include="wwwroot\pages\core\businessaccess\" />
@@ -62,6 +67,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="compilerconfig.json" />
+    <None Include="Views\Account\ActivePhoneCode.cshtml" />
+    <None Include="Views\Account\Login.cshtml" />
+    <None Include="Views\Account\RecoveryEmail.cshtml" />
+    <None Include="Views\Account\RecoveryPassword.cshtml" />
+    <None Include="Views\Account\RecoveryPhone.cshtml" />
+    <None Include="Views\Account\Register.cshtml" />
+    <None Include="Views\Account\Upgrade.cshtml" />
+    <None Include="Views\Account\Verify.cshtml" />
     <None Include="wwwroot\sass\simple-bar\_region.scss" />
     <None Include="wwwroot\sass\simple-bar\_simplebar.scss" />
   </ItemGroup>

@@ -11,55 +11,64 @@
 </head>
 <body>
 
-<section class="container-fluid container-f">
-    <section class="container" id="container-icon">
-    </section>
+    <section class="container-fluid container-f">
+        <section class="container" id="container-icon">
+        </section>
 </section>
 <script src="/lib/jquery/jquery-v3.3.1.min.js"></script>
-<script src="/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="/lib/fontawesome/fontawesome-all.min.js"></script>
-<script src="/lib/bootstrap/bootstrap.bundle.min.js"></script>
-<script src="/lib/scrollbar/simplebar.js"></script>
-<script src="/lib/api/environment.js"></script>
 <script src="/lib/api/config.js"></script>
+<script src="/lib/polyfill/promise.min.js"></script>
+<script src="/lib/api/environment.js"></script>
 <script src="/lib/api/util.js"></script>
-<script src="/lib/api/where.js"></script>
-<script src="/lib/api/order-by.js"></script>
 <script src="/lib/api/storage.js"></script>
 <script src="/lib/api/cookie.js"></script>
+<script src="/lib/fontawesome/fontawesome-all.min.js" data-auto-add-css="false"></script>
+<script src="/lib/hammer/hammer-v2.0.8.js"></script>
+<script src="/lib/select2/select2.full.min.js"></script>
+<script src="/lib/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/lib/floating-form/floating-form.js"></script>
+<script src="/lib/persiandate/persian-date-0.1.8b.min.js"></script>
+<script src="/lib/persiandate/persian-datepicker.min.js"></script>
+<script src="/lib/scrollbar/simplebar.js"></script>
+<script src="/lib/api/filter.js"></script>
+<script src="/lib/api/order-by.js"></script>
+<script src="/lib/api/where.js"></script>
 <script src="/lib/api/handler.js"></script>
 <script src="/lib/api/api.js"></script>
-<script src="/lib/api/general-bundle.js"></script>
-<script src="/pages/core/file/bundle.js"></script>
 <script src="/lib/ripple/ripple.min.js"></script>
-<script src="/js/admin/index.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        const handler = new Handler();
-        handler.complete = (data) => {
-        };
-        handler.beforeSend = () => {
-        };
-        handler.success = (res) => {
-            $("#container-icon").html("");
-            $.each(res,
-                function(i, v) {
-                    const row = $("<div>", { class: "row" });
-                    const divHeader = $("<div/>", { class: "col-12 col-xs-12 p-0 m-0" });
-                    const title = $("<h1/>", { class: "title-color", text: v.title });
-                    divHeader.append(title);
-                    row.append(divHeader);
-                    $.each(v.data,
-                        function(ind, val) {
-                            const div1 = $("<div/>", { class: "col-12 col-xs-12 col-md-1 p-0" });
-                            const input = $("<input/>", { type: "text", value: `<i class="${val.class}"></i>` });
-                            const card = $("<div/>",
-                                {
-                                    class: "card card-v",
-                                    click: function() {
-                                        copyToClipboard(input.get(0));
-                                        if (top.showConfirm) {
-                                            setTimeout(function() {
+<script src="/lib/translation/general-bundle.js"></script>
+<script src="/lib/translation/translation.js"></script>
+<script src="/lib/modal/modal.js"></script>
+<script src="/lib/core/core.js"></script>
+<script src="/lib/core/index.js"></script>
+<script src="/lib/api/sso.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            const handler = new Handler();
+            handler.complete = (data) => {
+            };
+            handler.beforeSend = () => {
+            };
+            handler.success = (res) => {
+                $("#container-icon").html("");
+                $.each(res,
+                    function (i, v) {
+                        const row = $("<div>", { class: "row" });
+                        const divHeader = $("<div/>", { class: "col-12 col-xs-12 p-0 m-0" });
+                        const title = $("<h1/>", { class: "title-color", text: v.title });
+                        divHeader.append(title);
+                        row.append(divHeader);
+                        $.each(v.data,
+                            function (ind, val) {
+                                const div1 = $("<div/>", { class: "col-12 col-xs-12 col-md-1 p-0" });
+                                const input = $("<input/>", { type: "text", value: `<i class="${val.class}"></i>` });
+                                const card = $("<div/>",
+                                    {
+                                        class: "card card-v",
+                                        click: function () {
+                                            copyToClipboard(input.get(0));
+                                            if (top.showConfirm) {
+                                                setTimeout(function () {
                                                     top.showConfirm({
                                                         title: "کپی",
                                                         body: `<i class="${val.class}"></i> با موفقیت کپی شد`,
@@ -71,75 +80,74 @@
                                                         }
                                                     });
                                                 },
-                                                450);
+                                                    450);
+                                            }
                                         }
-                                    }
-                                });
-                            const icon = $("<i/>", { class: val.class });
-                            const p = $("<p/>", { text: val.name });
-                            card.append(icon);
-                            card.append(input);
-                            card.append(p);
-                            div1.append(card);
-                            row.append(div1);
-                        });
-                    $("#container-icon").append(row);
-                });
-            hideLoading();
-        };
-        Api.get({ isDirectory: true, url: "/pages/core/icon/data.json", handler: handler });
+                                    });
+                                const icon = $("<i/>", { class: val.class });
+                                const p = $("<p/>", { text: val.name });
+                                card.append(icon);
+                                card.append(input);
+                                card.append(p);
+                                div1.append(card);
+                                row.append(div1);
+                            });
+                        $("#container-icon").append(row);
+                    });
+            };
+            Api.get({ isDirectory: true, url: "/pages/core/icon/data.json", handler: handler });
 
-        function copyToClipboard(elem) {
-            // create hidden text element, if it doesn't already exist
-            const isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
-            var origSelectionStart, origSelectionEnd;
-            if (isInput) {
-                // can just use the original source element for the selection and copy
-                target = elem;
-                origSelectionStart = elem.selectionStart;
-                origSelectionEnd = elem.selectionEnd;
-            } else {
-                // must use a temporary form element for the selection and copy
-                const targetId = "_hiddenCopyText_";
-                target = document.getElementById(targetId);
-                if (!target) {
-                    var target = document.createElement("textarea");
-                    target.style.position = "absolute";
-                    target.style.left = "-9999px";
-                    target.style.top = "0";
-                    target.id = targetId;
-                    document.body.appendChild(target);
+            function copyToClipboard(elem) {
+                // create hidden text element, if it doesn't already exist
+                const isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
+                var origSelectionStart, origSelectionEnd;
+                if (isInput) {
+                    // can just use the original source element for the selection and copy
+                    target = elem;
+                    origSelectionStart = elem.selectionStart;
+                    origSelectionEnd = elem.selectionEnd;
+                } else {
+                    // must use a temporary form element for the selection and copy
+                    const targetId = "_hiddenCopyText_";
+                    target = document.getElementById(targetId);
+                    if (!target) {
+                        var target = document.createElement("textarea");
+                        target.style.position = "absolute";
+                        target.style.left = "-9999px";
+                        target.style.top = "0";
+                        target.id = targetId;
+                        document.body.appendChild(target);
+                    }
+                    target.textContent = elem.textContent;
                 }
-                target.textContent = elem.textContent;
-            }
-            // select the content
-            const currentFocus = document.activeElement;
-            target.focus();
-            target.setSelectionRange(0, target.value.length);
+                // select the content
+                const currentFocus = document.activeElement;
+                target.focus();
+                target.setSelectionRange(0, target.value.length);
 
-            // copy the selection
-            var succeed;
-            try {
-                succeed = document.execCommand("copy");
-            } catch (e) {
-                succeed = false;
-            }
-            // restore original focus
-            if (currentFocus && typeof currentFocus.focus === "function") {
-                currentFocus.focus();
-            }
+                // copy the selection
+                var succeed;
+                try {
+                    succeed = document.execCommand("copy");
+                } catch (e) {
+                    succeed = false;
+                }
+                // restore original focus
+                if (currentFocus && typeof currentFocus.focus === "function") {
+                    currentFocus.focus();
+                }
 
-            if (isInput) {
-                // restore prior selection
-                elem.setSelectionRange(origSelectionStart, origSelectionEnd);
-            } else {
-                // clear temporary content
-                target.textContent = "";
+                if (isInput) {
+                    // restore prior selection
+                    elem.setSelectionRange(origSelectionStart, origSelectionEnd);
+                } else {
+                    // clear temporary content
+                    target.textContent = "";
+                }
+                return succeed;
             }
-            return succeed;
-        }
-    });
-</script>
+        });
+    </script>
 
 </body>
 </html>

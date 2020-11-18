@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using DataLayer.Base;
 using DataLayer.Tools;
 using Parsia.Core.ComboVal;
 using Parsia.Core.File;
-using Parsia.Core.User;
 
 namespace Parsia.Core.Person
 {
@@ -100,6 +98,10 @@ namespace Parsia.Core.Person
                 Description = dto.Description,
                 File = dto.File?.EntityId
             };
+            if (string.IsNullOrEmpty(person.Code))
+            {
+                person.Code = "-";
+            }
             return SetMandatoryField(person, bp, setCreate);
         }
 

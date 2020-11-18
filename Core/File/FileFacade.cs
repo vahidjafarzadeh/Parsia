@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,36 +17,39 @@ using Parsia.Core.Elastic;
 
 namespace Parsia.Core.File
 {
+    [ClassDetails(Clazz = "File", Facade = "FileFacade")]
     public class FileFacade : IBaseFacade<FileDto>
     {
         private static readonly FileFacade Facade = new FileFacade();
         private static readonly FileCopier Copier = new FileCopier();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(FileFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         public ServiceResult<object> GridView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.File.File>();
                 var queryString = $"select * from (SELECT * FROM {tableName}) e" +
                                   QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, "File", false, false, true)) +
+                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
 
                 using (var content = new ParsiContext())
                 {
                     var files = content.File.FromSqlRaw(queryString).OrderBy(x => x.Extension)
-                        .ThenByDescending(x => x.Created).ToList();
+                        .ThenByDescending(x => x.Created).IgnoreQueryFilters().ToList();
                     var lstData = files.Select(file => Copier.GetDto(file)).ToList();
                     return lstData.Count <= 0
                         ? new ServiceResult<object>(new List<FileDto>(), 0)
                         : new ServiceResult<object>(lstData, lstData.Count);
                 }
 
-                
+
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "FileFacade.GridView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
@@ -61,6 +65,7 @@ namespace Parsia.Core.File
 
         public ServiceResult<object> Delete(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 long entityId = 0;
@@ -77,11 +82,11 @@ namespace Parsia.Core.File
                     unitOfWork.File.Save();
                     return new ServiceResult<object>(Copier.GetDto(record), 1);
                 }
-                
+
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "FileFacade.Delete", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
@@ -92,6 +97,7 @@ namespace Parsia.Core.File
 
         public ServiceResult<object> GetAllExtension(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 using (var unitOfWork = new UnitOfWork())
@@ -101,16 +107,17 @@ namespace Parsia.Core.File
                         ? new ServiceResult<object>(0, 1)
                         : new ServiceResult<object>(extensionList, extensionList.Count);
                 }
-               
+
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "FileFacade.GetAllExtension", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> GetDetails(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 long entityId = 0;
@@ -124,7 +131,7 @@ namespace Parsia.Core.File
                 var pathOfFile =
                     GetPathOfFile(
                         new JsonFileDto
-                            {EntityId = fileDto.EntityId, Path = fileDto.Path, Extension = fileDto.Extension}, bp);
+                        { EntityId = fileDto.EntityId, Path = fileDto.Path, Extension = fileDto.Extension }, bp);
                 if (string.IsNullOrEmpty(pathOfFile))
                     return new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "فایل مورد نظر یافت نشد");
 
@@ -133,16 +140,17 @@ namespace Parsia.Core.File
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "FileFacade.GetDetails", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> CreateFolder(BusinessParam bp, FolderDto dto)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 if (string.IsNullOrEmpty(dto.FolderName))
-                    return ExceptionUtil.ExceptionHandler("لطفا نام پوشه را وارد نمایید", "FileFacade.CreateFolder",
+                    return ExceptionUtil.ExceptionHandler("لطفا نام پوشه را وارد نمایید", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 long? parentId = null;
                 var webRootPath = bp.Environment.WebRootPath;
@@ -155,7 +163,7 @@ namespace Parsia.Core.File
 
                 var exists = Directory.Exists(webRootPath + fileName);
                 if (exists)
-                    return ExceptionUtil.ExceptionHandler("نام پوشه تکراری می باشد", "FileFacade.CreateFolder",
+                    return ExceptionUtil.ExceptionHandler("نام پوشه تکراری می باشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 Directory.CreateDirectory(webRootPath + fileName);
                 var fileDto = new FileDto
@@ -178,29 +186,30 @@ namespace Parsia.Core.File
                     var done = unitOfWork.File.Insert(file);
                     unitOfWork.File.Save();
                     if (!done)
-                        return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", "FileFacade.CreateFolder",
+                        return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", ClassDetails[0].Facade + methodName,
                             bp.UserInfo);
-                    Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(file, "File", bp);
+                    Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(file, ClassDetails[0].Clazz, bp);
                     fileDto.EntityId = file.EntityId;
                     return new ServiceResult<object>(fileDto, 1);
                 }
-                
+
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "FileFacade.CreateFolder", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public async Task<ServiceResult<object>> CreateFile(BusinessParam bp, HttpRequest request)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 if (string.IsNullOrEmpty(request.Form["name"]))
-                    return ExceptionUtil.ExceptionHandler("لطفا نام فایل را وارد نمایید", "FileFacade.CreateFile",
+                    return ExceptionUtil.ExceptionHandler("لطفا نام فایل را وارد نمایید", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 if (request.Form.Files["file"] == null)
-                    return ExceptionUtil.ExceptionHandler("لطفا فایل را انتخاب نمایید", "FileFacade.CreateFile",
+                    return ExceptionUtil.ExceptionHandler("لطفا فایل را انتخاب نمایید", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
 
@@ -215,12 +224,12 @@ namespace Parsia.Core.File
 
                 var formFile = request.Form.Files["file"];
                 if (formFile.Length <= 0)
-                    return ExceptionUtil.ExceptionHandler("فایل ارسالی خالی می باشد", "FileFacade.CreateFile",
+                    return ExceptionUtil.ExceptionHandler("فایل ارسالی خالی می باشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 var extension = formFile.FileName.Split(".")[1];
                 var exists = System.IO.File.Exists(webRootPath + fileName + "." + extension);
                 if (exists)
-                    return ExceptionUtil.ExceptionHandler("فایل تکراری می باشد", "FileFacade.CreateFile",
+                    return ExceptionUtil.ExceptionHandler("فایل تکراری می باشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 var checkFileIsValid = CheckFileIsValid(formFile, extension);
                 if (!checkFileIsValid.Done)
@@ -259,17 +268,17 @@ namespace Parsia.Core.File
                     var done = unitOfWork.File.Insert(file);
                     unitOfWork.File.Save();
                     if (!done)
-                        return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", "FileFacade.CreateFile",
+                        return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", ClassDetails[0].Facade + methodName,
                             bp.UserInfo);
-                    Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(file, "File", bp);
+                    Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(file, ClassDetails[0].Clazz, bp);
                     fileDto.EntityId = file.EntityId;
                     return new ServiceResult<object>(fileDto, 1);
                 }
-                
+
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "FileFacade.CreateFile", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
@@ -280,6 +289,7 @@ namespace Parsia.Core.File
 
         private FileDto GetFileFromDataBaseWithId(long entityId, BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 using (var unitOfWork = new UnitOfWork())
@@ -290,13 +300,14 @@ namespace Parsia.Core.File
             }
             catch (Exception ex)
             {
-                if (bp != null) ExceptionUtil.ExceptionHandler(ex, "FileFacade.GetFileFromDataBaseWithId", bp.UserInfo);
+                if (bp != null) ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
                 return null;
             }
         }
 
         private ServiceResult<object> CheckFileIsValid(IFormFile file, string extension)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 return new ServiceResult<object>(true, 1);
@@ -309,6 +320,7 @@ namespace Parsia.Core.File
 
         private async Task<ServiceResult<object>> CreateThumbnail(IFormFile formFile, FileDto fileDto, BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var webRootPath = bp.Environment.WebRootPath;
@@ -336,21 +348,22 @@ namespace Parsia.Core.File
                     var done = unitOfWork.File.Insert(file);
                     unitOfWork.File.Save();
                     if (!done)
-                        return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", "FileFacade.CreateFile",
+                        return ExceptionUtil.ExceptionHandler("خطا در ذخیره فایل درون دیتابیس", ClassDetails[0].Facade + methodName,
                             bp.UserInfo);
-                    Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(file, "File", bp);
+                    Elastic<FileDto, DataLayer.Model.Core.File.File>.SaveToElastic(file, ClassDetails[0].Clazz, bp);
                     dto.EntityId = file.EntityId;
                     return new ServiceResult<object>(dto, 1);
                 }
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "FileFacade.CreateThumbnail", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         private string GetPathOfFile(JsonFileDto dto, BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 return
@@ -358,7 +371,7 @@ namespace Parsia.Core.File
             }
             catch (Exception ex)
             {
-                ExceptionUtil.ExceptionHandler(ex, "FileFacade.GetDetails", bp.UserInfo);
+                ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
                 return "";
             }
         }
@@ -375,6 +388,7 @@ namespace Parsia.Core.File
 
         public async Task<IActionResult> Download(string file, BusinessParam bp, bool thumbnail)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var lastPoint = file.LastIndexOf(".", StringComparison.Ordinal);
@@ -392,11 +406,11 @@ namespace Parsia.Core.File
 
                 var stream = new FileStream(path, FileMode.Open);
                 return new FileStreamResult(stream, FileRepositoryFacade.MimType[fileDto.Extension])
-                    {FileDownloadName = fileDto.Name + "." + fileDto.Extension};
+                { FileDownloadName = fileDto.Name + "." + fileDto.Extension };
             }
             catch (Exception e)
             {
-                ExceptionUtil.ExceptionHandler(e, "FileFacade.Download", null);
+                ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, null);
                 return null;
             }
         }

@@ -14,7 +14,7 @@ function setLocalVariables() {
     };
 }
 
-var initAutoCompletes = function() {
+var initAutoCompletes = function () {
 
     const parentAutocomplete = new Autocomplete();
     parentAutocomplete.init({
@@ -34,6 +34,11 @@ function localPageReady() {
     onPageReady();
 }
 
-$(document).ready(function() {
-    localPageReady();
+$(document).ready(function () {
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        localPageReady();
+    }
 });

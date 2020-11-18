@@ -4,15 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace Parsia.Core.UseCase
 {
     [ApiController]
+    [ClassDetails(Clazz = "UseCase", Facade = "UseCaseService")]
     public class UseCaseService : ControllerBase
     {
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(UseCaseService).GetCustomAttributes(typeof(ClassDetails), true);
+
         [HttpPost]
         [Route("service/usecase/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "UseCase", "gridView");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
                 ? UseCaseFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -25,10 +28,10 @@ namespace Parsia.Core.UseCase
             var dtoFromRequest = UseCaseFacade.GetInstance().GetDtoFromRequest(HttpContext.Request);
             if (!dtoFromRequest.Done)
                 return dtoFromRequest;
-            var dto = (UseCaseDto) dtoFromRequest.Result;
-            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket);
+            var dto = (UseCaseDto)dtoFromRequest.Result;
+            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket, Request);
             var bp = new BusinessParam(userInfo);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "UseCase",
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz,
                 dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? UseCaseFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
@@ -37,9 +40,9 @@ namespace Parsia.Core.UseCase
         [Route("service/usecase/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "UseCase", "update");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "update");
             return checkAccess.Done
                 ? UseCaseFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -49,9 +52,9 @@ namespace Parsia.Core.UseCase
         [Route("service/usecase/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "UseCase", "delete");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "delete");
             return checkAccess.Done
                 ? UseCaseFacade.GetInstance().Delete(bp)
                 : checkAccess;
@@ -61,9 +64,9 @@ namespace Parsia.Core.UseCase
         [Route("service/usecase/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "UseCase", "autocomplete");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "autocomplete");
             return checkAccess.Done
                 ? UseCaseFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
@@ -71,13 +74,13 @@ namespace Parsia.Core.UseCase
 
         [HttpPost]
         [Route("service/usecase/getTotalUseCase/{getAllData}/{term}/{pageNumber}")]
-        public ServiceResult<object> GetTotalUseCase(Clause clause,bool getAllData,string term,string pageNumber)
+        public ServiceResult<object> GetTotalUseCase(Clause clause, bool getAllData, string term, string pageNumber)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket);
+            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, "UseCase", "gridView");
+            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
-                ? UseCaseFacade.GetInstance().GetTotalUseCase(bp,getAllData,term,pageNumber)
+                ? UseCaseFacade.GetInstance().GetTotalUseCase(bp, getAllData, term, pageNumber)
                 : checkAccess;
         }
     }

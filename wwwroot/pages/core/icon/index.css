@@ -1,91 +1,74 @@
 ﻿.container-f {
-    background: white;
-    height: 100vh;
-    overflow: auto;
-}
-
-.container-f .container {
-    background: transparent;
-    height: auto;
+  height: 100vh;
+  background: white;
+  overflow: auto; }
+  .container-f .container {
     margin: 20px auto;
-}
+    background: transparent;
+    height: auto; }
 
 .title-color {
-    background: transparent;
-    border-bottom: 1px dotted #7e45ff;
-    color: #373737;
-    font-size: 0.8rem;
-    font-weight: bold;
-    height: 30px;
-    margin: 0;
-    overflow: hidden;
-    padding: 7px 15px 5px;
-    text-align: right;
-    width: 100%;
-}
+  width: 100%;
+  border-bottom: 1px dotted #7e45ff;
+  background: transparent;
+  font-size: 0.8rem;
+  text-align: right;
+  padding: 7px 15px 5px;
+  font-weight: bold;
+  height: 30px;
+  overflow: hidden;
+  margin: 0;
+  color: #373737; }
 
 .card-v {
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-    margin: 10px 0;
-    min-height: 60px;
-    position: relative;
-    width: 100%;
-}
-
-.card-v:hover {
+  width: 100%;
+  min-height: 60px;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  position: relative; }
+  .card-v:hover {
+    transition: all 0.25s;
     background: #4dabf7;
-    box-shadow: 0 5px 10px #e1e1e1;
+    box-shadow: 0 5px 10px #e1e1e1; }
+  .card-v:hover svg {
     transition: all 0.25s;
-}
-
-.card-v:hover svg {
+    color: white; }
+  .card-v:hover p {
+    transition: all 0.25s;
     color: white;
-    transition: all 0.25s;
-}
-
-.card-v:hover p {
-    background: transparent;
-    color: white;
-    transition: all 0.25s;
-}
-
-.card-v svg {
+    background: transparent; }
+  .card-v svg {
+    width: 45px !important;
+    height: 45px !important;
+    padding: 5px;
     color: #495057;
     cursor: pointer;
     display: table;
-    height: 45px !important;
-    margin: auto;
-    padding: 5px;
-    width: 45px !important;
-}
-
-.card-v input {
+    margin: auto; }
+  .card-v input {
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.7rem;
+    opacity: 1;
+    width: 100%;
+    display: block;
     background: transparent;
     border: 0;
     color: transparent;
-    cursor: pointer;
-    display: block;
-    font-size: 0.7rem;
-    font-weight: bold;
-    height: 100%;
-    left: 0;
-    margin: 0;
-    opacity: 1;
     position: absolute;
-    text-align: center;
     top: 0;
-    width: 100%;
-}
-
-.card-v p {
-    font-size: 0.7rem;
-    font-weight: bold;
+    left: 0;
+    height: 100%;
+    cursor: pointer; }
+  .card-v p {
     margin: 0 0 5px 0;
     text-align: center;
-}
+    font-weight: bold;
+    font-size: 0.7rem; }

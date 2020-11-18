@@ -40,6 +40,11 @@ function localPageReady() {
     onPageReady();
 }
 $(document).ready(function () {
-    initAutoCompletes();
-    localPageReady();
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initAutoCompletes();
+        localPageReady();
+    }
 });

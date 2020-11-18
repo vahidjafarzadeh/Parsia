@@ -1,6 +1,8 @@
 'use strict';
 let checkboxContainer;
 var localVariables = {
+    lockAble: false,
+    clazzName: "Role",
     URLs: {
         services: {
             showRow: 'role/showRow',

@@ -917,9 +917,11 @@ var fillGrid = function(data) {
     if (data) {
         var finalData = [];
         var pattern = ["$rowNum"];
-        data[0].forEach(function(key) {
-            pattern.push(key);
-        });
+        if (data[0]) {
+            data[0].forEach(function (key) {
+                pattern.push(key);
+            });
+        }
         data.forEach(function(row, index) {
             if (index > 0 && index <= pageSize) {
                 var obj = {};
@@ -1236,7 +1238,7 @@ var hidePageLoading = function () {
 };
 var onPageReady = function(params) {
     // change page language according to user lang
-    $("html").attr("lang", Storage.getUserInfo().lang === 1 ? "FA" : "EN");
+    $("html").attr("lang", Storage.getUserInfo().lang === 1 ? "FA" : "FA");
     $(document).on("tableCreated",
         function() {
         });

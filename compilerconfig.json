@@ -38,5 +38,9 @@
   {
     "outputFile": "wwwroot/sass/page/index.css",
     "inputFile": "wwwroot/sass/page/index.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/account/account.css",
+    "inputFile": "wwwroot/css/account/account.scss"
   }
 ]

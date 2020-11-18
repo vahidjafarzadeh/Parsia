@@ -9,5 +9,6 @@ const Bundle = {
     username: "نام کاربری",
     lastVisit: "آخرین بازدید",
     attempt: "تعداد تلاش ناموفق برای ورود",
+    isAdmin: "اجازه ورود به پنل مدیریت را دارد",
     person: "فرد"
 }

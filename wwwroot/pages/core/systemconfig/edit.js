@@ -8,7 +8,11 @@ var localVariables = {
         }
     }
 };
-
 $(document).ready(function () {
-    onPageReady();
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        onPageReady();
+    }
 });

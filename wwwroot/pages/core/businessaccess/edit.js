@@ -1,6 +1,8 @@
 'use strict';
 
 var localVariables = {
+    lockAble: false,
+    clazzName: "BusinessAccess",
     URLs: {
         services: {
             showRow: 'businessAccess/showRow',
@@ -49,8 +51,12 @@ var initAutoCompletes = function () {
 };
 
 $(document).ready(function () {
-    initLocalVariables(localVariables);
-    initAutoCompletes();
-    onPageReady();
-
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initLocalVariables(localVariables);
+        initAutoCompletes();
+        onPageReady();
+    }
 });

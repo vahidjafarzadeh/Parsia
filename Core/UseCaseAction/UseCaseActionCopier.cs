@@ -16,7 +16,7 @@ namespace Parsia.Core.UseCaseAction
             var updateUser = entity.UpdateUserEntity != null
                 ? new UserDto() { EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username }
                 : new UserDto();
-            var useCase = new UseCaseActionDto()
+            var useCaseAction = new UseCaseActionDto()
             {
                 EntityId = entity.EntityId,
                 Created = Util.GetTimeStamp(entity.Created),
@@ -27,25 +27,25 @@ namespace Parsia.Core.UseCaseAction
                 Code = entity.Code
             };
             if (entity.CurrentAction != null)
-                useCase.Action = new ActionDto()
+                useCaseAction.Action = new ActionDto()
                 {
                     EntityId = entity.CurrentAction.EntityId,
                     ActionEnName = entity.CurrentAction.ActionEnName,
                     ActionName = entity.CurrentAction.ActionName
                 };
             if (entity.CurrentUseCase != null)
-                useCase.UseCase = new UseCaseDto()
+                useCaseAction.UseCase = new UseCaseDto()
                 {
                     EntityId = entity.CurrentUseCase.EntityId,
                     UseCaseName = entity.CurrentUseCase.UseCaseName,
                     Clazz = entity.CurrentUseCase.Clazz
                 };
-            return useCase;
+            return useCaseAction;
         }
 
         public DataLayer.Model.Core.UseCaseAction.UseCaseAction GetEntity(UseCaseActionDto dto, BusinessParam bp, bool setCreate)
         {
-            var useCase = new DataLayer.Model.Core.UseCaseAction.UseCaseAction()
+            var useCaseAction = new DataLayer.Model.Core.UseCaseAction.UseCaseAction()
             {
                 EntityId = dto.EntityId,
                 Active = dto.Active,
@@ -55,7 +55,7 @@ namespace Parsia.Core.UseCaseAction
                 UseCase = dto.UseCase?.EntityId,
                 Action = dto.Action?.EntityId
             };
-            return SetMandatoryField(useCase, bp, setCreate);
+            return SetMandatoryField(useCaseAction, bp, setCreate);
         }
         public DataLayer.Model.Core.UseCaseAction.UseCaseAction SetMandatoryField(DataLayer.Model.Core.UseCaseAction.UseCaseAction useCaseAction,
             BusinessParam bp, bool setCreate)

@@ -42,6 +42,7 @@ var initAutoCompletes = function () {
 var localVariables;
 function setLocalVariables() {
     localVariables = {
+        clazzName: "Menu",
         URLs: {
             services: {
                 gridView: 'menu/gridView',
@@ -56,6 +57,11 @@ function localPageReady() {
     onPageReady();
 }
 $(document).ready(function () {
-    initAutoCompletes();
-    localPageReady();
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initAutoCompletes();
+        localPageReady();
+    }
 });

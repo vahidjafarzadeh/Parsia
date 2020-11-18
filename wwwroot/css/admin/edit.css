@@ -1,9 +1,8 @@
 ﻿@font-face {
-    font-family: "Iran";
-    font-weight: 100;
-    src: url("../../font/iran.eot");
-    src: url("../../font/iran.eot?#iefix") format("embedded-opentype"), url("../../font/iran.woff") format("woff"), url("../../font/iran.ttf") format("truetype");
-}
+  font-family: "Iran";
+  src: url("../../font/iran.eot");
+  src: url("../../font/iran.eot?#iefix") format("embedded-opentype"), url("../../font/iran.woff") format("woff"), url("../../font/iran.ttf") format("truetype");
+  font-weight: 100; }
 
 /*
 ** persian-datepicker - v0.5.4
@@ -11,436 +10,356 @@
 ** http://babakhani.github.io/PersianWebToolkit/docs/datepicker
 ** Under WTFPL license
 */
-
 .datepicker-container {
-    -moz-transition: opacity 150ms;
-    -ms-transition: opacity 150ms;
-    -o-transition: opacity 150ms;
-    -webkit-transition: opacity 150ms;
-    position: absolute;
-    top: 0;
-    transition: opacity 150ms;
-    z-index: 100000;
-}
-
-@media screen and (max-width: 567px) {
+  position: absolute;
+  z-index: 100000;
+  top: 0;
+  -webkit-transition: opacity 150ms;
+  -moz-transition: opacity 150ms;
+  -ms-transition: opacity 150ms;
+  -o-transition: opacity 150ms;
+  transition: opacity 150ms; }
+  @media screen and (max-width: 567px) {
     .datepicker-container {
-        left: calc(50vw - 100px) !important;
-        top: calc(50vh - 137.5px) !important;
-    }
-}
-
-.datepicker-container.hide {
+      left: calc(50vw - 100px) !important;
+      top: calc(50vh - 137.5px) !important; } }
+  .datepicker-container.hide {
     opacity: 0;
-    z-index: -1;
-}
-
-.datepicker-container.has-timepicker .datepicker-plot-area { height: 350px !important; }
-
-.datepicker-container .month-item { text-align: center; }
-
-.datepicker-container .year-item { text-align: center; }
+    z-index: -1; }
+  .datepicker-container.has-timepicker .datepicker-plot-area {
+    height: 350px !important; }
+  .datepicker-container .month-item {
+    text-align: center; }
+  .datepicker-container .year-item {
+    text-align: center; }
 
 .datepicker-plot-area {
-    -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    -moz-box-sizing: border-box;
-    -moz-user-select: none;
-    -ms-overflow-x: hidden;
-    -ms-overflow-y: hidden;
-    -ms-user-select: none;
-    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    -webkit-box-sizing: border-box;
-    -webkit-user-select: none;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
-    display: block;
-    font: 12px tahoma;
-    height: 275px;
-    left: 0 !important;
-    min-width: 200px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    padding: 0;
-    position: absolute;
-    top: 0 !important;
-    user-select: none;
-    width: 200px;
-}
-
-.datepicker-plot-area * {
-    color: #333;
+  left: 0 !important;
+  top: 0 !important;
+  height: 275px;
+  display: block;
+  width: 200px;
+  min-width: 200px;
+  padding: 0;
+  position: absolute;
+  font: 12px tahoma;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  overflow-y: hidden;
+  -ms-overflow-y: hidden;
+  overflow-x: hidden;
+  -ms-overflow-x: hidden;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -moz-user-select: none;
+  user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none; }
+  .datepicker-plot-area * {
     text-align: center;
-}
-
-.datepicker-plot-area table, .datepicker-plot-area th, .datepicker-plot-area td {
-    background: none;
+    color: #333; }
+  .datepicker-plot-area table, .datepicker-plot-area th, .datepicker-plot-area td {
     border: 0;
-}
-
-.datepicker-plot-area .datepicker-header {
+    background: none; }
+  .datepicker-plot-area .datepicker-header {
     display: block;
-    float: left;
+    width: 100%;
     height: 30px;
-    margin-bottom: 8px;
+    float: left;
     padding: 3px 0 0;
+    margin-bottom: 8px; }
+    .datepicker-plot-area .datepicker-header .btn-next {
+      width: 15%; }
+    .datepicker-plot-area .datepicker-header .btn-switch {
+      width: 66%;
+      margin: 0 2%; }
+    .datepicker-plot-area .datepicker-header .btn-prev {
+      width: 15%; }
+    .datepicker-plot-area .datepicker-header .btn-next, .datepicker-plot-area .datepicker-header .btn-switch, .datepicker-plot-area .datepicker-header .btn-prev {
+      display: block;
+      float: left;
+      height: 28px;
+      line-height: 28px;
+      font-weight: bold;
+      background-color: #fff;
+      color: #333;
+      padding: 0;
+      cursor: pointer; }
+      .datepicker-plot-area .datepicker-header .btn-next:hover, .datepicker-plot-area .datepicker-header .btn-switch:hover, .datepicker-plot-area .datepicker-header .btn-prev:hover {
+        background-color: #eee; }
+  .datepicker-plot-area .datepicker-time-view {
+    display: block;
+    float: left;
     width: 100%;
-}
-
-.datepicker-plot-area .datepicker-header .btn-next { width: 15%; }
-
-.datepicker-plot-area .datepicker-header .btn-switch {
-    margin: 0 2%;
-    width: 66%;
-}
-
-.datepicker-plot-area .datepicker-header .btn-prev { width: 15%; }
-
-.datepicker-plot-area .datepicker-header .btn-next, .datepicker-plot-area .datepicker-header .btn-switch, .datepicker-plot-area .datepicker-header .btn-prev {
-    background-color: #fff;
-    color: #333;
-    cursor: pointer;
-    display: block;
-    float: left;
-    font-weight: bold;
-    height: 28px;
-    line-height: 28px;
-    padding: 0;
-}
-
-.datepicker-plot-area .datepicker-header .btn-next:hover, .datepicker-plot-area .datepicker-header .btn-switch:hover, .datepicker-plot-area .datepicker-header .btn-prev:hover { background-color: #eee; }
-
-.datepicker-plot-area .datepicker-time-view {
-    background: #f9f9f9;
-    border-top: 1px solid #f1f1f1;
-    display: block;
-    float: left;
-    margin: 3px 0;
     padding: 5px 1%;
-    width: 100%;
-}
-
-.datepicker-plot-area .datepicker-time-view input {
+    margin: 3px 0;
     background: #f9f9f9;
-    border: none;
-    display: block;
-    height: 20px;
-    margin: 0 5%;
-    outline: none;
-    padding: 0;
-    width: 90%;
-}
-
-.datepicker-plot-area .datepicker-time-view .divider {
-    display: block;
-    float: left;
-    font: 12px bold;
-    height: 60px;
-    line-height: 60px;
-    overflow: hidden;
-    width: 3%;
-}
-
-.datepicker-plot-area .datepicker-time-view .divider span {
-    height: 60px;
-    line-height: 60px;
-}
-
-.datepicker-plot-area .datepicker-time-view > .time-segment {
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
-    display: block;
-    float: left;
-    height: 60px;
-    overflow: hidden;
-    width: 22%;
-}
-
-.datepicker-plot-area .datepicker-time-view > .time-segment:hover .down-btn, .datepicker-plot-area .datepicker-time-view > .time-segment:hover .up-btn {
-    background-color: #fff;
-    font-weight: bold;
-}
-
-.datepicker-plot-area .datepicker-time-view .down-btn, .datepicker-plot-area .datepicker-time-view .up-btn {
-    -moz-border-radius: 6px 6px 0 0;
-    -moz-transition: all 100ms ease;
-    -ms-transition: all 100ms ease;
-    -o-transition: all 100ms ease;
-    -webkit-border-radius: 6px 6px 0 0;
-    -webkit-transition: all 100ms ease;
-    border-radius: 6px 6px 0 0;
-    color: #ccc;
-    display: block;
-    float: left;
-    height: 20px;
-    line-height: 18px;
-    margin: 0;
-    transition: all 100ms ease;
+    border-top: 1px solid #f1f1f1; }
+    .datepicker-plot-area .datepicker-time-view input {
+      display: block;
+      width: 90%;
+      margin: 0 5%;
+      height: 20px;
+      padding: 0;
+      outline: none;
+      border: none;
+      background: #f9f9f9; }
+    .datepicker-plot-area .datepicker-time-view .divider {
+      display: block;
+      width: 3%;
+      height: 60px;
+      line-height: 60px;
+      float: left;
+      overflow: hidden;
+      font: 12px bold; }
+      .datepicker-plot-area .datepicker-time-view .divider span {
+        height: 60px;
+        line-height: 60px; }
+    .datepicker-plot-area .datepicker-time-view > .time-segment {
+      display: block;
+      width: 22%;
+      height: 60px;
+      float: left;
+      overflow: hidden;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px; }
+      .datepicker-plot-area .datepicker-time-view > .time-segment:hover .down-btn, .datepicker-plot-area .datepicker-time-view > .time-segment:hover .up-btn {
+        font-weight: bold;
+        background-color: #fff; }
+    .datepicker-plot-area .datepicker-time-view .down-btn, .datepicker-plot-area .datepicker-time-view .up-btn {
+      display: block;
+      float: left;
+      width: 100%;
+      margin: 0;
+      height: 20px;
+      line-height: 18px;
+      color: #ccc;
+      -webkit-transition: all 100ms ease;
+      -moz-transition: all 100ms ease;
+      -ms-transition: all 100ms ease;
+      -o-transition: all 100ms ease;
+      transition: all 100ms ease;
+      -moz-border-radius: 6px 6px 0 0;
+      -webkit-border-radius: 6px 6px 0 0;
+      border-radius: 6px 6px 0 0; }
+      .datepicker-plot-area .datepicker-time-view .down-btn:hover, .datepicker-plot-area .datepicker-time-view .up-btn:hover {
+        background-color: #eee;
+        color: #807f7f; }
+    .datepicker-plot-area .datepicker-time-view .down-btn {
+      -moz-border-radius: 0 0 6px 6px;
+      -webkit-border-radius: 0 0 6px 6px;
+      border-radius: 0 0 6px 6px; }
+  .datepicker-plot-area .datepicker-day-view .table-days {
     width: 100%;
-}
-
-.datepicker-plot-area .datepicker-time-view .down-btn:hover, .datepicker-plot-area .datepicker-time-view .up-btn:hover {
-    background-color: #eee;
-    color: #807f7f;
-}
-
-.datepicker-plot-area .datepicker-time-view .down-btn {
-    -moz-border-radius: 0 0 6px 6px;
-    -webkit-border-radius: 0 0 6px 6px;
-    border-radius: 0 0 6px 6px;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days {
-    direction: rtl;
     float: left;
-    width: 100%;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days tr { width: 300px; }
-
-.datepicker-plot-area .datepicker-day-view .table-days td {
-    height: 26px;
-    margin: 0;
-    padding: 0;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days td span {
+    direction: rtl; }
+    .datepicker-plot-area .datepicker-day-view .table-days tr {
+      width: 300px; }
+    .datepicker-plot-area .datepicker-day-view .table-days td {
+      height: 26px;
+      padding: 0;
+      margin: 0; }
+      .datepicker-plot-area .datepicker-day-view .table-days td span {
+        display: block;
+        width: 100%;
+        height: 26px;
+        line-height: 26px;
+        padding: 0;
+        margin: 0; }
+        .datepicker-plot-area .datepicker-day-view .table-days td span.today {
+          background-color: #333;
+          color: #fff;
+          border: 0;
+          text-shadow: none; }
+        .datepicker-plot-area .datepicker-day-view .table-days td span.other-month {
+          background-color: transparent;
+          color: #ccc;
+          border: none;
+          text-shadow: none; }
+  .datepicker-plot-area .datepicker-day-view .month-grid-box {
     display: block;
-    height: 26px;
-    line-height: 26px;
-    margin: 0;
-    padding: 0;
     width: 100%;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days td span.today {
-    background-color: #333;
-    border: 0;
-    color: #fff;
-    text-shadow: none;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days td span.other-month {
-    background-color: transparent;
-    border: none;
-    color: #ccc;
-    text-shadow: none;
-}
-
-.datepicker-plot-area .datepicker-day-view .month-grid-box {
-    display: block;
     float: right;
-    height: 180px;
-    margin: 10px 0;
     min-width: 150px;
-    width: 100%;
-}
-
-.datepicker-plot-area .datepicker-day-view .header .header-row {
+    height: 180px;
+    margin: 10px 0; }
+  .datepicker-plot-area .datepicker-day-view .header .header-row {
     display: block;
-    float: left;
+    width: 100%;
     height: 25px;
-    width: 100%;
-}
-
-.datepicker-plot-area .datepicker-day-view .header .header-row-cell {
-    color: #333;
+    float: left; }
+  .datepicker-plot-area .datepicker-day-view .header .header-row-cell {
     display: block;
+    width: 14%;
+    height: 25px;
     float: right;
-    font: 14px tahoma;
-    font-weight: bold;
-    height: 25px;
     line-height: 25px;
     text-indent: 6px;
-    width: 14%;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days td.disabled span,
-.datepicker-plot-area .datepicker-year-view .year-item-disable,
-.datepicker-plot-area .datepicker-month-view .month-item-disable {
+    font: 14px tahoma;
+    font-weight: bold;
+    color: #333; }
+  .datepicker-plot-area .datepicker-day-view .table-days td.disabled span,
+  .datepicker-plot-area .datepicker-year-view .year-item-disable,
+  .datepicker-plot-area .datepicker-month-view .month-item-disable {
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
-    border-radius: 0;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days td span,
-.datepicker-plot-area .datepicker-year-view .year-item,
-.datepicker-plot-area .datepicker-month-view .month-item {
+    border-radius: 0; }
+  .datepicker-plot-area .datepicker-day-view .table-days td span,
+  .datepicker-plot-area .datepicker-year-view .year-item,
+  .datepicker-plot-area .datepicker-month-view .month-item {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    border-radius: 3px;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days td span,
-.datepicker-plot-area .datepicker-year-view .year-item,
-.datepicker-plot-area .datepicker-month-view .month-item,
-.datepicker-plot-area .datepicker-day-view .table-days td.disabled span,
-.datepicker-plot-area .datepicker-year-view .year-item-disable,
-.datepicker-plot-area .datepicker-month-view .month-item-disable,
-.datepicker-plot-area .datepicker-time-view > .time-segment,
-.datepicker-plot-area .datepicker-time-view .down-btn,
-.datepicker-plot-area .datepicker-time-view .up-btn,
-.datepicker-plot-area .datepicker-time-view input { cursor: pointer; }
-
-.datepicker-plot-area .datepicker-day-view .table-days td span,
-.datepicker-plot-area .datepicker-year-view .year-item,
-.datepicker-plot-area .datepicker-month-view .month-item {
-    background-color: #fff;
-    border: 0;
-    color: #333;
+    border-radius: 3px; }
+  .datepicker-plot-area .datepicker-day-view .table-days td span,
+  .datepicker-plot-area .datepicker-year-view .year-item,
+  .datepicker-plot-area .datepicker-month-view .month-item,
+  .datepicker-plot-area .datepicker-day-view .table-days td.disabled span,
+  .datepicker-plot-area .datepicker-year-view .year-item-disable,
+  .datepicker-plot-area .datepicker-month-view .month-item-disable,
+  .datepicker-plot-area .datepicker-time-view > .time-segment,
+  .datepicker-plot-area .datepicker-time-view .down-btn,
+  .datepicker-plot-area .datepicker-time-view .up-btn,
+  .datepicker-plot-area .datepicker-time-view input {
+    cursor: pointer; }
+  .datepicker-plot-area .datepicker-day-view .table-days td span,
+  .datepicker-plot-area .datepicker-year-view .year-item,
+  .datepicker-plot-area .datepicker-month-view .month-item {
     font-size: 13px;
-    text-shadow: none;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days td.disabled span,
-.datepicker-plot-area .datepicker-year-view .year-item-disable,
-.datepicker-plot-area .datepicker-month-view .month-item-disable {
-    background-color: #f1f1f1;
-    border: none;
-    color: #ccc;
-    cursor: default;
-    text-shadow: none;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days td span.selected,
-.datepicker-plot-area .datepicker-year-view .year-item.selected,
-.datepicker-plot-area .datepicker-month-view .month-item.selected {
-    background-color: #006dcc;
-    border: none;
-    color: #fff;
-    text-shadow: 1px 1px 1px #000;
-}
-
-.datepicker-plot-area .datepicker-day-view .table-days td span.selected:hover,
-.datepicker-plot-area .datepicker-day-view .table-days td span:hover,
-.datepicker-plot-area .datepicker-year-view .year-item:hover,
-.datepicker-plot-area .datepicker-month-view .month-item:hover {
-    background-color: #006dcc;
+    background-color: #fff;
+    color: #333;
     border: 0;
-    color: #fff;
+    text-shadow: none; }
+  .datepicker-plot-area .datepicker-day-view .table-days td.disabled span,
+  .datepicker-plot-area .datepicker-year-view .year-item-disable,
+  .datepicker-plot-area .datepicker-month-view .month-item-disable {
+    background-color: #f1f1f1;
+    color: #ccc;
+    border: none;
     text-shadow: none;
-}
-
-.datepicker-plot-area .datepicker-day-view,
-.datepicker-plot-area .datepicker-month-view,
-.datepicker-plot-area .datepicker-year-view {
+    cursor: default; }
+  .datepicker-plot-area .datepicker-day-view .table-days td span.selected,
+  .datepicker-plot-area .datepicker-year-view .year-item.selected,
+  .datepicker-plot-area .datepicker-month-view .month-item.selected {
+    background-color: #006dcc;
+    color: #fff;
+    border: none;
+    text-shadow: 1px 1px 1px #000; }
+  .datepicker-plot-area .datepicker-day-view .table-days td span.selected:hover,
+  .datepicker-plot-area .datepicker-day-view .table-days td span:hover,
+  .datepicker-plot-area .datepicker-year-view .year-item:hover,
+  .datepicker-plot-area .datepicker-month-view .month-item:hover {
+    background-color: #006dcc;
+    color: #fff;
+    border: 0;
+    text-shadow: none; }
+  .datepicker-plot-area .datepicker-day-view,
+  .datepicker-plot-area .datepicker-month-view,
+  .datepicker-plot-area .datepicker-year-view {
     display: block;
-    float: left;
-    margin: 0;
-    min-height: 200px;
-    padding: 0 5px;
     width: 100%;
-}
-
-.datepicker-plot-area .datepicker-year-view .year-item,
-.datepicker-plot-area .datepicker-month-view .month-item {
+    float: left;
+    min-height: 200px;
+    margin: 0;
+    padding: 0 5px; }
+  .datepicker-plot-area .datepicker-year-view .year-item,
+  .datepicker-plot-area .datepicker-month-view .month-item {
     display: block;
+    width: 33.333333%;
+    margin: 2px 0 0;
     float: right;
     height: 36px;
-    line-height: 34px;
-    margin: 2px 0 0;
-    width: 33.333333%;
-}
-
-.datepicker-plot-area .datepicker-time-view {
+    line-height: 34px; }
+  .datepicker-plot-area .datepicker-time-view {
+    display: -webkit-box ;
+    display: -webkit-flex ;
+    display: -ms-flexbox ;
+    display: flex ;
     -webkit-align-items: center;
-    -webkit-justify-content: center;
     align-items: center;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    justify-content: center;
-}
-
-.datepicker-plot-area .datepicker-time-view > *:empty { display: none; }
-
-.datepicker-plot-area .toolbox {
+    -webkit-justify-content: center ;
+    justify-content: center ; }
+    .datepicker-plot-area .datepicker-time-view > *:empty {
+      display: none; }
+  .datepicker-plot-area .toolbox {
     display: block;
     float: left;
     padding: 3px 0;
-    width: 100%;
-}
-
-.datepicker-plot-area .toolbox .btn-today {
-    -webkit-align-items: center;
-    -webkit-justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    cursor: pointer;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    font-weight: bold;
-    height: 25px;
-    justify-content: center;
-    margin: 0 auto;
-    width: 60px;
-}
-
-.datepicker-plot-area .toolbox .btn-today:hover { background-color: #eee; }
+    width: 100%; }
+    .datepicker-plot-area .toolbox .btn-today {
+      background-color: #fff;
+      font-weight: bold;
+      margin: 0 auto;
+      width: 60px;
+      height: 25px;
+      cursor: pointer;
+      display: -webkit-box ;
+      display: -webkit-flex ;
+      display: -ms-flexbox ;
+      display: flex ;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-justify-content: center ;
+      justify-content: center ; }
+      .datepicker-plot-area .toolbox .btn-today:hover {
+        background-color: #eee; }
 
 .datepicker-plot-area-inline-view {
-    display: block;
-    float: left;
-    position: static;
-    width: 100%;
-}
+  display: block;
+  width: 100%;
+  position: static;
+  float: left; }
 
 [lang=fa] .datepicker-container .btn-switch, [lang=ar] .datepicker-container .btn-switch {
-    direction: ltr;
-    text-align: center !important;
-}
+  text-align: center !important;
+  direction: ltr; }
 
 [lang=fa] .datepicker-container .btn-next, [lang=fa] .datepicker-container .btn-prev, [lang=ar] .datepicker-container .btn-next, [lang=ar] .datepicker-container .btn-prev {
-    -moz-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
-    text-align: center !important;
-    transform: rotate(180deg);
-}
+  text-align: center !important;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg); }
 
-[lang=fa] .datepicker-container .datepicker-day-view .table-days td > span, [lang=ar] .datepicker-container .datepicker-day-view .table-days td > span { text-align: center !important; }
+[lang=fa] .datepicker-container .datepicker-day-view .table-days td > span, [lang=ar] .datepicker-container .datepicker-day-view .table-days td > span {
+  text-align: center !important; }
 
-[lang=fa] .datepicker-container .header-row-cell, [lang=ar] .datepicker-container .header-row-cell { font-family: Iran !important; }
+[lang=fa] .datepicker-container .header-row-cell, [lang=ar] .datepicker-container .header-row-cell {
+  font-family: Iran !important; }
 
 [lang=fa] .datepicker-container .datepicker-time-view, [lang=ar] .datepicker-container .datepicker-time-view {
-    -webkit-flex-direction: row-reverse;
-    flex-direction: row-reverse;
-}
-
-[lang=fa] .datepicker-container .datepicker-time-view .time-segment > *, [lang=ar] .datepicker-container .datepicker-time-view .time-segment > * {
+  -webkit-flex-direction: row-reverse ;
+  flex-direction: row-reverse ; }
+  [lang=fa] .datepicker-container .datepicker-time-view .time-segment > *, [lang=ar] .datepicker-container .datepicker-time-view .time-segment > * {
     text-align: center !important;
-    text-align: center !important;
-}
+    text-align: center !important; }
 
 [lang=fa] .simplebar-track, [lang=ar] .simplebar-track {
-    left: 0 !important;
-    right: initial;
-}
+  right: initial;
+  left: 0 !important; }
 
 [lang=fa] .simplebar-scroll-content, [lang=ar] .simplebar-scroll-content {
-    padding-left: 23px !important;
-    padding-right: 0 !important;
-}
+  padding-right: 0 !important;
+  padding-left: 23px !important; }
 
-[lang=fa] .simplebar-content, [lang=ar] .simplebar-content { margin-right: 0 !important; }
+[lang=fa] .simplebar-content, [lang=ar] .simplebar-content {
+  margin-right: 0 !important; }
 
 [lang=fa] .simplebar-track, [lang=ar] .simplebar-track {
-    left: 0 !important;
-    right: initial;
-}
+  right: initial;
+  left: 0 !important; }
 
 [lang=fa] .simplebar-scroll-content, [lang=ar] .simplebar-scroll-content {
-    padding-left: 23px !important;
-    padding-right: 0 !important;
-}
+  padding-right: 0 !important;
+  padding-left: 23px !important; }
 
-[lang=fa] .simplebar-content, [lang=ar] .simplebar-content { margin-right: 0 !important; }
+[lang=fa] .simplebar-content, [lang=ar] .simplebar-content {
+  margin-right: 0 !important; }
 
 /*!
  * 
@@ -452,940 +371,806 @@
  *         Under MIT License
  *       
  */
-
 [data-simplebar] {
-    -webkit-overflow-scrolling: touch;
-    max-height: inherit;
-    overflow: hidden !important;
-    position: relative;
-    z-index: 0;
-    /* Trigger native scrolling for mobile, if not supported, plugin is used. */
-}
+  position: relative;
+  z-index: 0;
+  overflow: hidden !important;
+  max-height: inherit;
+  -webkit-overflow-scrolling: touch;
+  /* Trigger native scrolling for mobile, if not supported, plugin is used. */ }
 
 [data-simplebar="init"] {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-}
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
 
 .simplebar-scroll-content {
-    -webkit-box-sizing: content-box !important;
-    box-sizing: content-box !important;
-    max-height: inherit !important;
-    min-width: 100% !important;
-    overflow-x: hidden !important;
-    overflow-y: scroll;
-}
+  overflow-x: hidden !important;
+  overflow-y: scroll;
+  min-width: 100% !important;
+  max-height: inherit !important;
+  -webkit-box-sizing: content-box !important;
+  box-sizing: content-box !important; }
 
 .simplebar-content {
-    -webkit-box-sizing: border-box !important;
-    box-sizing: border-box !important;
-    min-height: 100% !important;
-    overflow-x: scroll;
-    overflow-y: hidden !important;
-}
+  overflow-y: hidden !important;
+  overflow-x: scroll;
+  -webkit-box-sizing: border-box !important;
+  box-sizing: border-box !important;
+  min-height: 100% !important; }
 
 .simplebar-track {
-    bottom: 7px;
-    position: absolute;
-    right: 0;
-    width: 11px;
-    z-index: 1;
-}
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  bottom: 7px;
+  width: 11px; }
 
 .simplebar-scrollbar {
-    min-height: 10px;
-    position: absolute;
-    right: 2px;
-    width: 7px;
-}
+  position: absolute;
+  right: 2px;
+  width: 7px;
+  min-height: 10px; }
 
 .simplebar-scrollbar:before {
-    -webkit-transition: opacity 0.2s linear;
-    background: black;
-    border-radius: 7px;
-    content: "";
-    left: 0;
-    opacity: 0;
-    position: absolute;
-    right: 0;
-    transition: opacity 0.2s linear;
-}
+  position: absolute;
+  content: "";
+  background: black;
+  border-radius: 7px;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  -webkit-transition: opacity 0.2s linear;
+  transition: opacity 0.2s linear; }
 
 .simplebar-track:hover .simplebar-scrollbar:before,
 .simplebar-track .simplebar-scrollbar.visible:before {
-    -webkit-transition: opacity 0 linear;
-    /* When hovered, remove all transitions from drag handle */
-    opacity: 0.5;
-    transition: opacity 0 linear;
-}
+  /* When hovered, remove all transitions from drag handle */
+  opacity: 0.5;
+  -webkit-transition: opacity 0 linear;
+  transition: opacity 0 linear; }
 
-.simplebar-track.vertical { top: 0; }
+.simplebar-track.vertical {
+  top: 0; }
 
 .simplebar-track.vertical .simplebar-scrollbar:before {
-    bottom: 2px;
-    top: 2px;
-}
+  top: 2px;
+  bottom: 2px; }
 
 .simplebar-track.horizontal {
-    height: 11px;
-    left: 0;
-    visibility: hidden !important;
-    width: auto;
-}
-
-.simplebar-track.horizontal .simplebar-scrollbar { visibility: hidden !important; }
+  left: 0;
+  width: auto;
+  height: 11px;
+  visibility: hidden !important; }
+  .simplebar-track.horizontal .simplebar-scrollbar {
+    visibility: hidden !important; }
 
 .simplebar-track.horizontal .simplebar-scrollbar:before {
-    height: 100%;
-    left: 2px;
-    right: 2px;
-}
+  height: 100%;
+  left: 2px;
+  right: 2px; }
 
 .horizontal.simplebar-track .simplebar-scrollbar {
-    height: 7px;
-    min-height: 0;
-    min-width: 10px;
-    right: auto;
-    top: 2px;
-    width: auto;
-}
+  right: auto;
+  top: 2px;
+  height: 7px;
+  min-height: 0;
+  min-width: 10px;
+  width: auto; }
 
-svg:not(:root).svg-inline--fa { overflow: visible; }
+svg:not(:root).svg-inline--fa {
+  overflow: visible; }
 
 .svg-inline--fa {
-    display: inline-block;
-    font-size: inherit;
-    height: 1em;
-    overflow: visible;
-    vertical-align: -.125em;
-}
+  display: inline-block;
+  font-size: inherit;
+  height: 1em;
+  overflow: visible;
+  vertical-align: -.125em; }
 
-.svg-inline--fa.fa-lg { vertical-align: -.225em; }
+.svg-inline--fa.fa-lg {
+  vertical-align: -.225em; }
 
-.svg-inline--fa.fa-w-1 { width: .0625em; }
+.svg-inline--fa.fa-w-1 {
+  width: .0625em; }
 
-.svg-inline--fa.fa-w-2 { width: .125em; }
+.svg-inline--fa.fa-w-2 {
+  width: .125em; }
 
-.svg-inline--fa.fa-w-3 { width: .1875em; }
+.svg-inline--fa.fa-w-3 {
+  width: .1875em; }
 
-.svg-inline--fa.fa-w-4 { width: .25em; }
+.svg-inline--fa.fa-w-4 {
+  width: .25em; }
 
-.svg-inline--fa.fa-w-5 { width: .3125em; }
+.svg-inline--fa.fa-w-5 {
+  width: .3125em; }
 
-.svg-inline--fa.fa-w-6 { width: .375em; }
+.svg-inline--fa.fa-w-6 {
+  width: .375em; }
 
-.svg-inline--fa.fa-w-7 { width: .4375em; }
+.svg-inline--fa.fa-w-7 {
+  width: .4375em; }
 
-.svg-inline--fa.fa-w-8 { width: .5em; }
+.svg-inline--fa.fa-w-8 {
+  width: .5em; }
 
-.svg-inline--fa.fa-w-9 { width: .5625em; }
+.svg-inline--fa.fa-w-9 {
+  width: .5625em; }
 
-.svg-inline--fa.fa-w-10 { width: .625em; }
+.svg-inline--fa.fa-w-10 {
+  width: .625em; }
 
-.svg-inline--fa.fa-w-11 { width: .6875em; }
+.svg-inline--fa.fa-w-11 {
+  width: .6875em; }
 
-.svg-inline--fa.fa-w-12 { width: .75em; }
+.svg-inline--fa.fa-w-12 {
+  width: .75em; }
 
-.svg-inline--fa.fa-w-13 { width: .8125em; }
+.svg-inline--fa.fa-w-13 {
+  width: .8125em; }
 
-.svg-inline--fa.fa-w-14 { width: .875em; }
+.svg-inline--fa.fa-w-14 {
+  width: .875em; }
 
-.svg-inline--fa.fa-w-15 { width: .9375em; }
+.svg-inline--fa.fa-w-15 {
+  width: .9375em; }
 
-.svg-inline--fa.fa-w-16 { width: 1em; }
+.svg-inline--fa.fa-w-16 {
+  width: 1em; }
 
-.svg-inline--fa.fa-w-17 { width: 1.0625em; }
+.svg-inline--fa.fa-w-17 {
+  width: 1.0625em; }
 
-.svg-inline--fa.fa-w-18 { width: 1.125em; }
+.svg-inline--fa.fa-w-18 {
+  width: 1.125em; }
 
-.svg-inline--fa.fa-w-19 { width: 1.1875em; }
+.svg-inline--fa.fa-w-19 {
+  width: 1.1875em; }
 
-.svg-inline--fa.fa-w-20 { width: 1.25em; }
+.svg-inline--fa.fa-w-20 {
+  width: 1.25em; }
 
 .svg-inline--fa.fa-pull-left {
-    margin-right: .3em;
-    width: auto;
-}
+  margin-right: .3em;
+  width: auto; }
 
 .svg-inline--fa.fa-pull-right {
-    margin-left: .3em;
-    width: auto;
-}
+  margin-left: .3em;
+  width: auto; }
 
-.svg-inline--fa.fa-border { height: 1.5em; }
+.svg-inline--fa.fa-border {
+  height: 1.5em; }
 
-.svg-inline--fa.fa-li { width: 2em; }
+.svg-inline--fa.fa-li {
+  width: 2em; }
 
-.svg-inline--fa.fa-fw { width: 1.25em; }
+.svg-inline--fa.fa-fw {
+  width: 1.25em; }
 
 .fa-layers svg.svg-inline--fa {
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0; }
 
 .fa-layers {
-    display: inline-block;
-    height: 1em;
-    position: relative;
-    text-align: center;
-    vertical-align: -.125em;
-    width: 1em;
-}
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  text-align: center;
+  vertical-align: -.125em;
+  width: 1em; }
 
 .fa-layers svg.svg-inline--fa {
-    -webkit-transform-origin: center center;
-    transform-origin: center center;
-}
+  -webkit-transform-origin: center center;
+  transform-origin: center center; }
 
 .fa-layers-counter, .fa-layers-text {
-    display: inline-block;
-    position: absolute;
-    text-align: center;
-}
+  display: inline-block;
+  position: absolute;
+  text-align: center; }
 
 .fa-layers-text {
-    -webkit-transform: translate(-50%, -50%);
-    -webkit-transform-origin: center center;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    transform-origin: center center;
-}
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  -webkit-transform-origin: center center;
+  transform-origin: center center; }
 
 .fa-layers-counter {
-    -webkit-box-sizing: border-box;
-    -webkit-transform: scale(0.25);
-    -webkit-transform-origin: top right;
-    background-color: #ff253a;
-    border-radius: 1em;
-    box-sizing: border-box;
-    color: #fff;
-    height: 1.5em;
-    line-height: 1;
-    max-width: 5em;
-    min-width: 1.5em;
-    overflow: hidden;
-    padding: .25em;
-    right: 0;
-    text-overflow: ellipsis;
-    top: 0;
-    transform: scale(0.25);
-    transform-origin: top right;
-}
+  background-color: #ff253a;
+  border-radius: 1em;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #fff;
+  height: 1.5em;
+  line-height: 1;
+  max-width: 5em;
+  min-width: 1.5em;
+  overflow: hidden;
+  padding: .25em;
+  right: 0;
+  text-overflow: ellipsis;
+  top: 0;
+  -webkit-transform: scale(0.25);
+  transform: scale(0.25);
+  -webkit-transform-origin: top right;
+  transform-origin: top right; }
 
 .fa-layers-bottom-right {
-    -webkit-transform: scale(0.25);
-    -webkit-transform-origin: bottom right;
-    bottom: 0;
-    right: 0;
-    top: auto;
-    transform: scale(0.25);
-    transform-origin: bottom right;
-}
+  bottom: 0;
+  right: 0;
+  top: auto;
+  -webkit-transform: scale(0.25);
+  transform: scale(0.25);
+  -webkit-transform-origin: bottom right;
+  transform-origin: bottom right; }
 
 .fa-layers-bottom-left {
-    -webkit-transform: scale(0.25);
-    -webkit-transform-origin: bottom left;
-    bottom: 0;
-    left: 0;
-    right: auto;
-    top: auto;
-    transform: scale(0.25);
-    transform-origin: bottom left;
-}
+  bottom: 0;
+  left: 0;
+  right: auto;
+  top: auto;
+  -webkit-transform: scale(0.25);
+  transform: scale(0.25);
+  -webkit-transform-origin: bottom left;
+  transform-origin: bottom left; }
 
 .fa-layers-top-right {
-    -webkit-transform: scale(0.25);
-    -webkit-transform-origin: top right;
-    right: 0;
-    top: 0;
-    transform: scale(0.25);
-    transform-origin: top right;
-}
+  right: 0;
+  top: 0;
+  -webkit-transform: scale(0.25);
+  transform: scale(0.25);
+  -webkit-transform-origin: top right;
+  transform-origin: top right; }
 
 .fa-layers-top-left {
-    -webkit-transform: scale(0.25);
-    -webkit-transform-origin: top left;
-    left: 0;
-    right: auto;
-    top: 0;
-    transform: scale(0.25);
-    transform-origin: top left;
-}
+  left: 0;
+  right: auto;
+  top: 0;
+  -webkit-transform: scale(0.25);
+  transform: scale(0.25);
+  -webkit-transform-origin: top left;
+  transform-origin: top left; }
 
 .fa-lg {
-    font-size: 1.3333333333em;
-    line-height: .75em;
-    vertical-align: -.0667em;
-}
+  font-size: 1.3333333333em;
+  line-height: .75em;
+  vertical-align: -.0667em; }
 
-.fa-xs { font-size: .75em; }
+.fa-xs {
+  font-size: .75em; }
 
-.fa-sm { font-size: .875em; }
+.fa-sm {
+  font-size: .875em; }
 
-.fa-1x { font-size: 1em; }
+.fa-1x {
+  font-size: 1em; }
 
-.fa-2x { font-size: 2em; }
+.fa-2x {
+  font-size: 2em; }
 
-.fa-3x { font-size: 3em; }
+.fa-3x {
+  font-size: 3em; }
 
-.fa-4x { font-size: 4em; }
+.fa-4x {
+  font-size: 4em; }
 
-.fa-5x { font-size: 5em; }
+.fa-5x {
+  font-size: 5em; }
 
-.fa-6x { font-size: 6em; }
+.fa-6x {
+  font-size: 6em; }
 
-.fa-7x { font-size: 7em; }
+.fa-7x {
+  font-size: 7em; }
 
-.fa-8x { font-size: 8em; }
+.fa-8x {
+  font-size: 8em; }
 
-.fa-9x { font-size: 9em; }
+.fa-9x {
+  font-size: 9em; }
 
-.fa-10x { font-size: 10em; }
+.fa-10x {
+  font-size: 10em; }
 
 .fa-fw {
-    text-align: center;
-    width: 1.25em;
-}
+  text-align: center;
+  width: 1.25em; }
 
 .fa-ul {
-    list-style-type: none;
-    margin-left: 2.5em;
-    padding-left: 0;
-}
+  list-style-type: none;
+  margin-left: 2.5em;
+  padding-left: 0; }
 
-.fa-ul > li { position: relative; }
+.fa-ul > li {
+  position: relative; }
 
 .fa-li {
-    left: -2em;
-    line-height: inherit;
-    position: absolute;
-    text-align: center;
-    width: 2em;
-}
+  left: -2em;
+  position: absolute;
+  text-align: center;
+  width: 2em;
+  line-height: inherit; }
 
 .fa-border {
-    border: solid .08em #eee;
-    border-radius: .1em;
-    padding: .2em .25em .15em;
-}
+  border: solid .08em #eee;
+  border-radius: .1em;
+  padding: .2em .25em .15em; }
 
-.fa-pull-left { float: left; }
+.fa-pull-left {
+  float: left; }
 
-.fa-pull-right { float: right; }
+.fa-pull-right {
+  float: right; }
 
-.fa.fa-pull-left, .fab.fa-pull-left, .fal.fa-pull-left, .far.fa-pull-left, .fas.fa-pull-left { margin-right: .3em; }
+.fa.fa-pull-left, .fab.fa-pull-left, .fal.fa-pull-left, .far.fa-pull-left, .fas.fa-pull-left {
+  margin-right: .3em; }
 
-.fa.fa-pull-right, .fab.fa-pull-right, .fal.fa-pull-right, .far.fa-pull-right, .fas.fa-pull-right { margin-left: .3em; }
+.fa.fa-pull-right, .fab.fa-pull-right, .fal.fa-pull-right, .far.fa-pull-right, .fas.fa-pull-right {
+  margin-left: .3em; }
 
 .fa-spin {
-    -webkit-animation: fa-spin 2s infinite linear;
-    animation: fa-spin 2s infinite linear;
-}
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear; }
 
 .fa-pulse {
-    -webkit-animation: fa-spin 1s infinite steps(8);
-    animation: fa-spin 1s infinite steps(8);
-}
+  -webkit-animation: fa-spin 1s infinite steps(8);
+  animation: fa-spin 1s infinite steps(8); }
 
 @-webkit-keyframes fa-spin {
-    0% {
-        -webkit-transform: rotate(0);
-        transform: rotate(0);
-    }
-
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
 
 @keyframes fa-spin {
-    0% {
-        -webkit-transform: rotate(0);
-        transform: rotate(0);
-    }
-
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
+  0% {
+    -webkit-transform: rotate(0);
+    transform: rotate(0); }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
 
 .fa-rotate-90 {
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg);
-}
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg); }
 
 .fa-rotate-180 {
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg);
-}
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg); }
 
 .fa-rotate-270 {
-    -webkit-transform: rotate(270deg);
-    transform: rotate(270deg);
-}
+  -webkit-transform: rotate(270deg);
+  transform: rotate(270deg); }
 
 .fa-flip-horizontal {
-    -webkit-transform: scale(-1, 1);
-    transform: scale(-1, 1);
-}
+  -webkit-transform: scale(-1, 1);
+  transform: scale(-1, 1); }
 
 .fa-flip-vertical {
-    -webkit-transform: scale(1, -1);
-    transform: scale(1, -1);
-}
+  -webkit-transform: scale(1, -1);
+  transform: scale(1, -1); }
 
 .fa-flip-both, .fa-flip-horizontal.fa-flip-vertical {
-    -webkit-transform: scale(-1, -1);
-    transform: scale(-1, -1);
-}
+  -webkit-transform: scale(-1, -1);
+  transform: scale(-1, -1); }
 
 :root .fa-flip-both, :root .fa-flip-horizontal, :root .fa-flip-vertical, :root .fa-rotate-180, :root .fa-rotate-270, :root .fa-rotate-90 {
-    -webkit-filter: none;
-    filter: none;
-}
+  -webkit-filter: none;
+  filter: none; }
 
 .fa-stack {
-    display: inline-block;
-    height: 2em;
-    position: relative;
-    width: 2.5em;
-}
+  display: inline-block;
+  height: 2em;
+  position: relative;
+  width: 2.5em; }
 
 .fa-stack-1x, .fa-stack-2x {
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0; }
 
 .svg-inline--fa.fa-stack-1x {
-    height: 1em;
-    width: 1.25em;
-}
+  height: 1em;
+  width: 1.25em; }
 
 .svg-inline--fa.fa-stack-2x {
-    height: 2em;
-    width: 2.5em;
-}
+  height: 2em;
+  width: 2.5em; }
 
-.fa-inverse { color: #fff; }
+.fa-inverse {
+  color: #fff; }
 
 .sr-only {
-    border: 0;
-    clip: rect(0, 0, 0, 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-}
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px; }
 
 .sr-only-focusable:active, .sr-only-focusable:focus {
-    clip: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    position: static;
-    width: auto;
-}
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto; }
 
 .btn.material {
-    -moz-box-shadow: 0 3px 16px -2px rgba(227, 227, 227, 0.69), 0 2px 10px 0 rgba(186, 186, 186, 0.2) !important;
-    -moz-transition: 0.25s ease-in-out;
-    -ms-transition: 0.25s ease-in-out;
-    -o-transition: 0.25s ease-in-out;
-    -webkit-box-shadow: 0 3px 16px -2px rgba(227, 227, 227, 0.69), 0 2px 10px 0 rgba(186, 186, 186, 0.2) !important;
-    -webkit-transition: 0.25s ease-in-out;
-    border: none;
-    box-shadow: 0 3px 16px -2px rgba(227, 227, 227, 0.69), 0 2px 10px 0 rgba(186, 186, 186, 0.2) !important;
+  border: none;
+  outline: none;
+  text-align: center;
+  -webkit-box-shadow: 0 3px 16px -2px rgba(227, 227, 227, 0.69), 0 2px 10px 0 rgba(186, 186, 186, 0.2) !important;
+  -moz-box-shadow: 0 3px 16px -2px rgba(227, 227, 227, 0.69), 0 2px 10px 0 rgba(186, 186, 186, 0.2) !important;
+  box-shadow: 0 3px 16px -2px rgba(227, 227, 227, 0.69), 0 2px 10px 0 rgba(186, 186, 186, 0.2) !important;
+  -webkit-transition: 0.25s ease-in-out;
+  -moz-transition: 0.25s ease-in-out;
+  -ms-transition: 0.25s ease-in-out;
+  -o-transition: 0.25s ease-in-out;
+  transition: 0.25s ease-in-out; }
+  .btn.material:focus {
     outline: none;
-    text-align: center;
-    transition: 0.25s ease-in-out;
-}
-
-.btn.material:focus {
-    -moz-box-shadow: 0 3px 8px -2px rgba(146, 146, 146, 0.2), 0 2px 10px 0 rgba(63, 63, 63, 0.17) !important;
     -webkit-box-shadow: 0 3px 8px -2px rgba(146, 146, 146, 0.2), 0 2px 10px 0 rgba(63, 63, 63, 0.17) !important;
-    box-shadow: 0 3px 8px -2px rgba(146, 146, 146, 0.2), 0 2px 10px 0 rgba(63, 63, 63, 0.17) !important;
+    -moz-box-shadow: 0 3px 8px -2px rgba(146, 146, 146, 0.2), 0 2px 10px 0 rgba(63, 63, 63, 0.17) !important;
+    box-shadow: 0 3px 8px -2px rgba(146, 146, 146, 0.2), 0 2px 10px 0 rgba(63, 63, 63, 0.17) !important; }
+    .btn.material:focus:not(.outline) {
+      border: none; }
+  .btn.material:not(:disabled):hover {
     outline: none;
-}
-
-.btn.material:focus:not(.outline) { border: none; }
-
-.btn.material:not(:disabled):hover {
-    -moz-box-shadow: 0 8px 12px -4px rgba(146, 146, 146, 0.15), 0 6px 15px -3px rgba(93, 93, 93, 0.2) !important;
     -webkit-box-shadow: 0 8px 12px -4px rgba(146, 146, 146, 0.15), 0 6px 15px -3px rgba(93, 93, 93, 0.2) !important;
-    box-shadow: 0 8px 12px -4px rgba(146, 146, 146, 0.15), 0 6px 15px -3px rgba(93, 93, 93, 0.2) !important;
-    outline: none;
-}
-
-.btn.material:not(:disabled):hover:not(.outline) { border: none; }
-
-.btn.material:not(.outline).blue {
+    -moz-box-shadow: 0 8px 12px -4px rgba(146, 146, 146, 0.15), 0 6px 15px -3px rgba(93, 93, 93, 0.2) !important;
+    box-shadow: 0 8px 12px -4px rgba(146, 146, 146, 0.15), 0 6px 15px -3px rgba(93, 93, 93, 0.2) !important; }
+    .btn.material:not(:disabled):hover:not(.outline) {
+      border: none; }
+  .btn.material:not(.outline).blue {
     background-color: #2979FF;
-    color: white;
-}
-
-.btn.material:not(.outline).indigo {
+    color: white; }
+  .btn.material:not(.outline).indigo {
     background-color: #3d5afe;
-    color: white;
-}
-
-.btn.material:not(.outline).violet {
+    color: white; }
+  .btn.material:not(.outline).violet {
     background-color: #7c4dff;
-    color: white;
-}
-
-.btn.material:not(.outline).purple {
+    color: white; }
+  .btn.material:not(.outline).purple {
     background-color: #e040fb;
-    color: white;
-}
-
-.btn.material:not(.outline).deep-purple {
+    color: white; }
+  .btn.material:not(.outline).deep-purple {
     background-color: #651fff;
-    color: white;
-}
-
-.btn.material:not(.outline).orange {
+    color: white; }
+  .btn.material:not(.outline).orange {
     background-color: #ff6f00;
-    color: white;
-}
-
-.btn.material:not(.outline).success {
+    color: white; }
+  .btn.material:not(.outline).success {
     background-color: #15da93;
-    color: white;
-}
-
-.btn.material:not(.outline).danger {
+    color: white; }
+  .btn.material:not(.outline).danger {
     background-color: #ff4444;
-    color: white;
-}
-
-.btn.material:not(.outline).warning {
+    color: white; }
+  .btn.material:not(.outline).warning {
     background-color: #ffbb33;
-    color: white;
-}
-
-.btn.material:not(.outline).blue-grey {
+    color: white; }
+  .btn.material:not(.outline).blue-grey {
     background-color: #455a64;
-    color: white;
-}
-
-.btn.material:not(.outline).persian-green {
+    color: white; }
+  .btn.material:not(.outline).persian-green {
     background-color: #43c8ba;
-    color: white;
-}
-
-.btn.material.outline {
+    color: white; }
+  .btn.material.outline {
     background-color: transparent;
-    border: 2px solid;
-}
+    border: 2px solid; }
+    .btn.material.outline.blue {
+      border-color: #2979FF;
+      color: #2979FF; }
+    .btn.material.outline.indigo {
+      border-color: #3d5afe;
+      color: #3d5afe; }
+    .btn.material.outline.violet {
+      border-color: #7c4dff;
+      color: #7c4dff; }
+    .btn.material.outline.purple {
+      border-color: #e040fb;
+      color: #e040fb; }
+    .btn.material.outline.deep-purple {
+      border-color: #651fff;
+      color: #651fff; }
+    .btn.material.outline.orange {
+      border-color: #ff6f00;
+      color: #ff6f00; }
+    .btn.material.outline.success {
+      border-color: #15da93;
+      color: #15da93; }
+    .btn.material.outline.danger {
+      border-color: #ff4444;
+      color: #ff4444; }
+    .btn.material.outline.warning {
+      border-color: #ffbb33;
+      color: #ffbb33; }
+    .btn.material.outline.blue-grey {
+      border-color: #455a64;
+      color: #455a64; }
+    .btn.material.outline.persian-green {
+      border-color: #43c8ba;
+      color: #43c8ba; }
 
-.btn.material.outline.blue {
-    border-color: #2979FF;
-    color: #2979FF;
-}
-
-.btn.material.outline.indigo {
-    border-color: #3d5afe;
-    color: #3d5afe;
-}
-
-.btn.material.outline.violet {
-    border-color: #7c4dff;
-    color: #7c4dff;
-}
-
-.btn.material.outline.purple {
-    border-color: #e040fb;
-    color: #e040fb;
-}
-
-.btn.material.outline.deep-purple {
-    border-color: #651fff;
-    color: #651fff;
-}
-
-.btn.material.outline.orange {
-    border-color: #ff6f00;
-    color: #ff6f00;
-}
-
-.btn.material.outline.success {
-    border-color: #15da93;
-    color: #15da93;
-}
-
-.btn.material.outline.danger {
-    border-color: #ff4444;
-    color: #ff4444;
-}
-
-.btn.material.outline.warning {
-    border-color: #ffbb33;
-    color: #ffbb33;
-}
-
-.btn.material.outline.blue-grey {
-    border-color: #455a64;
-    color: #455a64;
-}
-
-.btn.material.outline.persian-green {
-    border-color: #43c8ba;
-    color: #43c8ba;
-}
-
-.btn.loading, .btn.finished, .btn.failed { position: relative; }
-
-.btn.loading::after, .btn.finished::after, .btn.failed::after {
-    -o-animation: buttonLoading 500ms linear infinite;
-    -webkit-animation: buttonLoading 500ms linear infinite;
-    animation: buttonLoading 500ms linear infinite;
-    background: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-sync-alt fa-w-16"><path fill="white" d="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z" class=""></path></svg>');
-    content: '';
-    height: 20px;
+.btn.loading, .btn.finished, .btn.failed {
+  position: relative; }
+  .btn.loading::after, .btn.finished::after, .btn.failed::after {
     position: absolute;
+    width: 20px;
+    height: 20px;
     right: calc(20% - 5px);
     top: calc(50% - 8px);
-    width: 20px;
-}
+    content: '';
+    background: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-sync-alt fa-w-16"><path fill="white" d="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z" class=""></path></svg>');
+    -webkit-animation: buttonLoading 500ms linear infinite;
+    -o-animation: buttonLoading 500ms linear infinite;
+    animation: buttonLoading 500ms linear infinite; }
 
 .btn.finished::after {
-    -o-animation: buttonScale 0.5s linear;
-    -webkit-animation: buttonScale 0.5s linear;
-    animation: buttonScale 0.5s linear;
-    background: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-check fa-w-16 text-light" ><path fill="white" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" class=""></path></svg>');
-}
+  background: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-check fa-w-16 text-light" ><path fill="white" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z" class=""></path></svg>');
+  -webkit-animation: buttonScale 0.5s linear;
+  -o-animation: buttonScale 0.5s linear;
+  animation: buttonScale 0.5s linear; }
 
 .btn.failed::after {
-    -o-animation: buttonScale 0.5s linear;
-    -webkit-animation: buttonScale 0.5s linear;
-    animation: buttonScale 0.5s linear;
-    background: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" class="svg-inline--fa fa-times fa-w-11 fa-3x"><path fill="white" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" class=""></path></svg>') no-repeat;
-    margin: -2px 0 0 0;
-}
+  background: url('data:image/svg+xml;utf8,<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" class="svg-inline--fa fa-times fa-w-11 fa-3x"><path fill="white" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" class=""></path></svg>') no-repeat;
+  margin: -2px 0 0 0;
+  -webkit-animation: buttonScale 0.5s linear;
+  -o-animation: buttonScale 0.5s linear;
+  animation: buttonScale 0.5s linear; }
 
 @-webkit-keyframes buttonLoading {
-    100% {
-        -moz-transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        -o-transform: rotate(360deg);
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg); } }
 
 @-moz-keyframes buttonLoading {
-    100% {
-        -moz-transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        -o-transform: rotate(360deg);
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg); } }
 
 @-ms-keyframes buttonLoading {
-    100% {
-        -moz-transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        -o-transform: rotate(360deg);
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg); } }
 
 @-o-keyframes buttonLoading {
-    100% {
-        -moz-transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        -o-transform: rotate(360deg);
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg); } }
 
 @keyframes buttonLoading {
-    100% {
-        -moz-transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        -o-transform: rotate(360deg);
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg); } }
 
 @-webkit-keyframes buttonScale {
-    0% {
-        -moz-transform: scale(10);
-        -ms-transform: scale(10);
-        -o-transform: scale(10);
-        -webkit-transform: scale(10);
-        transform: scale(10);
-    }
-
-    50% {
-        -moz-transform: scale(0.2);
-        -ms-transform: scale(0.2);
-        -o-transform: scale(0.2);
-        -webkit-transform: scale(0.2);
-        transform: scale(0.2);
-    }
-
-    70% {
-        -moz-transform: scale(1.2);
-        -ms-transform: scale(1.2);
-        -o-transform: scale(1.2);
-        -webkit-transform: scale(1.2);
-        transform: scale(1.2);
-    }
-
-    90% {
-        -moz-transform: scale(0.7);
-        -ms-transform: scale(0.7);
-        -o-transform: scale(0.7);
-        -webkit-transform: scale(0.7);
-        transform: scale(0.7);
-    }
-
-    100% {
-        -moz-transform: scale(1);
-        -ms-transform: scale(1);
-        -o-transform: scale(1);
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
-}
+  0% {
+    -webkit-transform: scale(10);
+    -moz-transform: scale(10);
+    -ms-transform: scale(10);
+    -o-transform: scale(10);
+    transform: scale(10); }
+  50% {
+    -webkit-transform: scale(0.2);
+    -moz-transform: scale(0.2);
+    -ms-transform: scale(0.2);
+    -o-transform: scale(0.2);
+    transform: scale(0.2); }
+  70% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2); }
+  90% {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    transform: scale(0.7); }
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1); } }
 
 @-moz-keyframes buttonScale {
-    0% {
-        -moz-transform: scale(10);
-        -ms-transform: scale(10);
-        -o-transform: scale(10);
-        -webkit-transform: scale(10);
-        transform: scale(10);
-    }
-
-    50% {
-        -moz-transform: scale(0.2);
-        -ms-transform: scale(0.2);
-        -o-transform: scale(0.2);
-        -webkit-transform: scale(0.2);
-        transform: scale(0.2);
-    }
-
-    70% {
-        -moz-transform: scale(1.2);
-        -ms-transform: scale(1.2);
-        -o-transform: scale(1.2);
-        -webkit-transform: scale(1.2);
-        transform: scale(1.2);
-    }
-
-    90% {
-        -moz-transform: scale(0.7);
-        -ms-transform: scale(0.7);
-        -o-transform: scale(0.7);
-        -webkit-transform: scale(0.7);
-        transform: scale(0.7);
-    }
-
-    100% {
-        -moz-transform: scale(1);
-        -ms-transform: scale(1);
-        -o-transform: scale(1);
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
-}
+  0% {
+    -webkit-transform: scale(10);
+    -moz-transform: scale(10);
+    -ms-transform: scale(10);
+    -o-transform: scale(10);
+    transform: scale(10); }
+  50% {
+    -webkit-transform: scale(0.2);
+    -moz-transform: scale(0.2);
+    -ms-transform: scale(0.2);
+    -o-transform: scale(0.2);
+    transform: scale(0.2); }
+  70% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2); }
+  90% {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    transform: scale(0.7); }
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1); } }
 
 @-ms-keyframes buttonScale {
-    0% {
-        -moz-transform: scale(10);
-        -ms-transform: scale(10);
-        -o-transform: scale(10);
-        -webkit-transform: scale(10);
-        transform: scale(10);
-    }
-
-    50% {
-        -moz-transform: scale(0.2);
-        -ms-transform: scale(0.2);
-        -o-transform: scale(0.2);
-        -webkit-transform: scale(0.2);
-        transform: scale(0.2);
-    }
-
-    70% {
-        -moz-transform: scale(1.2);
-        -ms-transform: scale(1.2);
-        -o-transform: scale(1.2);
-        -webkit-transform: scale(1.2);
-        transform: scale(1.2);
-    }
-
-    90% {
-        -moz-transform: scale(0.7);
-        -ms-transform: scale(0.7);
-        -o-transform: scale(0.7);
-        -webkit-transform: scale(0.7);
-        transform: scale(0.7);
-    }
-
-    100% {
-        -moz-transform: scale(1);
-        -ms-transform: scale(1);
-        -o-transform: scale(1);
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
-}
+  0% {
+    -webkit-transform: scale(10);
+    -moz-transform: scale(10);
+    -ms-transform: scale(10);
+    -o-transform: scale(10);
+    transform: scale(10); }
+  50% {
+    -webkit-transform: scale(0.2);
+    -moz-transform: scale(0.2);
+    -ms-transform: scale(0.2);
+    -o-transform: scale(0.2);
+    transform: scale(0.2); }
+  70% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2); }
+  90% {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    transform: scale(0.7); }
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1); } }
 
 @-o-keyframes buttonScale {
-    0% {
-        -moz-transform: scale(10);
-        -ms-transform: scale(10);
-        -o-transform: scale(10);
-        -webkit-transform: scale(10);
-        transform: scale(10);
-    }
-
-    50% {
-        -moz-transform: scale(0.2);
-        -ms-transform: scale(0.2);
-        -o-transform: scale(0.2);
-        -webkit-transform: scale(0.2);
-        transform: scale(0.2);
-    }
-
-    70% {
-        -moz-transform: scale(1.2);
-        -ms-transform: scale(1.2);
-        -o-transform: scale(1.2);
-        -webkit-transform: scale(1.2);
-        transform: scale(1.2);
-    }
-
-    90% {
-        -moz-transform: scale(0.7);
-        -ms-transform: scale(0.7);
-        -o-transform: scale(0.7);
-        -webkit-transform: scale(0.7);
-        transform: scale(0.7);
-    }
-
-    100% {
-        -moz-transform: scale(1);
-        -ms-transform: scale(1);
-        -o-transform: scale(1);
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
-}
+  0% {
+    -webkit-transform: scale(10);
+    -moz-transform: scale(10);
+    -ms-transform: scale(10);
+    -o-transform: scale(10);
+    transform: scale(10); }
+  50% {
+    -webkit-transform: scale(0.2);
+    -moz-transform: scale(0.2);
+    -ms-transform: scale(0.2);
+    -o-transform: scale(0.2);
+    transform: scale(0.2); }
+  70% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2); }
+  90% {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    transform: scale(0.7); }
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1); } }
 
 @keyframes buttonScale {
-    0% {
-        -moz-transform: scale(10);
-        -ms-transform: scale(10);
-        -o-transform: scale(10);
-        -webkit-transform: scale(10);
-        transform: scale(10);
-    }
-
-    50% {
-        -moz-transform: scale(0.2);
-        -ms-transform: scale(0.2);
-        -o-transform: scale(0.2);
-        -webkit-transform: scale(0.2);
-        transform: scale(0.2);
-    }
-
-    70% {
-        -moz-transform: scale(1.2);
-        -ms-transform: scale(1.2);
-        -o-transform: scale(1.2);
-        -webkit-transform: scale(1.2);
-        transform: scale(1.2);
-    }
-
-    90% {
-        -moz-transform: scale(0.7);
-        -ms-transform: scale(0.7);
-        -o-transform: scale(0.7);
-        -webkit-transform: scale(0.7);
-        transform: scale(0.7);
-    }
-
-    100% {
-        -moz-transform: scale(1);
-        -ms-transform: scale(1);
-        -o-transform: scale(1);
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
-}
+  0% {
+    -webkit-transform: scale(10);
+    -moz-transform: scale(10);
+    -ms-transform: scale(10);
+    -o-transform: scale(10);
+    transform: scale(10); }
+  50% {
+    -webkit-transform: scale(0.2);
+    -moz-transform: scale(0.2);
+    -ms-transform: scale(0.2);
+    -o-transform: scale(0.2);
+    transform: scale(0.2); }
+  70% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2); }
+  90% {
+    -webkit-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -ms-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    transform: scale(0.7); }
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1); } }
 
 /*! Ripple.js v1.2.1
  * The MIT License (MIT)
  * Copyright (c) 2014 Jacob Kelley */
-
 .has-ripple {
-    -o-transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
-    overflow: hidden;
-    position: relative;
-    transform: translate3d(0, 0, 0);
-}
+  position: relative;
+  overflow: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 .ripple {
-    -o-transform: scale(0);
-    -webkit-transform: scale(0);
-    background: #fff;
-    border-radius: 50%;
-    display: block;
-    opacity: 1;
-    pointer-events: none;
-    position: absolute;
-    transform: scale(0);
-}
+  display: block;
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  -webkit-transform: scale(0);
+  -o-transform: scale(0);
+  transform: scale(0);
+  background: #fff;
+  opacity: 1; }
 
 .ripple-animate {
-    -o-animation: ripple;
-    -webkit-animation: ripple;
-    animation: ripple;
-}
+  -webkit-animation: ripple;
+  -o-animation: ripple;
+  animation: ripple; }
 
 @-webkit-keyframes ripple {
-    100% {
-        -webkit-transform: scale(2);
-        opacity: 0;
-        transform: scale(2);
-    }
-}
+  100% {
+    opacity: 0;
+    -webkit-transform: scale(2);
+    transform: scale(2); } }
 
 @-o-keyframes ripple {
-    100% {
-        -o-transform: scale(2);
-        opacity: 0;
-        transform: scale(2);
-    }
-}
+  100% {
+    opacity: 0;
+    -o-transform: scale(2);
+    transform: scale(2); } }
 
 @keyframes ripple {
-    100% {
-        opacity: 0;
-        transform: scale(2);
-    }
-}
+  100% {
+    opacity: 0;
+    transform: scale(2); } }

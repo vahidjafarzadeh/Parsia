@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DataLayer.Base;
 using DataLayer.Context;
@@ -13,10 +14,12 @@ using Parsia.Core.UseCaseAction;
 
 namespace Parsia.Core.UseCase
 {
+    [ClassDetails(Clazz = "UseCase", Facade = "UseCaseFacade")]
     public class UseCaseFacade : IBaseFacade<UseCaseDto>
     {
         private static readonly UseCaseFacade Facade = new UseCaseFacade();
         private static readonly UseCaseCopier Copier = new UseCaseCopier();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(UseCaseFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         private UseCaseFacade()
         {
@@ -24,17 +27,18 @@ namespace Parsia.Core.UseCase
 
         public ServiceResult<object> GridView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.UseCase.UseCase>();
                 var queryString = $"select entityId,useCaseName,clazz,tableName,uName as parent,ParentId,createBy,accessKey,fullTitle,deleted from (select * from (select EntityId as entityId, UseCaseName as useCaseName, Clazz as clazz, TableName as tableName, ParentId, CreateBy as createBy, FullTitle as fullTitle, AccessKey As accessKey, Deleted as deleted from {tableName} where code <> 'ADMIN') as currentUseCase left join(select EntityId as eId, UseCaseName as uName from {tableName}) as parentUseCase on currentUseCase.ParentId = parentUseCase.eId) e" +
                     QueryUtil.GetWhereClause(bp.Clause,
-                        QueryUtil.GetConstraintForNativeQuery(bp, "UseCase", false, false, true)) +
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
                     QueryUtil.GetOrderByClause(bp.Clause);
                 queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var comboList = unitOfWork.ComboVal.CreateNativeQuery(queryString, x => new[]
+                    var useCaseList = unitOfWork.UseCase.CreateNativeQuery(queryString, x => new[]
                     {
                         x[0] != null ? Convert.ToInt32(x[0]) : (object) null,
                         x[1] != null ? Convert.ToInt64(x[1]) : (object) null,
@@ -43,23 +47,24 @@ namespace Parsia.Core.UseCase
                         x[4]?.ToString(),
                         x[5]?.ToString()
                     });
-                    if (comboList.Count == 0)
+                    if (useCaseList.Count == 0)
                         return new ServiceResult<object>(new List<UseCaseDto>(), 0);
                     var list = new List<object>();
                     var headerTitle = new object[] { "entityId", "useCaseName", "clazz", "tableName", "parent" };
                     list.Add(headerTitle);
-                    list.AddRange(comboList);
-                    return new ServiceResult<object>(list, comboList.Count);
+                    list.AddRange(useCaseList);
+                    return new ServiceResult<object>(list, useCaseList.Count);
                 }
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UseCaseFacade.GridView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> Save(BusinessParam bp, UseCaseDto dto)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 if (dto.Parent == null)
@@ -122,17 +127,18 @@ namespace Parsia.Core.UseCase
                     }
 
                 }
-                Elastic<UseCaseDto, DataLayer.Model.Core.UseCase.UseCase>.SaveToElastic(useCase, "UseCase", bp);
+                Elastic<UseCaseDto, DataLayer.Model.Core.UseCase.UseCase>.SaveToElastic(useCase, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(Copier.GetDto(useCase), 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UseCaseFacade.Save", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> ShowRow(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             long entityId = 0;
             foreach (var where in bp.Clause.Wheres.Where(where =>
                 where.Key.Equals("entityId") && where.Value != null && !where.Value.Equals("")))
@@ -141,7 +147,7 @@ namespace Parsia.Core.UseCase
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "UseCaseFacade.ShowRow",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var context = new ParsiContext())
                 {
@@ -158,12 +164,13 @@ namespace Parsia.Core.UseCase
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UseCaseFacade.ShowRow", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> Delete(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             long entityId = 0;
             foreach (var where in bp.Clause.Wheres.Where(where =>
                 where.Key.Equals("entityId") && where.Value != null && !where.Value.Equals("")))
@@ -172,7 +179,7 @@ namespace Parsia.Core.UseCase
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "UseCaseFacade.Delete",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 DataLayer.Model.Core.UseCase.UseCase useCase;
                 using (var unitOfWork = new UnitOfWork())
@@ -181,7 +188,7 @@ namespace Parsia.Core.UseCase
                 }
 
                 if (useCase == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "UseCaseFacade.Delete",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
                 useCase.Deleted = useCase.EntityId;
@@ -190,27 +197,28 @@ namespace Parsia.Core.UseCase
                     unitOfWork.UseCase.Update(useCase);
                     unitOfWork.UseCase.Save();
                 }
-                Elastic<UseCaseDto, DataLayer.Model.Core.UseCase.UseCase>.SaveToElastic(useCase, "UseCase", bp);
+                Elastic<UseCaseDto, DataLayer.Model.Core.UseCase.UseCase>.SaveToElastic(useCase, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UseCaseFacade.Delete", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.UseCase.UseCase>();
-                var queryString = $"select * from (select EntityId as entityId,UseCaseName as useCaseName,Clazz as clazz,TableName as tableName,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey,Deleted as deleted from {tableName}  where code <> 'ADMIN') e" +
+                var queryString = $"select * from (select EntityId as entityId,UseCaseName as useCaseName,Clazz as clazz,TableName as tableName,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey,Deleted as deleted from {tableName}) e" +
                                   QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, "UseCase", false, false, true)) +
+                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var comboList = unitOfWork.UseCase.CreateNativeQuery(queryString, x => new UseCaseDto()
+                    var useCaseList = unitOfWork.UseCase.CreateNativeQuery(queryString, x => new UseCaseDto()
                     {
                         EntityId = Convert.ToInt64(x[0].ToString()),
                         UseCaseName = x[1]?.ToString(),
@@ -218,14 +226,14 @@ namespace Parsia.Core.UseCase
                         TableName = x[3]?.ToString(),
                         FullTitle = x[4]?.ToString()
                     });
-                    return comboList.Count == 0
+                    return useCaseList.Count == 0
                         ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکوردی یافت نشد")
-                        : new ServiceResult<object>(comboList, comboList.Count);
+                        : new ServiceResult<object>(useCaseList, useCaseList.Count);
                 }
             }
             catch (Exception ex)
             {
-                return ExceptionUtil.ExceptionHandler(ex, "UseCaseFacade.AutocompleteView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
@@ -259,6 +267,7 @@ namespace Parsia.Core.UseCase
         }
         public ServiceResult<object> GetTotalUseCase(BusinessParam bp, bool getAllData, string search, string pageNumber)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
 
@@ -276,7 +285,7 @@ namespace Parsia.Core.UseCase
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UseCaseFacade.ShowRow", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 

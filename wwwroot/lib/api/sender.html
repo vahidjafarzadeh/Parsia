@@ -1,0 +1,46 @@
+<html>
+<head>
+<script src="/lib/api/cookie.js"></script>
+<script src="/lib/api/config.js"></script>
+<script src="/lib/api/environment.js"></script>
+<script src="/lib/api/storage.js"></script>
+<script src="/lib/api/util.js"></script>
+
+<script>
+	//debugger;
+	//var domain = 'http://localhost:4040' || "*" ;
+	var d =  "*" ;
+	
+	var m = '{"ticket":"' + getTicket() +'"}';
+
+	try{
+		top.postMessage(m,d); //send the message and target URI
+		console.log(m);
+	
+	}catch(e){
+	console.log('no message sent');
+	}
+		
+	function getTicket() {
+	    var user = Storage.getUserInfo();
+	    if (user == null) {
+            return null;
+	    }
+	    var currentDate = new Date().getTime();
+
+	    if (!diffTime(currentDate, user.timestamp, Config.USER_TIMEOUT)) {
+	        try {
+	        	removeUserInfo();
+	        } catch (e) {
+	            Log('************')
+	        }
+	        return null;
+	    }
+	    return user.getTicket();
+	}
+
+</script>
+</head>
+<body></body>
+</html>
+

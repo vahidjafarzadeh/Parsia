@@ -1,23 +1,25 @@
 'use strict';
 var localVariables = {
-        URLs: {
-            services: {
-                showRow: 'organization/showRow',
-                save: 'organization/save',
-                autocompleteView:"organization/autocompleteView"
-            }
-        },
-        Config: {
-            CKEditor: {
-                aboutUs: {
-                    language : 'fa',
-                    uiColor : '#f5f5f5',
-                    height : 500
-                }
+    lockAble: false,
+    clazzName: "Organization",
+    URLs: {
+        services: {
+            showRow: 'organization/showRow',
+            save: 'organization/save',
+            autocompleteView: "organization/autocompleteView"
+        }
+    },
+    Config: {
+        CKEditor: {
+            aboutUs: {
+                language: 'fa',
+                uiColor: '#f5f5f5',
+                height: 500
             }
         }
-    };
-let localInitListeners = ()=>{
+    }
+};
+let localInitListeners = () => {
 
 }
 let localInitViews = function () {
@@ -125,8 +127,7 @@ $(document).ready(function () {
     Storage.setPageNeedLogin(true);
     if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
         SSO.init();
-    }
-    else {
+    } else {
         initLocalVariables(localVariables);
         localInitViews();
         initAutoCompletes();

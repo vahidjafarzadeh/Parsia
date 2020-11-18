@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DataLayer.Base;
 using DataLayer.Context;
@@ -13,25 +14,29 @@ using Parsia.Core.Elastic;
 
 namespace Parsia.Core.Person
 {
+    [ClassDetails(Clazz = "Person", Facade = "PersonFacade")]
     public class PersonFacade : IBaseFacade<PersonDto>
     {
         private static readonly PersonFacade Facade = new PersonFacade();
         private static readonly PersonCopier Copier = new PersonCopier();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(PersonFacade).GetCustomAttributes(typeof(ClassDetails), true);
         private PersonFacade()
         {
         }
         public ServiceResult<object> GridView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Person.Person>();
-                var queryString = "select * from (select ROW_NUMBER() OVER (ORDER BY entityId) as rowNumber,entityId,firstName,lastName,NationalCode,fatherName,birthDate,deleted,fullTitle,createBy,accessKey from "+tableName+" where Code <> 'ADMIN') e " +
+                var queryString = $"select * from (select entityId,firstName,lastName,NationalCode,fatherName,birthDate,deleted,fullTitle,createBy,accessKey from {tableName} where Code <> 'ADMIN') e " +
                     QueryUtil.GetWhereClause(bp.Clause,
-                        QueryUtil.GetConstraintForNativeQuery(bp, "Person", false, false, true)) +
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
                     QueryUtil.GetOrderByClause(bp.Clause);
+                queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var comboList = unitOfWork.Person.CreateNativeQuery(queryString, x => new[]
+                    var personList = unitOfWork.Person.CreateNativeQuery(queryString, x => new[]
                     {
                         x[0] != null ? Convert.ToInt32(x[0]) : (object) null,
                         x[1] != null ? Convert.ToInt64(x[1]) : (object) null,
@@ -41,22 +46,23 @@ namespace Parsia.Core.Person
                         x[5]?.ToString(),
                        (Util.GetTimeStamp(string.IsNullOrEmpty(x[6]?.ToString()) ?  (DateTime?) null : Convert.ToDateTime(x[6].ToString())))
                     });
-                    if (comboList.Count == 0)
+                    if (personList.Count == 0)
                         return new ServiceResult<object>(new List<PersonDto>(),0);
                     var list = new List<object>();
                     var headerTitle = new object[] { "entityId", "firstName", "lastName", "nationalCode", "fatherName", "birthDate" };
                     list.Add(headerTitle);
-                    list.AddRange(comboList);
-                    return new ServiceResult<object>(list, comboList.Count);
+                    list.AddRange(personList);
+                    return new ServiceResult<object>(list, personList.Count);
                 }
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "PersonFacade.GridView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
         public ServiceResult<object> Save(BusinessParam bp, PersonDto dto)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 DataLayer.Model.Core.Person.Person person;
@@ -74,16 +80,17 @@ namespace Parsia.Core.Person
                         unitOfWork.Person.Update(person);
                         unitOfWork.Person.Save();
                     }
-                Elastic<PersonDto, DataLayer.Model.Core.Person.Person>.SaveToElastic(person, "Person", bp);
+                Elastic<PersonDto, DataLayer.Model.Core.Person.Person>.SaveToElastic(person, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(Copier.GetDto(person), 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "PersonFacade.Save", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
         public ServiceResult<object> ShowRow(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             long entityId = 0;
             foreach (var where in bp.Clause.Wheres.Where(where =>
                 where.Key.Equals("entityId") && where.Value != null && !where.Value.Equals("")))
@@ -92,7 +99,7 @@ namespace Parsia.Core.Person
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "PersonFacade.ShowRow",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var context = new ParsiContext())
                 {
@@ -112,20 +119,22 @@ namespace Parsia.Core.Person
                         .Include(p=>p.CurrentSubReligion)
                         .Include(p=>p.CreateUserEntity)
                         .Include(p=>p.UpdateUserEntity)
+                        .IgnoreQueryFilters()
                         .ToList();
-                    return person == null
+                    return person.Count == 0
                         ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکورد یافت نشد")
                         : new ServiceResult<object>(Copier.GetDto(person[0]), 1);
                 }
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "PersonFacade.ShowRow", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> Delete(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             long entityId = 0;
             foreach (var where in bp.Clause.Wheres.Where(where =>
                 where.Key.Equals("entityId") && where.Value != null && !where.Value.Equals("")))
@@ -134,7 +143,7 @@ namespace Parsia.Core.Person
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "PersonFacade.Delete",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 DataLayer.Model.Core.Person.Person person;
                 using (var unitOfWork = new UnitOfWork())
@@ -143,7 +152,7 @@ namespace Parsia.Core.Person
                 }
 
                 if (person == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "PersonFacade.Delete",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
                 person.Deleted = person.EntityId;
@@ -152,42 +161,43 @@ namespace Parsia.Core.Person
                     unitOfWork.Person.Update(person);
                     unitOfWork.Person.Save();
                 }
-                Elastic<PersonDto, DataLayer.Model.Core.Person.Person>.SaveToElastic(person, "Person", bp);
+                Elastic<PersonDto, DataLayer.Model.Core.Person.Person>.SaveToElastic(person, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "PersonFacade.Delete", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Person.Person>();
                 var queryString = $"select * from (select EntityId as entityId,FirstName as firstName,LastName as lastName,FullTitle as fullTitle,Deleted as deleted,AccessKey as accessKey,CreateBy as createBy from {tableName}) e" +
                                   QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, "Person", true, false, true)) +
+                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, true, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var comboList = unitOfWork.Person.CreateNativeQuery(queryString, x => new Dictionary<string,object>()
+                    var personList = unitOfWork.Person.CreateNativeQuery(queryString, x => new Dictionary<string,object>()
                     {
                         {"entityId",Convert.ToInt64(x[0].ToString()) },
-                        {"fullName",$"{x[1]?.ToString()} {x[2]?.ToString()}" },
-                        {"firstName",$"{x[1]?.ToString()}" },
-                        {"lastName",$"{x[2]?.ToString()}" },
+                        {"fullName",$"{x[1]} {x[2]}" },
+                        {"firstName",$"{x[1]}" },
+                        {"lastName",$"{x[2]}" },
                         {"fullTitle",x[3]?.ToString() }
                     });
-                    return comboList.Count == 0
+                    return personList.Count == 0
                         ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکوردی یافت نشد")
-                        : new ServiceResult<object>(comboList, comboList.Count);
+                        : new ServiceResult<object>(personList, personList.Count);
                 }
             }
             catch (Exception ex)
             {
-                return ExceptionUtil.ExceptionHandler(ex, "PersonFacade.AutocompleteView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
@@ -200,7 +210,6 @@ namespace Parsia.Core.Person
             if (!string.IsNullOrEmpty(request.Form["birthPlace"])) dto.BirthPlace = request.Form["birthPlace"]; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا محل تولد را وارد نمایید");
             if (!string.IsNullOrEmpty(request.Form["birthDate"])) dto.BirthDate = Convert.ToDouble(request.Form["birthDate"]) ; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا تاریخ تولد را وارد نمایید");
             if (!string.IsNullOrEmpty(request.Form["EntityId"]))dto.EntityId = Convert.ToInt64(request.Form["EntityId"]);
-            if (!string.IsNullOrEmpty(request.Form["Code"])) dto.Code = request.Form["Code"];
             if (!string.IsNullOrEmpty(request.Form["Active"])) dto.Active = Convert.ToBoolean(request.Form["Active"]);
             if (!string.IsNullOrEmpty(request.Form["Ticket"])) dto.Ticket = request.Form["Ticket"];
             if (!string.IsNullOrEmpty(request.Form["persianCode"])) dto.PersianCode = request.Form["persianCode"];

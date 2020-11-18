@@ -2,6 +2,7 @@
 var localVariables;
 function setLocalVariables() {
     localVariables = {
+        clazzName: "Organization",
         URLs: {
             services: {
                 gridView: 'organization/gridView',
@@ -16,5 +17,10 @@ function localPageReady() {
     onPageReady();
 }
 $(document).ready(function () {
-    localPageReady();
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        localPageReady();
+    }
 });

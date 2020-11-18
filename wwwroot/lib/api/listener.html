@@ -1,0 +1,57 @@
+<html>
+<head>
+<script src="/lib/api/cookie.js"></script>
+
+<script>
+	/* var c = 'farshad';
+	setCookie('mega', c, 150);
+	alert(c); */
+	var user = getUser();
+	
+	function getUser() {
+	    var user = getLocalStorageItem('user');
+	    if (user == null) {
+	        if (location.href.indexOf('/login') == -1) {//اگر در صفحه لاگین نباشیم صفحه لاگین را نشان بدهد
+	            alert('showLoginPage()');
+	            return null;
+	        }
+	        else
+	            return null;
+	    }
+	    var currentDate = new Date().getTime();
+
+	    if (!diffTime(currentDate, user.timestamp, user.expireMinute)) {
+	        try {
+	            removeLocalStorageItem(key);
+	        } catch (e) {
+	            Log('************')
+	        }
+	        return null;
+	    }
+	    // Action codes to check
+	    user.action_insert = 1;
+	    user.action_update = 2;
+	    user.action_delete = 3;
+	    user.action_search = 4;
+	    user.action_view = 5;
+	    user.action_print = 6;
+	    user.action_export_excel = 7;
+	    user.action_export_PDF = 8;
+	    user.action_view_count_all = 9;
+	    user.action_approve = 10;
+	    user.action_reject = 11;
+	    user.action_show_in_menu = 12;
+
+	    user.hasAccess = function (usecase, action) {
+	        var act = user.access[usecase];
+	        return act != null && (act | (Math.pow(2, action))) == act;
+	    }
+	    return user;
+	}
+
+</script>
+</head>
+<body>
+</body>
+</html>
+

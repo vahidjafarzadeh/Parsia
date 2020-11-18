@@ -1,6 +1,8 @@
 'use strict';
 
 var localVariables = {
+    lockAble: false,
+    clazzName: "EntityState",
     URLs: {
         services: {
             showRow: 'entitystate/showRow',
@@ -58,11 +60,13 @@ var initAutoCompletes = function () {
     userLockerAutocomplete.init(userLockerAutocompleteConf);
 
 };
-
 $(document).ready(function () {
-
-    initLocalVariables(localVariables);
-    initAutoCompletes();
-    onPageReady();
-
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initLocalVariables(localVariables);
+        initAutoCompletes();
+        onPageReady();
+    }
 });

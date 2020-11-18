@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DataLayer.Tools;
 using Datalayer.UnitOfWork;
@@ -8,10 +9,12 @@ using Parsia.Core.RoleAccessGroup;
 
 namespace Parsia.Core.roleAccessGroup
 {
+    [ClassDetails(Clazz = "RoleAccessGroup", Facade = "RoleAccessGroupFacade")]
     public class RoleAccessGroupFacade
     {
         private static readonly RoleAccessGroupFacade Facade = new RoleAccessGroupFacade();
         private static readonly RoleAccessGroupCopier Copier = new RoleAccessGroupCopier();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(RoleAccessGroupFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         public static RoleAccessGroupFacade GetInstance()
         {
@@ -23,6 +26,7 @@ namespace Parsia.Core.roleAccessGroup
 
         public ServiceResult<object> SaveList(BusinessParam bp, List<RoleAccessGroupDto> lstDto)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
 
@@ -43,17 +47,18 @@ namespace Parsia.Core.roleAccessGroup
                             unitOfWork.RoleAccessGroup.Update(accessGroup);
                             unitOfWork.RoleAccessGroup.Save();
                         }
-                    Elastic<RoleAccessGroupDto, DataLayer.Model.Core.RoleAccessGroup.RoleAccessGroup>.SaveToElastic(accessGroup, "RoleAccessGroup", bp);
+                    Elastic<RoleAccessGroupDto, DataLayer.Model.Core.RoleAccessGroup.RoleAccessGroup>.SaveToElastic(accessGroup, ClassDetails[0].Clazz, bp);
                 }
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "RoleAccessGroupFacade.Save", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
         public ServiceResult<object> DeletedList(BusinessParam bp, long roleId)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 using (var unitOfWork = new UnitOfWork())
@@ -62,7 +67,7 @@ namespace Parsia.Core.roleAccessGroup
                     foreach (var item in accessGroups)
                     {
                         unitOfWork.RoleAccessGroup.Delete(item);
-                        Elastic<RoleAccessGroupDto, DataLayer.Model.Core.RoleAccessGroup.RoleAccessGroup>.SaveToElastic(item, "RoleAccessGroup", bp);
+                        Elastic<RoleAccessGroupDto, DataLayer.Model.Core.RoleAccessGroup.RoleAccessGroup>.SaveToElastic(item, ClassDetails[0].Clazz, bp);
                     }
                     unitOfWork.UseCaseActionAccessGroup.Save();
                 }
@@ -70,7 +75,7 @@ namespace Parsia.Core.roleAccessGroup
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "RoleAccessGroupFacade.DeletedList", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 

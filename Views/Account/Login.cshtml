@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "ورود به سایت";
+    ViewBag.Description = "ورود به سایت";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+}
+
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <p class="ir">لطفا تا بارگزاری صفحه شکیبا باشید ...</p>
+    </div>
+</div>
+
+<div class="login-box">
+    <div class="card mb-4 role-box" style="display: none">
+        <div class="body">
+            <div class="logo">
+                <a href="/">
+                    <img class="log-image" src="/images/application/logo.png" alt="logo of site" />
+                </a>
+                <small class="cursor-defult">انتخاب دسترسی</small>
+            </div>
+            <div class="row m-0 container-role">
+            </div>
+        </div>
+    </div>
+    <div class="card logged-box">
+        <div class="body">
+            <div class="logo">
+                <a href="/">
+                    <img class="log-image" src="/images/application/logo.png" alt="logo of site" />
+                </a>
+                <small class="cursor-defult">ورود به سایت</small>
+            </div>
+            <div class="row m-0">
+                <div class="form-group floating-form-group col-12 col-lg-12">
+                    <input type="text" class="form-control form-control-sm floating-form-control float text-left" id="username"
+                           max-length="100" required="" tabindex="1">
+                    <span class="floating-form-bar"></span>
+                    <label for="username" class="floating-label">
+                        <i class="fas fa-user icon"></i><span>نام کاربری (شماره همراه یا ایمیل)</span>
+                    </label>
+                </div>
+                <div class="form-group floating-form-group col-12 col-lg-12">
+                    <input type="password" class="form-control form-control-sm floating-form-control float text-left" id="password"
+                           max-length="100" ksun-input-type="text" tabindex="2" required="">
+                    <span class="floating-form-bar"></span>
+                    <label for="password" class="floating-label">
+                        <i class="fas fa-lock icon"></i><span>کلمه عبور</span>
+                    </label>
+                </div>
+                <div class="form-group floating-form-group col-8 col-lg-8">
+                    <input type="text" class="form-control form-control-sm floating-form-control float text-left" id="captcha"
+                           length="4" tabindex="3" required="">
+                    <span class="floating-form-bar"></span>
+                    <label for="captcha" class="floating-label">
+                        <i class="fas fa-code icon"></i><span>کد امنیتی</span>
+                    </label>
+                </div>
+                <div class="form-group floating-form-group col-4 col-lg-4 p-0">
+                    <div id="container-captcha">
+
+                    </div>
+                </div>
+                <div class="form-group floating-form-group col-12 col-lg-12">
+                    <div class="form-group floating-form-group col-12 floating-form-checkbox-wrapper pt-0">
+                        <input class="form-control form-control-sm floating-form-control input" tabindex="4" type="checkbox" id="remember">
+                        <label class="floating-form-checkbox lbl lbl-checkbox" for="remember"></label>
+                        <label class="floating-form-checkbox-label lbl lbl-text" for="remember">مرا به خاطر بسپار ؟</label>
+                    </div>
+                </div>
+                <div class="form-group floating-form-group col-12 col-lg-12 pt-0 pb-0 pr-1 pl-1">
+                    <button class="btn btn-sm success material f-w" id="btn-login"><i class="fas fa-sign-out-alt btn-icon"></i><span class="btn-title">ورود</span></button>
+                </div>
+                <div class="form-group floating-form-group col-6 col-lg-6  pt-0 pb-0 pr-1 pl-1">
+                    <button class="btn btn-sm danger material f-w" type="submit"><i class="fab fa-google-plus-g btn-icon"></i><span class="btn-title">ورود با گوگل</span></button>
+                </div>
+                <div class="form-group floating-form-group col-6 col-lg-6  pt-0 pb-0 pr-1 pl-1">
+                    <button class="btn btn-sm blue  material f-w" type="submit"><i class="fab fa-facebook-square btn-icon"></i><span class="btn-title">ورود با فیسبوک</span></button>
+                </div>
+                <div class="form-group floating-form-group col-6 col-lg-6  pt-0 pb-0 pr-1 pl-1 o-h">
+                    <a href="/" class="btn btn-sm purple  material f-w" type="submit"><i class="fas fa-reply-all btn-icon"></i><span class="btn-title">بازگشت به سایت</span></a>
+                </div>
+                <div class="form-group floating-form-group col-6 col-lg-6  pt-0 pb-0 pr-1 pl-1 o-h">
+                    <a href="/register" class="btn btn-sm indigo  material f-w" type="submit"><i class="fas fa-user-plus btn-icon"></i><span class="btn-title">ثبت نام</span></a>
+                </div>
+                <div class="form-group floating-form-group col-12 col-lg-12 pt-0 pb-0 pr-1 pl-1 o-h">
+                    <a href="/recovery" class="btn btn-sm deep-purple material f-w" type="submit"><i class="fas fa-unlock-alt btn-icon"></i><span class="btn-title">کلمه عبور خود را فراموش کرده اید؟</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

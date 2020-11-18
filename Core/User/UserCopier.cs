@@ -33,7 +33,8 @@ namespace Parsia.Core.User
                 LastName = entity.LastName,
                 PersonId = entity.PersonId,
                 UpdatedBy = updateUser,
-                Code = entity.Code
+                Code = entity.Code,
+                IsAdmin = entity.IsAdmin
             };
         }
 
@@ -54,8 +55,13 @@ namespace Parsia.Core.User
                 FullTitle = dto.Username + " | " + dto.FirstName+" | "+ dto.LastName,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                PersonId = dto.PersonId
+                PersonId = dto.PersonId,
+                IsAdmin = dto.IsAdmin
             };
+            if (string.IsNullOrEmpty(user.Code))
+            {
+                user.Code = "-";
+            }
             return SetMandatoryField(user, bp, setCreate);
         }
 

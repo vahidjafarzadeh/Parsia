@@ -1,7 +1,3 @@
-/**
- * Created by F.Kazemi on 10/24/2018.
- */
-
 var FloatingForm = (function() {
     "use strict";
     const init = function(config) {

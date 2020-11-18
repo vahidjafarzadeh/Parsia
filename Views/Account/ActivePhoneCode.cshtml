@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "ActivePhoneCode";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+}
+
+
+<div class="login-box">
+    <div class="logo">
+        <a href="/">
+            <img class="log-image" src="~/Content/images/site/logo.png" alt="logo of site" />
+        </a>
+        <small class="cursor-defult">فعال سازی حساب کاربری</small>
+    </div>
+    <div class="card">
+        <div class="body">
+            <form id="active-code" method="POST">
+                <div class="msg">کد فعال سازی را وارد نمایید</div>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="material-icons">person</i>
+                    </span>
+                    <div class="form-line">
+                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" maxlength="11" minlength="11" placeholder="تلفن همراه" required autocomplete="off">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="material-icons">phonelink_lock</i>
+                    </span>
+                    <div class="form-line">
+                        <input type="text" class="form-control" name="code" maxlength="6" minlength="6" placeholder="کد فعال سازی" required autocomplete="off">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="material-icons">code</i>
+                    </span>
+                    <div class="form-line" style="width: 140px">
+                        <input type="text" class="form-control" name="captcha" minlength="6" maxlength="6" placeholder="کد امنیتی" required autocomplete="off">
+                    </div>
+                    <span class="input-group-addon" id="captchaContent">
+
+                    </span>
+                </div>
+                <div class="input-group">
+                    <button class="btn btn-block bg-green waves-effect full-width" type="submit">بررسی</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) { });
+    function ready(callback) {
+        if (document.readyState !== 'loading') callback();
+        else if (document.addEventListener) document.addEventListener('DOMContentLoaded', callback);
+        else document.attachEvent('onreadystatechange', function () {
+            if (document.readyState === 'complete') callback();
+        });
+    }
+    ready(function () {
+        Captcha("captchaContent");
+        var hand = new Handler();
+        hand.success = function (data, textStatus, jqXhr) {
+            if (data.Done) {
+                if (jqXhr && jqXhr.responseJSON && jqXhr.responseJSON.Done && jqXhr.responseJSON.Result.Ticket) {
+                    localStorage.setItem("ticket", jqXhr.responseJSON.Result.Ticket);
+                }
+                hideLoading();
+                swal({
+                    title: "پیغام سیستم",
+                    text: "فعال سازی اکانت با موفقیت انجام شد",
+                    timer: 4000,
+                    showConfirmButton: false
+                });
+                setTimeout(() => {
+                    window.location.href = Config.applicationUrl + "login";
+                }, 5000);
+            } else {
+                $("#captchaContent").html("");
+                Captcha("captchaContent");
+                hand.configError(data);
+            }
+        };
+        hand.complete = function (jqXhr) {
+
+        };
+        addSubmitToForm("active-code", "Account/ActiveCode", "formData", hand);
+    });
+
+
+</script>

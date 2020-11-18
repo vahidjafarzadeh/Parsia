@@ -187,6 +187,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group floating-form-group col-12 col-lg-6">
+                                    <div class="form-group floating-form-group col-12 floating-form-checkbox-wrapper d-rtl">
+                                        <input type="checkbox" tabindex="3"
+                                               class="form-control form-control-sm floating-form-control floating-mode input"
+                                               id="isAdmin"
+                                               ksun-bundle-key="isAdmin">
+                                        <label class="floating-form-checkbox" for="isAdmin"></label>
+                                        <label class="floating-form-checkbox-label" for="isAdmin" ksun-bundle-key="isAdmin"></label>
+                                    </div>
+                                </div>
+                                <div class="form-group floating-form-group col-12 col-lg-6">
                                     <input type="text" class="form-control form-control-sm floating-form-control" id="created-by"
                                            ksun-text-format="{username}" ksun-bundle-key="$createdBy" tabindex="9" readonly>
                                     <span class="floating-form-bar"></span>
@@ -298,7 +308,7 @@
     <script src="/pages/core/user/bundle.js"></script>
     <script src="/lib/shortkey/mousetrap.min.js"></script>
     <script src="/lib/core/core.js"></script>
-    <script src="/lib/core/edit.js"></script>
+    <script src="/lib/core/edit.js"></script><script src="/lib/api/sso.js"></script>
     <script src="/pages/core/user/edit.js"></script>
 </body>
 </html>

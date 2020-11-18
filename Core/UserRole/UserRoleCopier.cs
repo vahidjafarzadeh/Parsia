@@ -46,7 +46,7 @@ namespace Parsia.Core.UserRole
 
         public DataLayer.Model.Core.UserRole.UserRole GetEntity(UserRoleDto dto, BusinessParam bp, bool setCreate)
         {
-            var role = new DataLayer.Model.Core.UserRole.UserRole
+            var uerRole = new DataLayer.Model.Core.UserRole.UserRole
             {
                 EntityId = dto.EntityId,
                 Active = dto.Active,
@@ -58,7 +58,7 @@ namespace Parsia.Core.UserRole
                 UserId = dto.User.EntityId,
                 RoleId = dto.Role.EntityId
             };
-            return SetMandatoryField(role, bp, setCreate);
+            return SetMandatoryField(uerRole, bp, setCreate);
         }
 
         public DataLayer.Model.Core.UserRole.UserRole SetMandatoryField(DataLayer.Model.Core.UserRole.UserRole userRole,

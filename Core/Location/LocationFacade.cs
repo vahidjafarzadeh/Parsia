@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DataLayer.Base;
 using DataLayer.Context;
@@ -9,14 +10,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Parsia.Core.ComboVal;
 using Parsia.Core.Elastic;
-using Parsia.Core.Role;
 
 namespace Parsia.Core.Location
 {
+    [ClassDetails(Clazz = "Location", Facade = "LocationFacade")]
     public class LocationFacade : IBaseFacade<LocationDto>
     {
         private static readonly LocationFacade Facade = new LocationFacade();
         private static readonly LocationCopier Copier = new LocationCopier();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(LocationFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
 
         private LocationFacade()
         {
@@ -24,27 +27,28 @@ namespace Parsia.Core.Location
 
         public ServiceResult<object> GridView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Location.Location>();
                 var tableNameComboVal = Util.GetSqlServerTableName<DataLayer.Model.Core.ComboVal.ComboVal>();
                 var queryString = $"select entityId,name,typeName,type,parentName,parentId,fullTitle,deleted,createBy,accessKey from ( select combo.comboName as typeName,parent.parentName as parentName, EntityId as entityId, Name as name,Type as type,ParentId as parentId,FullTitle as fullTitle,Deleted as deleted,CreateBy as createBy,AccessKey as accessKey from {tableName} as mainLocation left join (select EntityId as comboId,Name as comboName from {tableNameComboVal}) as combo on combo.comboId = mainLocation.type left join (select EntityId as parentEntityId,Name as parentName from {tableName}) as parent on parent.parentEntityId = mainLocation.ParentId ) e " +
                                   QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, "Location", false, false, true)) +
+                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
                 queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var locationList = unitOfWork.Person.CreateNativeQuery(queryString, x => new[]
+                    var locationList = unitOfWork.Location.CreateNativeQuery(queryString, x => new[]
                     {
                         x[0] != null ? Convert.ToInt32(x[0]) : (object) null,
                         x[1] != null ? Convert.ToInt64(x[1]) : (object) null,
                         x[2]?.ToString(),
                         x[3]?.ToString(),
-                        x[5]?.ToString(),
+                        x[5]?.ToString()
                     });
                     if (locationList.Count == 0)
-                        return new ServiceResult<object>(new List<RoleDto>(), 0);
+                        return new ServiceResult<object>(new List<LocationDto>(), 0);
                     var list = new List<object>();
                     var headerTitle = new object[] { "entityId", "name", "type", "parent" };
                     list.Add(headerTitle);
@@ -54,11 +58,12 @@ namespace Parsia.Core.Location
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "LocationFacade.GridView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade+methodName, bp.UserInfo);
             }
         }
         public ServiceResult<object> Save(BusinessParam bp, LocationDto dto)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 DataLayer.Model.Core.Location.Location location;
@@ -78,16 +83,17 @@ namespace Parsia.Core.Location
                         unitOfWork.Location.Save();
                     }
 
-                Elastic<LocationDto, DataLayer.Model.Core.Location.Location>.SaveToElastic(location, "Location", bp);
+                Elastic<LocationDto, DataLayer.Model.Core.Location.Location>.SaveToElastic(location, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(Copier.GetDto(location), 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "LocationFacade.Save", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
         public ServiceResult<object> ShowRow(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             long entityId = 0;
             foreach (var where in bp.Clause.Wheres.Where(where =>
                 where.Key.Equals("entityId") && where.Value != null && !where.Value.Equals("")))
@@ -96,7 +102,7 @@ namespace Parsia.Core.Location
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "LocationFacade.ShowRow",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var context = new ParsiContext())
                 {
@@ -105,18 +111,20 @@ namespace Parsia.Core.Location
                         .Include(p => p.UpdateUserEntity)
                         .Include(p => p.CurrentType)
                         .Include(p => p.CurrentLocation)
+                        .IgnoreQueryFilters()
                         .ToList();
                     return new ServiceResult<object>(Copier.GetDto(location[0]), 1);
                 }
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "LocationFacade.ShowRow", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> Delete(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             long entityId = 0;
             foreach (var where in bp.Clause.Wheres.Where(where =>
                 where.Key.Equals("entityId") && where.Value != null && !where.Value.Equals("")))
@@ -125,41 +133,42 @@ namespace Parsia.Core.Location
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "RoleFacade.Delete",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
-                DataLayer.Model.Core.Role.Role role;
+                DataLayer.Model.Core.Location.Location location;
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    role = unitOfWork.Role.GetRecord(entityId);
+                    location = unitOfWork.Location.GetRecord(entityId);
                 }
 
-                if (role == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "RoleFacade.Delete",
+                if (location == null)
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
-                role.Deleted = role.EntityId;
+                location.Deleted = location.EntityId;
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    unitOfWork.Role.Update(role);
-                    unitOfWork.Role.Save();
+                    unitOfWork.Location.Update(location);
+                    unitOfWork.Location.Save();
                 }
-                Elastic<RoleDto, DataLayer.Model.Core.Role.Role>.SaveToElastic(role, "Role", bp);
+                Elastic<LocationDto, DataLayer.Model.Core.Location.Location>.SaveToElastic(location, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "RoleFacade.Delete", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Location.Location>();
                 var queryString = $"select * from (select EntityId as entityId,FullTitle as fullTitle,Deleted as deleted,AccessKey as accessKey,CreateBy as createBy from {tableName}) e " +
                                   QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, "Location", true, false, true)) +
+                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, true, false, true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
@@ -175,7 +184,7 @@ namespace Parsia.Core.Location
             }
             catch (Exception ex)
             {
-                return ExceptionUtil.ExceptionHandler(ex, "LocationFacade.AutocompleteView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
@@ -194,23 +203,19 @@ namespace Parsia.Core.Location
 
         public string GetParent(BusinessParam bp , long? entityId)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
-                if (entityId != null)
+                if (entityId == null) return "";
+                using (var unitOfWork = new UnitOfWork())
                 {
-                    using (var unitOfWork = new UnitOfWork())
-                    {
-                        return unitOfWork.Location.Get(p => p.EntityId == entityId).Select(p => p.Name).FirstOrDefault();
-                    }
+                    return unitOfWork.Location.Get(p => p.EntityId == entityId).Select(p => p.Name).FirstOrDefault();
                 }
-                else
-                {
-                    return "";
-                }
+
             }
             catch (Exception ex)
             {
-                ExceptionUtil.ExceptionHandler(ex, "LocationFacade.GetParent", bp.UserInfo);
+                ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
                 return "";
             }
         }

@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <title>@(ViewBag.Title)</title>
+    <base href="/" />
+    <!--Start Meta Tags-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="fontiran.com:license" content="WR2QUH">
+    <meta name="description" content="@ViewData["Description"]" />
+    <meta name="author" content="2vtj" />
+    <meta name="robots" content="NOINDEX,NOFOLLOW" />
+    <meta name="googlebot" content="nofollow" />
+    <meta name="googlebot" content="nosnippet" />
+    <meta name="googlebot" content="noarchive" />
+    <meta name="googlebot" content="noindex" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#f5363f" />
+    <meta name="theme-color" content="#f5363f">
+    <meta http-equiv="content-language" content="fa" />
+    <!--End Meta Tags-->
+    <!--Start Favicon-->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <!--Start Favicon-->
+    <link href="/sass/core/core.min.css" rel="stylesheet" />
+    <link href="/css/account/account.min.css" rel="stylesheet" />
+    @RenderSection("header", required: false)
+</head>
+
+<body class="login-page">
+    @RenderBody()
+
+    <div class="modal fade" id="loading-modal" tabindex="-1" role="dialog" aria-labelledby="loading-modal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-loading modal-dialog-centered modal-dialog-top-md-down" role="document">
+            <div class="modal-content">
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="loading-content-wrapper">
+                        <i class="fas fa-circle-notch icon"></i>
+                        <span class="content">لطفا شکیبا باشید</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/lib/bundle/scripts.min.js"></script>
+    <script src="/lib/api/captcha-config.js"></script>
+    <script src="/lib/modal/modal.js"></script>
+    <script src="~/lib/api/storage.js"></script>
+    <script src="/js/account/script.js"></script>
+    @RenderSection("script", required: false)
+</body>
+
+</html>

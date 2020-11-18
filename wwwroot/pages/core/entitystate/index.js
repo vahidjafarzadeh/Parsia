@@ -10,7 +10,7 @@ function setLocalVariables() {
             }
 
         }
-        , clazzName: 'CoEntityState'
+        , clazzName: 'EntityState'
     };
 }
 
@@ -20,6 +20,12 @@ function localPageReady() {
     initLocalVariables(localVariables);
     onPageReady();
 }
+
 $(document).ready(function () {
-    localPageReady();
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        localPageReady();
+    }
 });

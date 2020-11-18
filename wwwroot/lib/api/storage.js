@@ -41,10 +41,9 @@ var Storage = (function() {
     };
 
     var setUserInfo = function(value) {
-        value.timestamp = new Date().getTime();
         set(ENVIRONMENT.StorageKey.USER, value);
     };
-
+    
     const getUserInfo = function(showLoginType) {
         const currentDate = new Date().getTime();
         var obj = get(ENVIRONMENT.StorageKey.USER);

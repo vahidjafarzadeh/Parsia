@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "بازیابی رمز عبور";
+    ViewBag.Description = "بازیابی رمز عبور";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+}
+
+
+
+<div class="login-box">
+    <div class="logo">
+        <a href="/">
+            <img class="log-image" src="~/Content/images/site/logo.png" alt="logo of site" />
+        </a>
+        <small class="cursor-defult">بازیابی رمز عبور</small>
+    </div>
+    <div class="card">
+        <div class="body">
+            <form id="recovery" method="POST">
+                <div class="msg">برای بازیابی کد بازیابی خود را وارد نمایید</div>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="material-icons">code</i>
+                    </span>
+                    <div class="form-line">
+                        <input type="text" class="form-control" id="code" name="code" placeholder="کد بازیابی" required autocomplete="off">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <button class="btn btn-block bg-green waves-effect full-width" id="btn-recovery" type="button">بازیابی</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section script
+{
+    <script>
+        $("body").addClass("login-page ls-closed");
+        $("#btn-recovery").click(function() {
+            window.location.href =Config.applicationUrl+"recovery-password?code="+$("#code").val();
+        });
+    </script>
+}

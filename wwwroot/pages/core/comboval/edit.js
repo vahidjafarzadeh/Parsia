@@ -37,44 +37,46 @@ accessHandler.success = function (result) {
         $("#adminOnlyDiv").addClass("d-none");
     }
 };
-
-
 $(document).ready(function () {
-    initLocalVariables(localVariables);
-    initAutoCompletes();
-    onPageReady();
-    Mousetrap.bind('ctrl+s', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        saveOrUpdate();
-    });
-    Mousetrap.bind('f6', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        clearForm();
-    });
-    Mousetrap.bind('esc', function (e) {
-        try {
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initLocalVariables(localVariables);
+        initAutoCompletes();
+        onPageReady();
+        Mousetrap.bind('ctrl+s', function (e) {
             e.stopPropagation();
             e.preventDefault();
-            parent.editFrameWrapper.removeClass("visible");
-            if (gridRefreshFlag) {
-                parent.retrieveData();
+            saveOrUpdate();
+        });
+        Mousetrap.bind('f6', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            clearForm();
+        });
+        Mousetrap.bind('esc', function (e) {
+            try {
+                e.stopPropagation();
+                e.preventDefault();
+                parent.editFrameWrapper.removeClass("visible");
+                if (gridRefreshFlag) {
+                    parent.retrieveData();
+                }
+            } catch (e) {
+
             }
-        } catch (e) {
-
-        }
-    });
-    Mousetrap.bind('f5', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        showRow(currentData);
-    });
-    Mousetrap.bind('ctrl+m', function (e) {
-        showRow();
-    });
-    const dataWhere = new Wheres();
-    dataWhere.add("ticket", Storage.getUserInfo().ticket, ENVIRONMENT.Condition.EQUAL);
-    Api.post({ url: URLs.services.getAccess, data: dataWhere, handler: accessHandler });
-
+        });
+        Mousetrap.bind('f5', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            showRow(currentData);
+        });
+        Mousetrap.bind('ctrl+m', function (e) {
+            showRow();
+        });
+        const dataWhere = new Wheres();
+        dataWhere.add("ticket", Storage.getUserInfo().ticket, ENVIRONMENT.Condition.EQUAL);
+        Api.post({ url: URLs.services.getAccess, data: dataWhere, handler: accessHandler });
+    }
 });

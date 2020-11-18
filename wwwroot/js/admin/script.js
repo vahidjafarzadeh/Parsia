@@ -39,6 +39,19 @@ const initAllEvent = () => {
             }
         });
 };
+function showLoginPage(retURL) {
+    if (top.login) {
+        const externalID = Util.urlParameter("externalID");
+        top.login(externalID);
+    } else {
+        top.location.href =
+            AUTHENTICATION_SERVER +
+            "login/?" +
+            new Date().getTime() +
+            "&r=" +
+            window.btoa(retURL !== null ? retURL : top.location.href); //encode
+    }
+}
 const createScrollBar = () => {
 
 };
@@ -55,7 +68,7 @@ const createMenu = (data) => {
     const lstRoot = [];
     $.each(data,
         (i, v) => {
-            if (v.parentId === -1) {
+            if (v.parent && v.parent.entityId === 1) {
                 lstRoot.push(v);
             }
         });
@@ -74,7 +87,7 @@ const createMenu = (data) => {
                         const ul1 = $("<ul/>", { class: "base-menu" });
                         $.each(data,
                             (index, item) => {
-                                if (item.parentId === v.entityId) {
+                                if (item.parent && item.parent.entityId === v.entityId) {
                                     const li1 = $("<li/>",
                                         {
                                             class: "base-child",
@@ -89,13 +102,13 @@ const createMenu = (data) => {
                                                 }
                                             }
                                         });
-                                    const p = $("<p/>", { class: "title-text", text: item.name });
+                                    const p = $("<p/>", { class: "title-text", text: item.title });
                                     li1.append(p);
                                     const ul2 = $("<ul/>", { class: "child-menu" });
                                     let counter = 1;
                                     $.each(data,
                                         (ind, value) => {
-                                            if (value.parentId === item.entityId) {
+                                            if (value.parent && value.parent.entityId === item.entityId) {
                                                 const li3 = $("<li/>",
                                                     {
                                                         html: value.icon,
@@ -106,7 +119,7 @@ const createMenu = (data) => {
                                                             createTab(value);
                                                         }
                                                     });
-                                                const span = $("<span/>", { text: value.name });
+                                                const span = $("<span/>", { text: value.title });
                                                 li3.find("i").addClass(`color-${counter}`);
                                                 li3.append(span);
                                                 ul2.append(li3);
@@ -126,7 +139,7 @@ const createMenu = (data) => {
                     html: v.icon,
                     "data-toggle": "tooltip",
                     "data-placement": "left",
-                    "title": v.name
+                    "title": v.title
                 });
             li.append(span);
             containerMenu.append(li);
@@ -183,7 +196,7 @@ const createTab = (data) => {
 
             }
         });
-    const spanText = $("<span/>", { class: "text", text: data.name });
+    const spanText = $("<span/>", { class: "text", text: data.title });
     const spanIconRemove = $("<span/>",
         {
             class: "icon remove",
@@ -213,230 +226,31 @@ function showConfirm(config) {
 }
 function hideConfirm() {
     modalInstance.hideConfirm();
-}
-$(function () {
-    initVariable();
-    initAllEvent();
-    createScrollBar();
-    loading.fadeOut("slow");
-    createMenu([
-        {
-            name: "تنظیمات",
-            title: "setting",
-            path: "/",
-            icon: "<i class='fas fa-cogs'></i>",
-            orderNode: 1,
-            parentId: -1,
-            entityId: 1
-        },
-        {
-            name: "مدیریت کاربران",
-            title: "user management",
-            path: "/",
-            icon: "<i class='fas fa-users'></i>",
-            orderNode: 2,
-            parentId: -1,
-            entityId: 2
-        },
-        {
-            name: "تنظیمات سامانه",
-            title: "base setting",
-            path: "/",
-            icon: "<i class='fas fa-users'></i>",
-            orderNode: 1,
-            parentId: 1,
-            entityId: 4
-        },
-        {
-            name: "تنظیمات سیستم",
-            title: "system setting",
-            path: "/",
-            icon: "<i class='fas fa-users'></i>",
-            orderNode: 2,
-            parentId: 1,
-            entityId: 5
-        },
-        {
-            name: "مدیریت فایل ها",
-            title: "file manager",
-            path: "/pages/core/file/index.html",
-            icon: "<i class='fas fa-file'></i>",
-            orderNode: 1,
-            parentId: 4,
-            entityId: 6
-        },
-        {
-            name: "مقادیر چند گزینه ای",
-            title: "combo val",
-            path: "/pages/core/comboval/index.html",
-            icon: "<i class='fas fa-list-ol'></i>",
-            orderNode: 2,
-            parentId: 4,
-            entityId: 7
-        },
-        {
-            name: "آیکون ها",
-            title: "icons",
-            path: "/pages/core/icon/index.html",
-            icon: "<i class='fas fa-atom'></i>",
-            orderNode: 3,
-            parentId: 4,
-            entityId: 8
-        },{
-            name: "اماکن",
-            title: "icons",
-            path: "/pages/core/location/index.html",
-            icon: "<i class='fas fa-location-arrow''></i>",
-            orderNode: 3,
-            parentId: 4,
-            entityId: 8
-        },
-        {
-            name: "تنظیمات پویا",
-            title: "dynamic setting",
-            path: "/pages/core/systemconfig/edit.html?eID=1",
-            icon: "<i class='fas fa-chart-line'></i>",
-            orderNode: 2,
-            parentId: 5,
-            entityId: 10
-        },
-        {
-            name: "لیست کاربران",
-            title: "user list",
-            path: "/",
-            icon: "<i class='fas fa-users'></i>",
-            orderNode: 1,
-            parentId: 2,
-            entityId: 11
-        },
-        {
-            name: "دسترسی ها",
-            title: "access group",
-            path: "/",
-            icon: "<i class='fas fa-users'></i>",
-            orderNode: 2,
-            parentId: 2,
-            entityId: 12
-        },
-        {
-            name: "افراد",
-            title: "persons",
-            path: "/pages/core/person/index.html",
-            icon: "<i class='fas fa-user-friends'></i>",
-            orderNode: 1,
-            parentId: 11,
-            entityId: 13
-        },
-        {
-            name: "کاربران سامانه",
-            title: "users",
-            path: "/pages/core/user/index.html",
-            icon: "<i class='fas fa-users'></i>",
-            orderNode: 2,
-            parentId: 11,
-            entityId: 14
-        },
-        {
-            name: "نقش کاربران",
-            title: "user role",
-            path: "/pages/core/userrole/index.html",
-            icon: "<i class='fas fa-user-cog'></i>",
-            orderNode: 3,
-            parentId: 11,
-            entityId: 15
-        },
-        {
-            name: "گروه دسترسی",
-            title: "access",
-            path: "/pages/core/accessgroup/index.html",
-            icon: "<i class='fas fa-users'></i>",
-            orderNode: 3,
-            parentId: 12,
-            entityId: 16
-        },
-        {
-            name: "عملیات",
-            title: "actions",
-            path: "/pages/core/action/index.html",
-            icon: "<i class='fas fa-people-carry'></i>",
-            orderNode: 1,
-            parentId: 12,
-            entityId: 17
-        },
-        {
-            name: "نقش ها",
-            title: "roles",
-            path: "/pages/core/role/index.html",
-            icon: "<i class='fas fa-user-circle'></i>",
-            orderNode: 4,
-            parentId: 12,
-            entityId: 18
-        },
-        {
-            name: "سازمان ها",
-            title: "organization",
-            path: "/pages/core/organization/index.html",
-            icon: "<i class='fas fa-building'></i>",
-            orderNode: 5,
-            parentId: 12,
-            entityId: 19
-        },
-        {
-            name: "دسترسی کارها",
-            title: "business access",
-            path: "/pages/core/businessaccess/index.html",
-            icon: " <i class='fas fa-universal-access'></i> ",
-            orderNode: 5,
-            parentId: 12,
-            entityId: 19
-        },
-        {
-            name: "وضعیت موجودیت ها",
-            title: "entity state",
-            path: "/pages/core/entitystate/index.html",
-            icon: "<i class='fas fa-lock'></i>",
-            orderNode: 5,
-            parentId: 12,
-            entityId: 19
-        },
-        {
-            name: "مدیریت منوها",
-            title: "menu management",
-            path: "/",
-            icon: "<i class='fas fa-users'></i>",
-            orderNode: 3,
-            parentId: 1,
-            entityId: 20
-        },
-        {
-            name: "منوهای سایت",
-            title: "menu site",
-            path: "/pages/core/menu/index.html",
-            icon: "<i class='fas fa-th-list'></i>",
-            orderNode: 1,
-            parentId: 20,
-            entityId: 21
-        },
-        {
-            name: "فرآیندها",
-            title: "use case",
-            path: "/pages/core/usecase/index.html",
-            icon: "<i class='fas fa-random'></i>",
-            orderNode: 2,
-            parentId: 12,
-            entityId: 22
+};
+const getMenu = () => {
+    var handler = new Handler();
+    handler.beforeSend = () => {
+    }
+    handler.complete = () => {
+    }
+    handler.success = (data) => {
+        if (data.done) {
+            createMenu(data.result);
+        } else {
+            errorHandler(data);
         }
-    ]);
-    const user = {
-        username: "vahid",
-        firstName: "وحید",
-        lastName: "جعفرزاده",
-        roleName: "مدیر سیستم",
-        orgName: "فناوران",
-        ticket: "tvahid|55a1ab7d4431df72c8efc8d8903ae7834790cf33",
-        lang: 1,
-        menuTree: "",
-        timestamp: new Date().getTime()
-    };
-    Storage.set("user", user);
+    }
+    Api.post({ url: "menu/getAllMenu", data: {}, handler: handler});
+}
+$(document).ready(function () {
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initVariable();
+        initAllEvent();
+        createScrollBar();
+        loading.fadeOut("slow");
+        getMenu();
+    }
 });

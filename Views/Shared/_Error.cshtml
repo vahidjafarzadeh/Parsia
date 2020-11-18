@@ -1,0 +1,24 @@
+﻿@model DataLayer.Tools.ServiceResult<Object>
+    @{
+        Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    }
+<script>
+
+    document.addEventListener("DOMContentLoaded", function (event) { });
+    function ready(callback) {
+        if (document.readyState !== 'loading') callback();
+        else if (document.addEventListener) document.addEventListener('DOMContentLoaded', callback);
+        else document.attachEvent('onreadystatechange', function () {
+            if (document.readyState === 'complete') callback();
+        });
+    }
+    ready(function () {
+        
+        showNotification("bg-red", '@(Model.ErrorDesc)', "bottom", "left", "animated bounceIn", "animated bounceOut");
+    });
+</script>
+
+
+
+
+    

@@ -13,7 +13,7 @@ $navBarColor: #272d47;
 
 //--------------color
 $bodyColor: #d8ddee;
-$hoverText: #0d47f6 ;
+$hoverText: #0d47f6;
 $navBarColor: white;
 $rightNavColor: #1d53f7;
 $rightNavSecondColor: #0d47f6;
@@ -290,12 +290,14 @@ body, html {
                                 font-size: 0.9rem;
                                 margin: 0 0 0 10px;
                             }
-                            span{
-                                &:hover{
-                                    color :$hoverText;
-                                    transition:all 0.25s;
+
+                            span {
+                                &:hover {
+                                    color: $hoverText;
+                                    transition: all 0.25s;
                                 }
                             }
+
                             .color-1 {
                                 color: #4bc27d;
                             }
@@ -349,9 +351,13 @@ body, html {
         }
     }
 }
+
 .main-box {
-    padding: 0;
-    margin: 0;
+        padding: 0;
+        margin: 0;
+        height: calc(100vh);
+        overflow: auto;
+    
 
     .tab-container {
         width: 100%;
@@ -532,8 +538,9 @@ body, html {
                         .refresh {
                             top: 8px;
                             left: 20px;
-                            svg{
-                                font-size:11px
+
+                            svg {
+                                font-size: 11px
                             }
                         }
                     }
@@ -590,6 +597,7 @@ body, html {
         }
     }
 }
+
 .modal-col-red {
     background-color: #dc3545 !important;
 
@@ -619,6 +627,7 @@ body, html {
         }
     }
 }
+
 .modal-col-teal {
     background-color: #249d71 !important;
 
@@ -649,6 +658,7 @@ body, html {
         }
     }
 }
+
 .modal-lg, .modal-xl {
     max-width: calc(100% - 50px) !important;
 
@@ -671,14 +681,15 @@ body, html {
             padding: 0;
             border: 0;
             background: #fafafa;
-            button{
-                font-size:0.8rem;
+
+            button {
+                font-size: 0.8rem;
             }
         }
     }
 }
 //mobile
-@media only screen and (max-width:768px){
+@media only screen and (max-width:768px) {
     .box-aside {
         height: auto;
 
@@ -686,6 +697,8 @@ body, html {
             height: 60px;
             position: fixed;
             z-index: 10;
+            background: transparent;
+            border-left: 0 solid transparent;
 
             .container-menu {
                 width: 100%;
@@ -695,15 +708,25 @@ body, html {
                 li {
                     img {
                         margin: 10px auto;
-                        cursor:pointer;
+                        cursor: pointer;
+                        filter: brightness(0.25);
                     }
                 }
             }
         }
 
         .auto {
-            height: 100vh;
+            height: 100%;
             transition: all 350ms;
+            background: #1d53f7;
+            border-left: 1px solid #0d47f6;
+            .container-menu {
+                li {
+                    img {
+                        filter: brightness(1);
+                    }
+                }
+            }
         }
 
         .meta-data-menu {
@@ -715,6 +738,7 @@ body, html {
             }
         }
     }
+
     .main-box {
         .tab-container {
             .notification {
@@ -728,5 +752,4 @@ body, html {
             height: 100%;
         }
     }
-    
 }

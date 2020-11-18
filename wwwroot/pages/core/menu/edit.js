@@ -1,6 +1,8 @@
 'use strict';
 var useCaseAutoComplete, targetAutoComplete, menuAutoComplete;
 var localVariables = {
+    lockAble: false,
+    clazzName: "Menu",
     URLs: {
         services: {
             showRow: 'menu/showRow',
@@ -48,11 +50,16 @@ var initAutoCompletes = function () {
     });
 };
 $(document).ready(function () {
-    initLocalVariables(localVariables);
-    initAutoCompletes();
-    onPageReady();
-    $("#icon").on('keyup', function () {
-        let words = $(this).val();
-        $(this).val(words.replace(/"/g, "'"));
-    });
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initLocalVariables(localVariables);
+        initAutoCompletes();
+        onPageReady();
+        $("#icon").on('keyup', function () {
+            let words = $(this).val();
+            $(this).val(words.replace(/"/g, "'"));
+        });
+    }
 });

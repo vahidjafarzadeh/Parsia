@@ -21,6 +21,9 @@ function localPageReady() {
 }
 $(document).ready(function () {
     Storage.setPageNeedLogin(true);
-    localPageReady();
-
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        localPageReady();
+    }
 });

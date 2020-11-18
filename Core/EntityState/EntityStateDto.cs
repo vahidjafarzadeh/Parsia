@@ -7,7 +7,6 @@ namespace Parsia.Core.EntityState
     public class EntityStateDto : BaseDto
     {
         public long EntityId { get; set; }
-
         public string TableName { get; set; }
         public long TableEntityId { get; set; }
         public OrganizationDto Organization { get; set; }

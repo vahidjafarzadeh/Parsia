@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using DataLayer.Base;
 using DataLayer.Context;
-using DataLayer.Model.Core.User;
 using DataLayer.Tools;
 using Datalayer.UnitOfWork;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +14,12 @@ using Parsia.Core.Location;
 
 namespace Parsia.Core.Organization
 {
+    [ClassDetails(Clazz = "Organization", Facade = "OrganizationFacade")]
     public class OrganizationFacade
     {
         private static readonly OrganizationFacade Facade = new OrganizationFacade();
         private static readonly OrganizationCopier Copier = new OrganizationCopier();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(OrganizationFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         private OrganizationFacade()
         {
@@ -30,6 +31,7 @@ namespace Parsia.Core.Organization
 
         public string GetOrgAccess(long orgId)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 using (var unitOfWork = new UnitOfWork())
@@ -39,18 +41,19 @@ namespace Parsia.Core.Organization
             }
             catch (Exception ex)
             {
-                ExceptionUtil.ExceptionHandler(ex, "OrganizationFacade.GetOrgAccess", null);
+                ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade+methodName, null);
                 return "";
             }
         }
         public ServiceResult<object> GridView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Organization.Organization>();
                 var queryString = $"select * from ( select EntityId as entityId,Name as name,child.parentName,ParentId as parentId,FullTitle as fullTitle,Deleted as deleted , AccessKey as accessKey , CreateBy as createBy from {tableName} as org left join (select EntityId as parentEntityId,Name as parentName from {tableName}) child on child.parentEntityId = org.ParentId ) e " +
                                  QueryUtil.GetWhereClause(bp.Clause,
-                        QueryUtil.GetConstraintForNativeQuery(bp, "Organization", false, false, true)) +
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, false)) +
                     QueryUtil.GetOrderByClause(bp.Clause);
                 queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
@@ -60,7 +63,7 @@ namespace Parsia.Core.Organization
                         x[0] != null ? Convert.ToInt32(x[0]) : (object) null,
                         x[1] != null ? Convert.ToInt64(x[1]) : (object) null,
                         x[2]?.ToString(),
-                        x[3]?.ToString(),
+                        x[3]?.ToString()
                     });
                     if (orgList.Count == 0)
                         return new ServiceResult<object>(new List<OrganizationDto>(), 1);
@@ -73,12 +76,13 @@ namespace Parsia.Core.Organization
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "ComboValFacade.GridView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> Save(BusinessParam bp, OrganizationDto dto)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 DataLayer.Model.Core.Organization.Organization organization;
@@ -96,17 +100,18 @@ namespace Parsia.Core.Organization
                         unitOfWork.Organization.Update(organization);
                         unitOfWork.Organization.Save();
                     }
-                Elastic<OrganizationDto, DataLayer.Model.Core.Organization.Organization>.SaveToElastic(organization, "Organization", bp);
+                Elastic<OrganizationDto, DataLayer.Model.Core.Organization.Organization>.SaveToElastic(organization, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(Copier.GetDto(organization), 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "ComboVal.Save", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> ShowRow(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             long entityId = 0;
             foreach (var where in bp.Clause.Wheres.Where(where =>
                 where.Key.Equals("entityId") && where.Value != null && !where.Value.Equals("")))
@@ -115,7 +120,7 @@ namespace Parsia.Core.Organization
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "OrganizationFacade.ShowRow",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var context = new ParsiContext())
                 {
@@ -131,6 +136,7 @@ namespace Parsia.Core.Organization
                         .Include(p => p.CurrentOrganization)
                         .Include(p => p.CreateUserEntity)
                         .Include(p => p.UpdateUserEntity)
+                        .IgnoreQueryFilters()
                         .ToList();
                     return data.Count == 0
                         ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکورد یافت نشد")
@@ -140,12 +146,13 @@ namespace Parsia.Core.Organization
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "OrganizationFacade.ShowRow", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> Delete(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             long entityId = 0;
             foreach (var where in bp.Clause.Wheres.Where(where =>
                 where.Key.Equals("entityId") && where.Value != null && !where.Value.Equals("")))
@@ -154,7 +161,7 @@ namespace Parsia.Core.Organization
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "OrganizationFacade.Delete",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 DataLayer.Model.Core.Organization.Organization organization;
                 using (var unitOfWork = new UnitOfWork())
@@ -163,7 +170,7 @@ namespace Parsia.Core.Organization
                 }
 
                 if (organization == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", "OrganizationFacade.Delete",
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
                 organization.Deleted = organization.EntityId;
@@ -172,24 +179,25 @@ namespace Parsia.Core.Organization
                     unitOfWork.Organization.Update(organization);
                     unitOfWork.Organization.Save();
                 }
-                Elastic<OrganizationDto, DataLayer.Model.Core.Organization.Organization>.SaveToElastic(organization, "Organization", bp);
+                Elastic<OrganizationDto, DataLayer.Model.Core.Organization.Organization>.SaveToElastic(organization, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "OrganizationFacade.Delete", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> AutocompleteView(BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Organization.Organization>();
                 var queryString = "select * from (select EntityId as entityId,Name as name,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey,Deleted as deleted from " +
                                   tableName + " ) e" +
                                   QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, "Organization", false, false, true)) +
+                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, false)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
@@ -207,7 +215,7 @@ namespace Parsia.Core.Organization
             }
             catch (Exception ex)
             {
-                return ExceptionUtil.ExceptionHandler(ex, "OrganizationFacade.AutocompleteView", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
@@ -250,6 +258,7 @@ namespace Parsia.Core.Organization
 
         public string SetAccessKey(OrganizationDto organizationDto, long? parentId, BusinessParam bp)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Organization.Organization>();
@@ -306,7 +315,7 @@ namespace Parsia.Core.Organization
             }
             catch (Exception e)
             {
-                ExceptionUtil.ExceptionHandler(e, "OrganizationFacade.SetAccessKey", bp.UserInfo);
+                ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
                 return "AAA";
             }
         }

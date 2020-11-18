@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DataLayer.Base;
 using DataLayer.Tools;
 using Parsia.Core.AccessGroup;
-using Parsia.Core.Action;
-using Parsia.Core.UseCase;
 using Parsia.Core.UseCaseAction;
 
 namespace Parsia.Core.UseCaseActionAccessGroup
@@ -21,7 +16,7 @@ namespace Parsia.Core.UseCaseActionAccessGroup
             var updateUser = entity.UpdateUserEntity != null
                 ? new UserDto() { EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username }
                 : new UserDto();
-            var caseActionAccessGroupDto = new UseCaseActionAccessGroupDto()
+            var useCaseActionAccessGroup = new UseCaseActionAccessGroupDto()
             {
                 EntityId = entity.EntityId,
                 Created = Util.GetTimeStamp(entity.Created),
@@ -32,22 +27,22 @@ namespace Parsia.Core.UseCaseActionAccessGroup
                 Code = entity.Code,
             };
             if (entity.CurrentAccessGroup != null)
-                caseActionAccessGroupDto.AccessGroup = new AccessGroupDto()
+                useCaseActionAccessGroup.AccessGroup = new AccessGroupDto()
                 {
                     EntityId = entity.CurrentAccessGroup.EntityId,
                     Name = entity.CurrentAccessGroup.Name
                 };
             if (entity.CurrentUseCaseAction != null)
-                caseActionAccessGroupDto.UseCaseAction = new UseCaseActionDto()
+                useCaseActionAccessGroup.UseCaseAction = new UseCaseActionDto()
                 {
                     EntityId = entity.CurrentUseCaseAction.EntityId
                 };
-            return caseActionAccessGroupDto;
+            return useCaseActionAccessGroup;
         }
 
         public DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup GetEntity(UseCaseActionAccessGroupDto dto, BusinessParam bp, bool setCreate)
         {
-            var useCase = new DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup()
+            var useCaseActionAccessGroup = new DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup()
             {
                 EntityId = dto.EntityId,
                 Active = dto.Active,
@@ -57,18 +52,18 @@ namespace Parsia.Core.UseCaseActionAccessGroup
                 AccessGroup = dto.AccessGroup.EntityId,
                 UseCaseAction = UseCaseActionFacade.GetInstance().GetUseCaseAction(dto.UseCaseAction)
             };
-            return SetMandatoryField(useCase, bp, setCreate);
+            return SetMandatoryField(useCaseActionAccessGroup, bp, setCreate);
         }
-        public DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup SetMandatoryField(DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup useCaseAction,
+        public DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup SetMandatoryField(DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup useCaseActionAccessGroup,
             BusinessParam bp, bool setCreate)
         {
-            useCaseAction.AccessKey = bp.UserInfo.AccessKey;
-            useCaseAction.UpdateBy = bp.UserInfo.UserId;
-            useCaseAction.Updated = DateTime.Now;
-            if (!setCreate) return useCaseAction;
-            useCaseAction.CreateBy = bp.UserInfo.UserId;
-            useCaseAction.Created = DateTime.Now;
-            return useCaseAction;
+            useCaseActionAccessGroup.AccessKey = bp.UserInfo.AccessKey;
+            useCaseActionAccessGroup.UpdateBy = bp.UserInfo.UserId;
+            useCaseActionAccessGroup.Updated = DateTime.Now;
+            if (!setCreate) return useCaseActionAccessGroup;
+            useCaseActionAccessGroup.CreateBy = bp.UserInfo.UserId;
+            useCaseActionAccessGroup.Created = DateTime.Now;
+            return useCaseActionAccessGroup;
         }
     }
 }

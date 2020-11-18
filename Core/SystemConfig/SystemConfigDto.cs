@@ -8,8 +8,8 @@ namespace Parsia.Core.SystemConfig
         public string Root { get; set; }
         public string ApiHashEncryption { get; set; }
         public long SystemRoleId { get; set; }
-        public long SystemAdminRoleId { get; set; }
-        public long ApplicationAdminRoleId { get; set; }
+        public long UserRoleId { get; set; }
         public string AdminValidIp { get; set; }
+        public string ApplicationUrl { get; set; }
     }
 }

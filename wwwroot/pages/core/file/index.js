@@ -19,6 +19,7 @@ let containerFilter,
     filter;
 const initializeVariable = () => {
     localVariable = {
+        clazzName: "File",
         urls: {
             getAllExtension: "file/getAllExtension",
             gridView: "file/gridView",
@@ -580,11 +581,15 @@ var gridView = () => {
     };
     Api.post({ url: localVariable.urls.gridView, data: configData, handler: handler });
 };
-$(function() {
-    initializeVariable();
-    eventListener();
-    Translation.translate();
-    getExtensionForView();
-    gridView();
-
+$(document).ready(function () {
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initializeVariable();
+        eventListener();
+        Translation.translate();
+        getExtensionForView();
+        gridView();
+    }
 });

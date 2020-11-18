@@ -10738,6 +10738,11 @@ svg:not(:root).svg-inline--fa {
     width: 25px;
     height: 25px; }
 
+@media only screen and (max-width: 768px) {
+  .btn-filter {
+    margin: 5px 0 !important;
+    padding: 0; } }
+
 .spinner-layer {
   position: absolute;
   width: 100%;
@@ -11045,3 +11050,7 @@ svg:not(:root).svg-inline--fa {
 .text-loading {
   float: right;
   margin: 15px 20px; }
+
+.text-left {
+  text-align: left !important;
+  direction: ltr !important; }

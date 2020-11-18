@@ -171,37 +171,12 @@ var initAutoCompletes = function () {
     });
 };
 $(document).ready(function () {
-    initLocalVariables(localVariables);
-    initAutoCompletes();
-    onPageReady();
-    Mousetrap.bind('ctrl+s', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        saveOrUpdate();
-    });
-    Mousetrap.bind('f6', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        clearForm();
-    });
-    Mousetrap.bind('esc', function (e) {
-        try {
-            e.stopPropagation();
-            e.preventDefault();
-            parent.editFrameWrapper.removeClass("visible");
-            if (gridRefreshFlag) {
-                parent.retrieveData();
-            }
-        } catch (e) {
-
-        }
-    });
-    Mousetrap.bind('f5', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        showRow(currentData);
-    });
-    Mousetrap.bind('ctrl+m', function (e) {
-        showRow();
-    });
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initLocalVariables(localVariables);
+        initAutoCompletes();
+        onPageReady();
+    }
 });

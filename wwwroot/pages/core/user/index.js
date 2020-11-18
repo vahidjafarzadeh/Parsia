@@ -26,5 +26,10 @@ const changeDate = (res) => {
     }
 }
 $(document).ready(function () {
-    localPageReady();
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        localPageReady();
+    }
 });

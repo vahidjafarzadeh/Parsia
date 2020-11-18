@@ -9,66 +9,9 @@ var localVariables = {
         }
     },
     lockAble: false,
-    clazzName: "Person",
+    clazzName: "Users",
     ignoreToClear: []
 };
-$(document).ready(function () {
-    initLocalVariables(localVariables);
-    initAutoCompletes();
-    onPageReady();
-    Mousetrap.bind('ctrl+s', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        saveOrUpdate();
-    });
-    Mousetrap.bind('f6', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        clearForm();
-    });
-    Mousetrap.bind('esc', function (e) {
-        try {
-            e.stopPropagation();
-            e.preventDefault();
-            parent.editFrameWrapper.removeClass("visible");
-            if (gridRefreshFlag) {
-                parent.retrieveData();
-            }
-        } catch (e) {
-
-        }
-    });
-    Mousetrap.bind('f5', function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        showRow(currentData);
-    });
-    Mousetrap.bind('ctrl+m', function (e) {
-        showRow();
-    });
-    $("#password").on("focus", (e) => {
-        if (!$("#password").val()) {
-            $("#password").val(Util.generatePassword(10));
-        }
-    });
-    $("#emailCode").on("focus", (e) => {
-        if (!$("#emailCode").val()) {
-            $("#emailCode").val(Util.uuid());
-        }
-    });
-    $("#phoneCode").on("focus", (e) => {
-        if (!$("#phoneCode").val()) {
-            let number = "";
-            for (var i = 0; i < 6; i++) {
-                number += `${Util.getRandomInt(0, 9)}`;
-            }
-            $("#phoneCode").val(number);
-        }
-    });
-    $("#username").on("keyup", (e) => {
-        $("#password").val("");
-    });
-});
 var initAutoCompletes = function () {
     var personIdAutocomplete = new Autocomplete();
     personIdAutocomplete.init({
@@ -322,4 +265,36 @@ var fillForm = function (rowData, callback) {
 const onPersonAutocompleteSelect = (data) => {
     $("#firstName").val(data.object.firstName).addClass("floating-mode");
     $("#lastName").val(data.object.lastName).addClass("floating-mode");
-}
+};
+$(document).ready(function () {
+    Storage.setPageNeedLogin(true);
+    if (Storage.isPageNeedLogin() && Storage.getUserInfo() === null) {
+        SSO.init();
+    } else {
+        initLocalVariables(localVariables);
+        initAutoCompletes();
+        onPageReady();
+        $("#password").on("focus", (e) => {
+            if (!$("#password").val()) {
+                $("#password").val(Util.generatePassword(10));
+            }
+        });
+        $("#emailCode").on("focus", (e) => {
+            if (!$("#emailCode").val()) {
+                $("#emailCode").val(Util.uuid());
+            }
+        });
+        $("#phoneCode").on("focus", (e) => {
+            if (!$("#phoneCode").val()) {
+                let number = "";
+                for (var i = 0; i < 6; i++) {
+                    number += `${Util.getRandomInt(0, 9)}`;
+                }
+                $("#phoneCode").val(number);
+            }
+        });
+        $("#username").on("keyup", (e) => {
+            $("#password").val("");
+        });
+    }
+});

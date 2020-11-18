@@ -34,7 +34,7 @@
       height: 30px;
       overflow: hidden; }
       .content-wrapper .col-sm-2 .inner header .btn-filter {
-        margin: 5px;
+        margin: 5px !important;
         width: 50px;
         height: 20px;
         padding: 0;
@@ -249,3 +249,28 @@
 
 .mandatory {
   color: red; }
+
+@media only screen and (max-width: 768px) {
+  #file-manager-previous-folder, #file-manager-new-folder-button, #file-manager-new-file-button {
+    margin: 5px;
+    min-width: 110px; }
+  .content-wrapper {
+    height: calc(100vh - 30px);
+    overflow: auto;
+    -webkit-align-content: start;
+    align-content: start; }
+  .content-wrapper .col-sm-2 .inner {
+    background: #fcfcfc;
+    border: 1px solid #f0f0f0;
+    height: auto;
+    min-height: 80px;
+    -webkit-box-shadow: 0 5px 10px #dfdfdf78;
+    -moz-box-shadow: 0 5px 10px #dfdfdf78;
+    box-shadow: 0 5px 10px #dfdfdf78;
+    margin: 10px 0; }
+  .file-wrapper {
+    height: auto;
+    overflow: auto;
+    display: table !important; }
+    .file-wrapper .wrapper-file {
+      width: 95px; } }

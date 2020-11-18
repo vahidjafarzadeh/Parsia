@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DataLayer.Tools;
 using Datalayer.UnitOfWork;
@@ -8,10 +9,13 @@ using Parsia.Core.Elastic;
 
 namespace Parsia.Core.UseCaseAction
 {
+    [ClassDetails(Clazz = "UseCaseAction", Facade = "UseCaseActionFacade")]
     public class UseCaseActionFacade
     {
         private static readonly UseCaseActionFacade Facade = new UseCaseActionFacade();
         private static readonly UseCaseActionCopier Copier = new UseCaseActionCopier();
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(UseCaseActionFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
         private UseCaseActionFacade()
         {
         }
@@ -36,6 +40,7 @@ namespace Parsia.Core.UseCaseAction
         }
         public ServiceResult<object> SaveList(BusinessParam bp, List<UseCaseActionDto> lstDto)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
 
@@ -62,12 +67,13 @@ namespace Parsia.Core.UseCaseAction
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UseCaseFacade.Save", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
         public ServiceResult<object> DeletedList(BusinessParam bp, long useCaseId)
         {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 using (var unitOfWork = new UnitOfWork())
@@ -83,7 +89,7 @@ namespace Parsia.Core.UseCaseAction
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, "UseCaseFacade.Save", bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
     }
