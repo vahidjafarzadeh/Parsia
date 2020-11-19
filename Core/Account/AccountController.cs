@@ -14,13 +14,6 @@ namespace Parsia.Controllers
     public class AccountController : Controller
     {
 
-        //        private readonly SignInManager<Users> _signInManager;
-        //
-        //        public AccountController(SignInManager<Users> signInManager)
-        //        {
-        //            _signInManager = signInManager;
-        //        }
-
         [Route("login")]
         public ActionResult Login()
         {
@@ -169,30 +162,5 @@ namespace Parsia.Controllers
         {
             return View();
         }
-
-
-
-        //        [Route("provider/{provider}")]
-        //        public IActionResult GetProvider(string provider)
-        //        {
-        //            var redirectUrl = Url.RouteUrl("ExternalLogin", Request.Scheme);
-        //            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-        //            return Challenge(properties,provider);
-        //        }
-        //
-        //
-        //        [Route("external-login",Name = "ExternalLogin")]
-        //        public IActionResult ExternalLogin()
-        //        {
-        //            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-        //            using (var unitOfWork = new UnitOfWork())
-        //            {
-        //                //do login
-        //            }
-        //            return RedirectToRoute("index");
-        //        }
-
-
-
     }
 }

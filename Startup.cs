@@ -64,6 +64,9 @@ namespace Parsia
             SystemConfig.TemplateIdUserFactorCode = section["TemplateIdUserFactorCode"];
             SystemConfig.TemplateIdAdminFactorCode = section["TemplateIdAdminFactorCode"];
             SystemConfig.TemplateIdBlockIpCode = section["TemplateIdBlockIpCode"];
+            SystemConfig.ValidUrls = section["ValidUrls"];
+            SystemConfig.IpBlackList = section["IpBlackList"];
+            SystemConfig.DevelopMode = Convert.ToBoolean(section["DevelopMode"]);
         }
 
         #endregion
