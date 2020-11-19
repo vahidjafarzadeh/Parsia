@@ -1,23 +1,21 @@
 using System;
+using System.IO;
 using System.Security.Claims;
 using DataLayer.Context;
-using DataLayer.Model.Core.User;
 using DataLayer.Token;
 using DataLayer.Tools;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Parsia.Core.Account;
 using WebMarkupMin.AspNetCore3;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 
@@ -26,6 +24,10 @@ namespace Parsia
 {
     public class Startup
     {
+        private static ILogger _logger;
+        public IHostingEnvironment HostingEnvironment { get; }
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
@@ -33,8 +35,7 @@ namespace Parsia
             BuildAppSettingsProvider(hostingEnvironment);
         }
 
-        public IHostingEnvironment HostingEnvironment { get; }
-        public IConfiguration Configuration { get; }
+
 
         #region SystemConfig
 
@@ -46,8 +47,23 @@ namespace Parsia
             SystemConfig.ApiHashEncryption = section["ApiHashEncryption"];
             SystemConfig.SystemRoleId = long.Parse(section["SystemRoleId"]);
             SystemConfig.UserRoleId = long.Parse(section["UserRoleId"]);
+            SystemConfig.MaxAttemptLogin = long.Parse(section["MaxAttemptLogin"]);
             SystemConfig.AdminValidIp = section["AdminValidIp"];
             SystemConfig.ApplicationUrl = section["ApplicationUrl"];
+            SystemConfig.MenuCacheTimeMinute = Convert.ToDouble(section["MenuCacheTimeMinute"]);
+            SystemConfig.EmailSmtpHost = section["EmailSmtpHost"];
+            SystemConfig.EmailHost = section["EmailHost"];
+            SystemConfig.EmailPortSmtpHost = section["EmailPortSmtpHost"];
+            SystemConfig.EmailPasswordHost = section["EmailPasswordHost"];
+            SystemConfig.EmailSiteName = section["EmailSiteName"];
+            SystemConfig.SmsUserApiKey = section["SmsUserApiKey"];
+            SystemConfig.SmsSecretKey = section["SmsSecretKey"];
+            SystemConfig.TemplateIdVerificationCode = section["TemplateIdVerificationCode"];
+            SystemConfig.TemplateIdRecoveryPasswordCode = section["TemplateIdRecoveryPasswordCode"];
+            SystemConfig.TemplateIdRememberMeCode = section["TemplateIdRememberMeCode"];
+            SystemConfig.TemplateIdUserFactorCode = section["TemplateIdUserFactorCode"];
+            SystemConfig.TemplateIdAdminFactorCode = section["TemplateIdAdminFactorCode"];
+            SystemConfig.TemplateIdBlockIpCode = section["TemplateIdBlockIpCode"];
         }
 
         #endregion
@@ -70,15 +86,10 @@ namespace Parsia
             });
             services.AddMvc().AddJsonOptions(options => { options.JsonSerializerOptions.IgnoreNullValues = true; });
 
-            services.AddLogging();
+
             services.AddCors();
             services.AddJwt(Configuration);
             services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
-         
-
-
-
-            
             services.AddRazorPages();
             #region Max Size To Upload
 
@@ -117,13 +128,31 @@ namespace Parsia
                     options.AppId = "1951011171673584";
                     options.AppSecret = "8ed533c721c65274a1fb21f40d29613e";
                 });
-           
+
+            #endregion
+            #region Add Memory Cache
+
+            services.AddMemoryCache();
+
+            #endregion
+            #region Partial To String
+            services.AddScoped<IViewRenderService, ViewRenderService>();
+            #endregion
+            #region Logging
+
+            services.AddLogging();
+
             #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            #region Logging File directory
+            var path = HostingEnvironment.WebRootPath;
+            loggerFactory.AddFile($"{path}\\Logs\\Log.txt");
+            SystemConfig.Logger = loggerFactory.CreateLogger("ExceptionUtil");
+            #endregion
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else
@@ -169,7 +198,7 @@ namespace Parsia
             app.Use(async (context, next) =>
             {
                 // Do work that doesn't write to the Response.
-                if (context.Request.Path.StartsWithSegments("/Admin")|| context.Request.Path.StartsWithSegments("/admin"))
+                if (context.Request.Path.StartsWithSegments("/Admin") || context.Request.Path.StartsWithSegments("/admin"))
                 {
                     if (!context.User.Identity.IsAuthenticated)
                     {

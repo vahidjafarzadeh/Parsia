@@ -1,9 +1,12 @@
-﻿using System.Security.Claims;
-using DataLayer.Model.Core.User;
+﻿using System;
+using System.Linq;
+using DataLayer.Context;
+using DataLayer.Tools;
 using Datalayer.UnitOfWork;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Parsia.Core.Account;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Parsia.Controllers
@@ -11,155 +14,183 @@ namespace Parsia.Controllers
     public class AccountController : Controller
     {
 
-//        private readonly SignInManager<Users> _signInManager;
-//
-//        public AccountController(SignInManager<Users> signInManager)
-//        {
-//            _signInManager = signInManager;
-//        }
+        //        private readonly SignInManager<Users> _signInManager;
+        //
+        //        public AccountController(SignInManager<Users> signInManager)
+        //        {
+        //            _signInManager = signInManager;
+        //        }
 
         [Route("login")]
         public ActionResult Login()
         {
             return PartialView();
         }
-        //        [Route("register")]
-        //        public ActionResult Register()
+        [Route("register")]
+        public ActionResult Register()
+        {
+            return PartialView();
+        }
+        [Route("active-phone")]
+        public ActionResult ActivePhoneCode()
+        {
+            return PartialView();
+        }
+        [Route("verify")]
+        public ActionResult Verify(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return View("_Error", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد فعال سازی معتبر نمی باشد"));
+            }
+            else
+            {
+                using (var context = new ParsiContext())
+                {
+                    var user = context.Users.Where(p => p.EmailCode == id.Trim()).IgnoreQueryFilters().FirstOrDefault();
+                    if (user != null)
+                    {
+                        if (user.Deleted != 0)
+                        {
+                            return View("_Error", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد"));
+
+                        }
+                        user.EmailCode = Guid.NewGuid().ToString();
+                        user.Active = true;
+                        context.Users.Update(user);
+                        context.SaveChanges();
+                        return Redirect("/login");
+                    }
+                    else
+                    {
+                        return View("_Error", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کاربر گرامی لینک فعال سازی حساب کاربری شما منقضی شده است . لطفا مجددا در سایت عضو شده و یا از قسمت ارتباط با ما درخواستی مبنی بر فعال سازی حساب کاربری برای مدیر سایت ارسال نمایید"));
+                    }
+                }
+
+            }
+        }
+        [Route("recovery")]
+        public ActionResult RecoveryEmail()
+        {
+            return PartialView();
+        }
+        [Route("recovery-password")]
+        public ActionResult RecoveryPassword(string code)
+        {
+
+            if (string.IsNullOrEmpty(code))
+            {
+                return View("_Error", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد بازیابی معتبر نمی باشد"));
+            }
+            else
+            {
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var user = unitOfWork.Users.Get(p => p.EmailCode == code.Trim()).FirstOrDefault();
+                    if (user != null)
+                    {
+                        if (user.Deleted != 0)
+                        {
+                            return View("_Error", new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد"));
+
+                        }
+                        ViewData["code"] = user.EmailCode;
+                        return View();
+                    }
+                    else
+                    {
+                        return View("_Error", new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "کد فعال سازی معتبر نمی باشد"));
+                    }
+                }
+            }
+        }
+        [Route("recover-phone")]
+        public ActionResult RecoveryPhone()
+        {
+            return PartialView();
+        }
+        #region Send Email
+
+        public IActionResult RegisterEmail()
+        {
+            return PartialView();
+        }
+        public IActionResult ForgetPassword()
+        {
+            return PartialView();
+        }
+
+        #endregion
+        [Route("upgrade-site")]
+        public ActionResult Upgrade()
+        {
+            return PartialView();
+        }
+        [Route("logout")]
+        public ActionResult LogOut()
+        {
+            try
+            {
+                var username = User.Identity.Name.ToLower().Trim();
+                if (!string.IsNullOrEmpty(username))
+                {
+                    using (var unitOfWork = new UnitOfWork())
+                    {
+                        var user = unitOfWork.Users.Get(p => p.Username == username).FirstOrDefault();
+                        if (user != null)
+                        {
+                            user.LastVisit = DateTime.Now;
+                            unitOfWork.Users.Update(user);
+                            unitOfWork.Users.Save();
+                        }
+
+                        if (OnlineUser.UserSessionManager.ContainsKey(username))
+                        {
+                            OnlineUser.UserSessionManager.Remove(username);
+                        }
+
+                        HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                        return RedirectToAction("Index", "Home", new { Areas = "" });
+                    }
+                }
+                else
+                {
+                    HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    return RedirectToAction("Index", "Home", new { Areas = "" });
+                }
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Index", "Home", new { Areas = "" });
+            }
+        }
+        [Route("error")]
+        public ActionResult ErrorUser()
+        {
+            return View();
+        }
+
+
+
+        //        [Route("provider/{provider}")]
+        //        public IActionResult GetProvider(string provider)
         //        {
-        //            return PartialView();
+        //            var redirectUrl = Url.RouteUrl("ExternalLogin", Request.Scheme);
+        //            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        //            return Challenge(properties,provider);
         //        }
-        //        [Route("verify")]
-        //        public ActionResult Verify(string id)
+        //
+        //
+        //        [Route("external-login",Name = "ExternalLogin")]
+        //        public IActionResult ExternalLogin()
         //        {
-        //            if (string.IsNullOrEmpty(id))
+        //            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+        //            using (var unitOfWork = new UnitOfWork())
         //            {
-        //                return View("_Error",new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "کد فعال سازی معتبر نمی باشد"));
+        //                //do login
         //            }
-        //            else
-        //            {
-        //                var user = _unitOfWork.Users.Get(p => p.EmailCode == id).FirstOrDefault();
-        //                if (user != null)
-        //                {
-        //                    if (user.IsDeleted != 0)
-        //                    {
-        //                        return View("_Error", new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد"));
-        //                        
-        //                    }
-        //                    user.EmailCode = Guid.NewGuid().ToString();
-        //                    user.Status = true;
-        //                    _unitOfWork.Users.Update(user);
-        //                    _unitOfWork.Users.Save();
-        //                    return View("Login");
-        //                }
-        //                else
-        //                {
-        //                    return View("_Error", new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "کاربر گرامی لینک فعال سازی حساب کاربری شما منقضی شده است . لطفا مجددا در سایت عضو شده و یا از قسمت ارتباط با ما درخواستی مبنی بر فعال سازی حساب کاربری برای مدیر سایت ارسال نمایید"));
-        //                }
-        //            }
+        //            return RedirectToRoute("index");
         //        }
-        //
-        //        [Route("active-phone")]
-        //        public ActionResult ActivePhoneCode()
-        //        {
-        //            return PartialView();
-        //        }
-        //
-        //        [Route("recovery")]
-        //        public ActionResult RecoveryEmail()
-        //        {
-        //            return PartialView();
-        //        }
-        //        [Route("recover-phone")]
-        //        public ActionResult RecoveryPhone()
-        //        {
-        //            return PartialView();
-        //        }
-        //
-        //        [Route("recovery-password")]
-        //        public ActionResult RecoveryPassword(string code)
-        //        {
-        //
-        //            if (string.IsNullOrEmpty(code))
-        //            {
-        //                return View("_Error", new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "کد بازیابی معتبر نمی باشد"));
-        //            }
-        //            else
-        //            {
-        //                var user = _unitOfWork.Users.Get(p => p.EmailCode == code).FirstOrDefault();
-        //                if (user != null)
-        //                {
-        //                    if (user.IsDeleted != 0)
-        //                    {
-        //                        return View("_Error", new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد"));
-        //
-        //                    }
-        //
-        //                    ViewBag.code = user.EmailCode;
-        //                    return View();
-        //                }
-        //                else
-        //                {
-        //                    return View("_Error", new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "کد فعال سازی معتبر نمی باشد"));
-        //                }
-        //            }
-        //        }
-        //
-        //        [Route("upgrade-site")]
-        //        public ActionResult Upgrade()
-        //        {
-        //            return PartialView();
-        //        }
-        //        [Route("logout")]
-        //        public ActionResult LogOut()
-        //        {
-        //            try
-        //            {
-        //                var tic = User.Identity.Name.GetTicket();
-        //                if (tic != null)
-        //                {
-        //                    var user = _unitOfWork.Users.Get(p => p.EntityId == tic.UserId).FirstOrDefault();
-        //                    if (user != null)
-        //                    {
-        //                        user.LastVisit = DateTime.Now;
-        //                        _unitOfWork.Users.Update(user);
-        //                        _unitOfWork.Users.Save();
-        //                    }
-        //
-        //                    DynamicToken.Token.Remove(tic.Username);
-        //                    DynamicRoles.Roles.Remove(tic.Username);
-        //                    FormsAuthentication.SignOut();
-        //                    return RedirectToAction("Index", "Home", new { Areas = "" });
-        //                }
-        //                else
-        //                {
-        //                    FormsAuthentication.SignOut();
-        //                    return RedirectToAction("Index","Home",new{Areas=""});
-        //                }
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                return RedirectToAction("Index", "Home", new { Areas = "" });
-        //            }
-        //        }
-//        [Route("provider/{provider}")]
-//        public IActionResult GetProvider(string provider)
-//        {
-//            var redirectUrl = Url.RouteUrl("ExternalLogin", Request.Scheme);
-//            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-//            return Challenge(properties,provider);
-//        }
-//
-//
-//        [Route("external-login",Name = "ExternalLogin")]
-//        public IActionResult ExternalLogin()
-//        {
-//            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-//            using (var unitOfWork = new UnitOfWork())
-//            {
-//                //do login
-//            }
-//            return RedirectToRoute("index");
-//        }
 
 
 

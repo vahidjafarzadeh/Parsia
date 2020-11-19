@@ -1,0 +1,4 @@
+2020-11-18T23:39:45.3993266+03:30  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2020-11-18T23:39:45.4126545+03:30  [INF] Hosting environment: "Development" (c3307c92)
+2020-11-18T23:39:45.4128018+03:30  [INF] Content root path: "D:\workspace\visual project\Parsia\Parsia" (b5d60022)
+2020-11-18T23:39:45.6636675+03:30 80000487-0000-f200-b63f-84710c7967bb [ERR] fefr rf rf ef efrfe (b0e1691a)

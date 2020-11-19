@@ -10,7 +10,6 @@ namespace Parsia.Areas.Administrator.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = SystemConfig.AdminTitlePage;
-            ViewData["UserImage"] = "avatar.png";
             return View();
         }
     }

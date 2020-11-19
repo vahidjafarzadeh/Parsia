@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_LayoutAccount.cshtml";
 }
 
+
 <div class="page-loader-wrapper">
     <div class="loader">
         <div class="preloader">
@@ -22,136 +23,69 @@
 </div>
 
 <div class="login-box">
-    <div class="logo">
-        <a href="/">
-            <img class="log-image" src="~/Content/images/site/logo.png" alt="logo of site" />
-        </a>
-        <small class="cursor-defult">عضویت در سایت</small>
-    </div>
     <div class="card">
         <div class="body">
-            <form id="sign_in" method="POST">
-                <div class="msg">فرم ورود اطلاعات</div>
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="material-icons">person</i>
-                    </span>
-                    <div class="form-line">
-                        <input type="text" class="form-control" id="username" name="username" maxlength="100" minlength="8" placeholder="نام کاربری" required autocomplete="off">
-                    </div>
+            <div class="logo">
+                <a href="/">
+                    <img class="log-image" src="/images/application/logo.png" alt="logo of site" />
+                </a>
+                <small class="cursor-defult">عضویت در سایت</small>
+            </div>
+            <div class="row m-0">
+                <div class="form-group floating-form-group col-12 col-lg-12">
+                    <input type="text" class="form-control form-control-sm floating-form-control float text-left" id="username"
+                           max-length="100" required="" tabindex="1" autocomplete="off">
+                    <span class="floating-form-bar"></span>
+                    <label for="username" class="floating-label">
+                        <i class="fas fa-user icon"></i><span>نام کاربری (شماره همراه یا ایمیل)</span>
+                    </label>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="material-icons">lock</i>
-                    </span>
-                    <div class="form-line">
-                        <input type="password" class="form-control" name="password" maxlength="50" minlength="8" placeholder="کلمه عبور" required autocomplete="off">
-                    </div>
+                <div class="form-group floating-form-group col-12 col-lg-12">
+                    <input type="password" class="form-control form-control-sm floating-form-control float text-left" id="password"
+                           max-length="100" ksun-input-type="text" tabindex="2" maxlength="50" minlength="2" required autocomplete="off">
+                    <span class="floating-form-bar"></span>
+                    <label for="password" class="floating-label">
+                        <i class="fas fa-lock icon"></i><span>کلمه عبور</span>
+                    </label>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="material-icons">lock</i>
-                    </span>
-                    <div class="form-line">
-                        <input type="password" class="form-control" name="confirmPassword" maxlength="50" minlength="8" placeholder="تکرار کلمه عبور" required autocomplete="off">
-                    </div>
+                <div class="form-group floating-form-group col-12 col-lg-12">
+                    <input type="password" class="form-control form-control-sm floating-form-control float text-left" id="confirmPassword"
+                           max-length="100" ksun-input-type="text" tabindex="3" maxlength="50" minlength="8" required autocomplete="off">
+                    <span class="floating-form-bar"></span>
+                    <label for="confirmPassword" class="floating-label">
+                        <i class="fas fa-lock icon"></i><span>تکرار کلمه عبور</span>
+                    </label>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="material-icons">code</i>
-                    </span>
-                    <div class="form-line"  style="width: 140px">
-                        <input type="text" class="form-control" name="captcha" minlength="6" maxlength="6" placeholder="کد امنیتی" required autocomplete="off">
-                    </div>
-                    <span class="input-group-addon" id="captchaContent">
+                <div class="form-group floating-form-group col-8 col-lg-8">
+                    <input type="text" class="form-control form-control-sm floating-form-control float text-left" id="captcha"
+                           length="4" tabindex="3" required="">
+                    <span class="floating-form-bar"></span>
+                    <label for="captcha" class="floating-label">
+                        <i class="fas fa-code icon"></i><span>کد امنیتی</span>
+                    </label>
+                </div>
+                <div class="form-group floating-form-group col-4 col-lg-4 p-0">
+                    <div id="container-captcha">
 
-                    </span>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <input type="checkbox" name="law" id="law" checked="checked" class="filled-in chk-col-green">
-                    <label for="law">قوانین سایت را می پذیرم؟</label>
+                <div class="form-group floating-form-group col-12 col-lg-12">
+                    <div class="form-group floating-form-group col-12 floating-form-checkbox-wrapper pt-0">
+                        <input class="form-control form-control-sm floating-form-control input" tabindex="4" type="checkbox" id="law" checked>
+                        <label class="floating-form-checkbox lbl lbl-checkbox" for="law"></label>
+                        <label class="floating-form-checkbox-label lbl lbl-text" for="law">قوانین سایت را می پذیرم؟</label>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <button class="btn btn-block bg-green waves-effect full-width" type="submit">عضویت</button>
+                <div class="form-group floating-form-group col-12 col-lg-12 pt-0 pb-0 pr-1 pl-1">
+                    <button class="btn btn-sm success material f-w" id="btn-register"><i class="fas fa-user-plus btn-icon"></i><span class="btn-title">عضویت</span></button>
                 </div>
-                <div class="input-group">
-                    <a href="/" class="btn btn-block bg-pink waves-effect full-width">بازگشت به سایت</a>
+                <div class="form-group floating-form-group col-6 col-lg-6  pt-0 pb-0 pr-1 pl-1 o-h">
+                    <a href="/" class="btn btn-sm purple  material f-w" type="submit"><i class="fas fa-reply-all btn-icon"></i><span class="btn-title">بازگشت به سایت</span></a>
                 </div>
-                <div class="input-group">
-                    <a href="/login" class="full-width text-right fs-12">آیا شما قبلا ثبت نام کرده اید ؟</a>
+                <div class="form-group floating-form-group col-6 col-lg-6  pt-0 pb-0 pr-1 pl-1 o-h">
+                    <a href="/login" class="btn btn-sm indigo  material f-w" type="submit"><i class="fas fa-sign-out-alt btn-icon"></i><span class="btn-title">ورود به سایت</span></a>
                 </div>
-                
-            </form>
+            </div>
         </div>
     </div>
 </div>
-
-
-@section script
-{
-    <script>
-        $("body").addClass("login-page ls-closed");
-        Captcha("captchaContent");
-        var hand = new Handler();
-        hand.success = function(data, textStatus, jqXhr) {
-            if (data.Done) {
-                if (jqXhr && jqXhr.responseJSON && jqXhr.responseJSON.Done && jqXhr.responseJSON.Result.Ticket) {
-                    localStorage.setItem("ticket", jqXhr.responseJSON.Result.Ticket);
-                }
-                hideLoading();
-                if (data.Result === "phone") {
-                    swal({
-                        title: "پیغام سیستم",
-                        text:
-                            "عضویت با موفقیت انجام شد . برای فعال سازی اکانت خود کد ارسالی به شماره همراه خود را وارد نمایید",
-                        timer: 4000,
-                        showConfirmButton: false
-                    });
-                    setTimeout(() => {
-                            var myHandler = new Handler();
-                        myHandler.success = function (data, textStatus, jqXhr) {
-                            var phone = $("#username").val();
-                                $("body").html(data);
-                                setTimeout(() => {
-                                    $("#phoneNumber").val(phone);
-                                },10);
-                            };
-                            myHandler.complete = function(jqXhr) { hideLoading(); };
-                            Api.getController({
-                                url: "active-phone",
-                                filter: {},
-                                handler: myHandler,
-                                ticket: false,
-                                isAsync: true,
-                                setHeader: false
-                            });
-
-                        },
-                        4000);
-                }
-                else {
-                    swal({
-                        title: "پیغام سیستم",
-                        text:
-                            "عضویت با موفقیت انجام شد .لطفا برای فعال سازی اکانت خود روی لینک ارسالی به ایمیل خود کلیک نمایید",
-                        timer: 4000,
-                        showConfirmButton: false
-                    });
-                    setTimeout(() => {
-                            window.location.href = Config.applicationUrl + "login";
-                        },
-                        5000);
-                }
-
-            } else {
-                $("#captchaContent").html("");
-                Captcha("captchaContent");
-                hand.configError(data);
-            }
-        };
-        hand.complete = function(jqXhr) {
-            hideLoading();
-        };
-        addSubmitToForm("sign_in", "Account/Register", "formData", hand);
-    </script>
-}

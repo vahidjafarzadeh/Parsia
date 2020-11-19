@@ -7,6 +7,7 @@ $floating-form-base-color: $base-color;
 $floating-form-select-base-color: $base-color;
 @import "../../sass/component/floating-form-select2";
 @import "../../sass/component/material-ckeditor";
+
 body {
     font-family: iran !important;
     padding: 0 !important;
@@ -18,7 +19,7 @@ body {
     max-width: 360px;
     margin: 5% auto;
     overflow-x: hidden;
-    overflow-y:auto;
+    overflow-y: auto;
 }
 
 .login-page .login-box .msg {
@@ -131,6 +132,7 @@ body {
     color: #fff;
     margin-top: -5px;
 }
+
 .page-loader-wrapper {
     z-index: 99999999;
     position: fixed;
@@ -152,6 +154,7 @@ body {
     color: #444;
     float: left;
 }
+
 .page-loader-wrapper .loader {
     position: relative;
     top: calc(50% - 30px);
@@ -218,7 +221,6 @@ body {
     width: 90px;
     height: 90px;
     @include objectFit(contain);
-   
 }
 
 .cursor-defult {
@@ -400,31 +402,39 @@ button, input, select, a {
     margin-bottom: 20px;
     overflow: hidden !important;
 }
+
 .icon {
     margin: 0 5px;
 }
+
 [type="checkbox"] + label {
     padding-right: 0;
 }
-.f-w{
-    width:100%;
+
+.f-w {
+    width: 100%;
 }
+
 .btn-icon {
     font-size: 15px;
     margin: 0 5px;
     position: relative;
     top: 2px;
 }
+
 .btn-title {
     font-size: .8rem;
     text-align: right;
 }
+
 .teal {
     background: #e0f2f1;
 }
-.o-h{
-    overflow:hidden !important;
+
+.o-h {
+    overflow: hidden !important;
 }
+
 .role-manager {
     color: red;
 
@@ -447,5 +457,42 @@ button, input, select, a {
     .role {
         float: right;
         margin: 0;
+    }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+.container-build {
+    position: absolute;
+    left: 0;
+    background: white;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    @include flexBox(flex);
+    @include justifyContent(center);
+    @include flexDirection(column);
+
+    img {
+        max-width: 500px;
+        display: table;
+        margin: auto;
+        height: 265px;
+        @include objectFit(contain);
+    }
+
+    p {
+        font-size: 0.8rem;
+        text-align: center;
+        color: #ff2c72;
     }
 }

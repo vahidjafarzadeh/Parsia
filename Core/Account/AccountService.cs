@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using DataLayer.Context;
 using DataLayer.Model.Core.User;
 using DataLayer.Token;
@@ -20,17 +21,19 @@ namespace Parsia.Core.Account
     public class AccountService : ControllerBase
     {
         private readonly IJwtHandlers _jwtHandlers;
+        private readonly IViewRenderService _viewRenderService;
 
-        public AccountService(IJwtHandlers jwtHandlers)
+        public AccountService(IJwtHandlers jwtHandlers, IViewRenderService viewRenderService)
         {
             _jwtHandlers = jwtHandlers;
+            _viewRenderService = viewRenderService;
         }
-        [HttpPost, Route("service/account/Login")]
+        [HttpPost, Route("service/account/login")]
         public ServiceResult<object> Login()
         {
             try
             {
-                var user = new Users();
+                Users user;
                 var userName = Request.Form["username"].ToString();
                 var password = Request.Form["password"].ToString();
                 var captcha = Request.Form["captcha"].ToString();
@@ -52,18 +55,11 @@ namespace Parsia.Core.Account
                 }
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    user = unitOfWork.Users.Get(p => p.Username == userName).FirstOrDefault();
+                    user = unitOfWork.Users.Get(p => p.Username == userName.ToLower().Trim()).FirstOrDefault();
                     if (user != null)
                     {
                         var pas = UserFacade.GetInstance().GetHashPassword(password);
-                        if (pas != user.Password)
-                        {
-                            user.Attempt = Convert.ToInt16(user.Attempt + 1);
-                            unitOfWork.Users.Update(user);
-                            unitOfWork.Users.Save();
-                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کاربری با این مشخصات یافت نشد");
-                        }
-                        if (user.Attempt >= 5)
+                        if (user.Attempt >= DataLayer.Tools.SystemConfig.MaxAttemptLogin)
                         {
                             user.Attempt = Convert.ToInt16(user.Attempt + 1);
                             unitOfWork.Users.Update(user);
@@ -75,6 +71,15 @@ namespace Parsia.Core.Account
 
                             return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "حساب کاربری مورد نظر مسدود می باشد");
                         }
+                        if (pas != user.Password)
+                        {
+                            user.Attempt = Convert.ToInt16(user.Attempt + 1);
+                            unitOfWork.Users.Update(user);
+                            unitOfWork.Users.Save();
+                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کاربری با این مشخصات یافت نشد");
+                        }
+
+
                     }
                     else
                     {
@@ -153,7 +158,7 @@ namespace Parsia.Core.Account
 
                 using (var context = new ParsiContext())
                 {
-                    var userRole = context.UserRole.Where(p => p.CurrentUsers.Username == userInfo.Username
+                    var userRole = context.UserRole.Where(p => p.CurrentUsers.Username == userInfo.Username.ToLower().Trim()
                                                                 && p.CurrentUsers.Password == UserFacade.GetInstance().GetHashPassword(userInfo.Password.Trim())
                                                                 && p.RoleId == userInfo.RoleId &&
                                                                 p.OrganizationId == userInfo.OrganizationId)
@@ -181,10 +186,9 @@ namespace Parsia.Core.Account
                             OrganizationName = userRole.CurrentOrganization.Name,
                             OrganizationId = userRole.OrganizationId,
                             Timestamp = Util.GetTimeStamp(DateTime.Now.AddMinutes(Convert.ToDouble(userRole.CurrentRole.ExpireMinute.ToString()))),
-                            Picture = userRole.CurrentUsers.CurrentPerson.CurrentFile.Path
+                            Picture = userRole.CurrentUsers.CurrentPerson?.CurrentFile?.Path
                         };
-                        var accessUserInfo = new AccessUserInfo();
-                        accessUserInfo.UseCase = new Dictionary<string, HashSet<string>>();
+                        info.UseCase = new Dictionary<string, HashSet<string>>();
                         var accessGroup = context.RoleAccessGroup.Where(p => p.Role == info.RoleId)
                             .Select(p => p.AccessGroup)
                             .ToList();
@@ -197,39 +201,39 @@ namespace Parsia.Core.Account
                                 .ThenInclude(p => p.CurrentAction).ToList();
                             foreach (var item in data)
                             {
-                                if (accessUserInfo.UseCase.ContainsKey(item.CurrentUseCaseAction.CurrentUseCase.Clazz.ToLower()))
+                                if (info.UseCase.ContainsKey(item.CurrentUseCaseAction.CurrentUseCase.Clazz.ToLower()))
                                 {
-                                    HashSet<string> current =
-                                        accessUserInfo.UseCase[item.CurrentUseCaseAction.CurrentUseCase.Clazz.ToLower()];
+                                    var current =
+                                        info.UseCase[item.CurrentUseCaseAction.CurrentUseCase.Clazz.ToLower()];
                                     current.Add(item.CurrentUseCaseAction.CurrentAction.ActionEnName);
-                                    accessUserInfo.UseCase.Remove(item.CurrentUseCaseAction.CurrentUseCase.Clazz.ToLower());
-                                    accessUserInfo.UseCase.Add(item.CurrentUseCaseAction.CurrentUseCase.Clazz.ToLower(), current);
+                                    info.UseCase.Remove(item.CurrentUseCaseAction.CurrentUseCase.Clazz.ToLower());
+                                    info.UseCase.Add(item.CurrentUseCaseAction.CurrentUseCase.Clazz.ToLower(), current);
                                 }
                                 else
                                 {
                                     var current = new HashSet<string>();
                                     current.Add(item.CurrentUseCaseAction.CurrentAction.ActionEnName);
-                                    accessUserInfo.UseCase.Add(item.CurrentUseCaseAction.CurrentUseCase.Clazz.ToLower(), current);
+                                    info.UseCase.Add(item.CurrentUseCaseAction.CurrentUseCase.Clazz.ToLower(), current);
                                 }
                             }
                         }
-                        info.AccessUserInfos = accessUserInfo;
-                        if (OnlineUser.UserSessionManager.ContainsKey(info.Username))
+                        if (OnlineUser.UserSessionManager.ContainsKey(info.Username.ToLower()))
                         {
-                            OnlineUser.UserSessionManager.Remove(info.Username);
-                            OnlineUser.UserSessionManager.Add(info.Username, info);
+                            OnlineUser.UserSessionManager.Remove(info.Username.ToLower());
+                            OnlineUser.UserSessionManager.Add(info.Username.ToLower(), info);
                         }
                         else
                         {
-                            OnlineUser.UserSessionManager.Add(info.Username, info);
+                            OnlineUser.UserSessionManager.Add(info.Username.ToLower(), info);
                         }
                         var claims = new List<Claim>
                         {
                             new Claim("userId",info.UserId.ToString()),
+                            new Claim(ClaimTypes.Name,info.Username),
                             new Claim("username",info.Username),
                             new Claim("firstName",info.FirstName),
                             new Claim("lastName",info.LastName),
-                            new Claim("picture",info.Picture),
+                            new Claim("picture",info.Picture ?? "images/users/avatar.png"),
                             new Claim("IsAdmin",userRole.CurrentUsers.IsAdmin.ToString())
                         };
                         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -268,428 +272,435 @@ namespace Parsia.Core.Account
                 return new ServiceResult<object>(Enumerator.ErrorCode.BusinessMessage, "امکان ورود به سایت در حال حاضر میسر نمی باشد");
             }
         }
+        [HttpPost, Route("service/account/register")]
+        public async Task<ServiceResult<object>> Register()
+        {
+            try
+            {
+                var userName = Request.Form["username"].ToString();
+                var password = Request.Form["password"].ToString();
+                var confirmPassword = Request.Form["confirmPassword"].ToString();
+                var law = Convert.ToBoolean(Request.Form["law"]);
+                var captcha = Request.Form["captcha"].ToString();
+                if (string.IsNullOrEmpty(userName))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نام کاربری را وارد نمایید");
+                }
+                if (string.IsNullOrEmpty(password))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کلمه عبور را وارد نمایید");
+                }
+                if (string.IsNullOrEmpty(confirmPassword))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا تکرار کلمه عبور را وارد نمایید");
+                }
+                if (string.IsNullOrEmpty(captcha))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد امنیتی را وارد نمایید");
+                }
+                if (!DataLayer.Tools.Captcha.ValidateCaptchaCode(captcha.Trim().ToLower(), Request.HttpContext))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد امنیتی صحیح نمی باشد");
+                }
+                if (password != confirmPassword)
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کلمه عبور با تکرار کلمه عبور مغایرت دارد");
+                }
+                if (!userName.Trim().IsValidEmail() && !userName.Trim().IsValidNumber())
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "نام کاربری شما مورد تایید نمی باشد لطفا یا یک ایمیل معتبر یا یک شماره تلفن همراه 11 رقمی وارد نمایید");
+                }
+                if (law)
+                {
+                    if (userName.Trim().IsValidEmail())
+                    {
+                        using (var unitOfWork = new UnitOfWork())
+                        {
+                            var existUser = unitOfWork.Users.Get(p => p.Username == userName.ToLower().Trim())
+                                .FirstOrDefault();
+                            if (existUser != null)
+                            {
+                                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                                    "کاربر گرامی با عرض پوزش این نام کاربری قبلا ثبت گردیده است لطفا یک نام کاربری دیگر را امتحان نمایید");
+                            }
+                            else
+                            if (password.Length < 8)
+                            {
+                                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                                    "کاربر گرامی تعداد کاراکتر های مجاز برای کلمه عبور حداقل 8 رقم می باشد");
+                            }
+                            else
+                            {
+                                var person = new DataLayer.Model.Core.Person.Person()
+                                {
+                                    FirstName = "کاربر",
+                                    LastName = "کاربر",
+                                    NationalCode = "1",
+                                    BirthPlace = "تهران",
+                                    BirthDate = DateTime.Now,
+                                    Created = DateTime.Now,
+                                    Updated = DateTime.Now,
+                                    Code = "-",
+                                    CreateBy = 1,
+                                    UpdateBy = 1,
+                                    Active = true,
+                                    Deleted = 0
+                                };
+                                unitOfWork.Person.Insert(person);
+                                unitOfWork.Users.Save();
+                                var user = new Users()
+                                {
+                                    PersonId = person.EntityId,
+                                    Username = userName.Trim().ToLower(),
+                                    EmailCode = Guid.NewGuid().ToString(),
+                                    Password = UserFacade.GetInstance().GetHashPassword(password.Trim()),
+                                    PhoneCode = Util.RandomNumber(),
+                                    Attempt = 0,
+                                    LastVisit = DateTime.Now,
+                                    FirstName = "کاربر",
+                                    LastName = "کاربر",
+                                    Created = DateTime.Now,
+                                    Updated = DateTime.Now,
+                                    CreateBy = 1,
+                                    UpdateBy = 1,
+                                    Active = false,
+                                    IsAdmin = false,
+                                    Code = "-",
+                                    Deleted = 0
+                                };
+                                user.Active = false;
+                                unitOfWork.Users.Insert(user);
+                                unitOfWork.Users.Save();
+                                var userRole = new DataLayer.Model.Core.UserRole.UserRole()
+                                {
+                                    RoleId = 2,
+                                    OrganizationId = 1,
+                                    OrgAccess = "AAA",
+                                    UserId = user.EntityId,
+                                    Created = DateTime.Now,
+                                    Updated = DateTime.Now,
+                                    CreateBy = 1,
+                                    UpdateBy = 1,
+                                    Active = true,
+                                    Deleted = 0
+                                };
+                                unitOfWork.UserRole.Insert(userRole);
+                                unitOfWork.Users.Save();
+                                var body = await _viewRenderService.RenderToStringAsync("Account/RegisterEmail", user);
+                                SendEmail.Send(userName.Trim().ToLower(), "فعال سازی حساب کاربری", body, DataLayer.Tools.SystemConfig.EmailSiteName);
+                                return new ServiceResult<object>("email", 1);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var c = userName.ToLower().Trim().FirstOrDefault();
+                        if (c != '0')
+                        {
+                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                                "شماره تلفن همراه معتبر نمی باشد ( با کاراکتر 0 شروع شود و 11 رقم باشد )");
+                        }
+                        else if (userName.ToLower().Trim().Length != 11)
+                        {
+                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                                "شماره تلفن همراه معتبر نمی باشد ( با کاراکتر 0 شروع شود و 11 رقم باشد )");
+                        }
+                        else
+                        {
+                            using (var unitOfWork = new UnitOfWork())
+                            {
+                                var existUser = unitOfWork.Users.Get(p => p.Username == userName.ToLower().Trim())
+                                    .FirstOrDefault();
+                                if (existUser != null)
+                                {
+                                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                                        "کاربر گرامی با عرض پوزش این نام کاربری قبلا ثبت گردیده است لطفا یک نام کاربری دیگر را امتحان نمایید");
+                                }
+                                else if (password.Length < 8)
+                                {
+                                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                                        "کاربر گرامی تعداد کاراکتر های مجاز برای کلمه عبور حداقل 8 رقم می باشد");
+                                }
+                                else
+                                {
+                                    var person = new DataLayer.Model.Core.Person.Person()
+                                    {
+                                        FirstName = "کاربر",
+                                        LastName = "کاربر",
+                                        NationalCode = "1",
+                                        BirthPlace = "تهران",
+                                        BirthDate = DateTime.Now,
+                                        Created = DateTime.Now,
+                                        Updated = DateTime.Now,
+                                        CreateBy = 1,
+                                        Code = "-",
+                                        UpdateBy = 1,
+                                        Active = true,
+                                        Deleted = 0
+                                    };
+                                    unitOfWork.Person.Insert(person);
+                                    unitOfWork.Users.Save();
+                                    var user = new Users()
+                                    {
+                                        PersonId = person.EntityId,
+                                        Username = userName.Trim().ToLower(),
+                                        EmailCode = Guid.NewGuid().ToString(),
+                                        Password = UserFacade.GetInstance().GetHashPassword(password.Trim()),
+                                        PhoneCode = Util.RandomNumber(),
+                                        Attempt = 0,
+                                        LastVisit = DateTime.Now,
+                                        FirstName = "کاربر",
+                                        LastName = "کاربر",
+                                        Code = "-",
+                                        Created = DateTime.Now,
+                                        Updated = DateTime.Now,
+                                        CreateBy = 1,
+                                        UpdateBy = 1,
+                                        Active = false,
+                                        IsAdmin = false,
+                                        Deleted = 0
+                                    };
+                                    unitOfWork.Users.Insert(user);
+                                    unitOfWork.Users.Save();
+                                    var userRole = new DataLayer.Model.Core.UserRole.UserRole()
+                                    {
+                                        RoleId = 2,
+                                        OrganizationId = 1,
+                                        OrgAccess = "AAA",
+                                        UserId = user.EntityId,
+                                        Created = DateTime.Now,
+                                        Updated = DateTime.Now,
+                                        CreateBy = 1,
+                                        UpdateBy = 1,
+                                        Active = true,
+                                        Deleted = 0
+                                    };
+                                    unitOfWork.UserRole.Insert(userRole);
+                                    unitOfWork.Users.Save();
+                                    var sms = new Sms();
+                                    var number = Convert.ToInt64(userName.ToLower());
+                                    sms.VerifyCode(user.PhoneCode, number);
+                                    return new ServiceResult<object>("phone", 1);
+                                }
+                            }
 
+                        }
+                    }
+                }
+                else
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا جهت عضویت در سایت موافقت خود را با قوانین عضویت در سایت تایید نمایید");
+                }
+            }
+            catch (Exception e)
+            {
+                return ExceptionUtil.ExceptionHandler(e, "AccountService.Register", null);
+            }
+        }
+        [HttpPost, Route("service/account/activeCode")]
+        public ServiceResult<object> ActiveCode()
+        {
+            try
+            {
+                var phoneNumber = Request.Form["phoneNumber"].ToString();
+                var code = Request.Form["code"].ToString();
+                var captcha = Request.Form["captcha"].ToString();
+                if (string.IsNullOrEmpty(phoneNumber))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا تلفن همراه را وارد نمایید");
+                }
+                if (string.IsNullOrEmpty(code))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد فعال سازی را وارد نمایید");
+                }
+                if (string.IsNullOrEmpty(captcha))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد امنیتی را وارد نمایید");
+                }
+                if (!DataLayer.Tools.Captcha.ValidateCaptchaCode(captcha, Request.HttpContext))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد امنیتی صحیح نمی باشد");
+                }
+                else
+                {
+                    using (var unitOfWork = new UnitOfWork())
+                    {
+                        var user = unitOfWork.Users.Get(p => p.Username == phoneNumber.ToLower().Trim() && p.PhoneCode == code.Trim()).FirstOrDefault();
+                        if (user != null)
+                        {
+                            if (user.Deleted != 0)
+                            {
+                                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد");
+                            }
+                            user.PhoneCode = Util.RandomNumber();
+                            user.Active = true;
+                            unitOfWork.Users.Update(user);
+                            unitOfWork.Users.Save();
+                            return new ServiceResult<object>(true, 1);
+                        }
+                        else
+                        {
+                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "اطلاعات ارسالی معتبر نمی باشد");
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return ExceptionUtil.ExceptionHandler(e, "AccountService.ActiveCode", null);
+            }
+        }
+        [HttpPost, Route("service/account/recovery")]
+        public async Task<ServiceResult<object>> Recovery()
+        {
+            try
+            {
+                var username = Request.Form["username"].ToString();
+                var captcha = Request.Form["captcha"].ToString();
+                if (string.IsNullOrEmpty(username))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نام کاربری را وارد نمایید");
+                }
+                if (string.IsNullOrEmpty(captcha))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد امنیتی را وارد نمایید");
+                }
+                if (!DataLayer.Tools.Captcha.ValidateCaptchaCode(captcha, Request.HttpContext))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد امنیتی صحیح نمی باشد");
+                }
+                else
+                {
+                    using (var unitOfWork = new UnitOfWork())
+                    {
+                        var user = unitOfWork.Users.Get(p => p.Username == username.ToLower().Trim()).FirstOrDefault();
+                        if (user != null)
+                        {
+                            if (user.Deleted != 0)
+                            {
+                                return new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "کاربری یافت نشد");
+                            }
 
+                            if (user.Username.IsValidNumber())
+                            {
+                                Sms sms = new Sms();
+                                long number = Convert.ToInt64(username.ToLower().Trim());
+                                sms.RecoveryPassword(user.EmailCode, number);
+                                return new ServiceResult<object>("phone", 1);
+                            }
+                            else
+                            {
+                                var body = await _viewRenderService.RenderToStringAsync("Account/ForgetPassword", user);
+                                SendEmail.Send(username.ToLower().Trim(), "بازیابی کلمه عبور", body, DataLayer.Tools.SystemConfig.EmailSiteName);
+                                return new ServiceResult<object>("email", 1);
+                            }
+                        }
+                        else
+                        {
+                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کاربری یافت نشد");
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, e.Message);
+            }
+        }
+        [HttpPost, Route("service/account/changePassword")]
+        public ServiceResult<object> ChangePassword()
+        {
+            try
+            {
+                var password = Request.Form["new-password"].ToString();
+                var confirmPassword = Request.Form["confirm-password"].ToString();
+                var code = Request.Form["code"].ToString();
+                var captcha = Request.Form["captcha"].ToString();
+                if (string.IsNullOrEmpty(password))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کلمه عبور جدید را وارد نمایید");
+                }
+                if (string.IsNullOrEmpty(confirmPassword))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا تکرار کلمه عبور جدید را وارد نمایید");
+                }
+                if (password != confirmPassword)
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کلمه عبور جدید با تکرار کلمه عبور جدید مغایرت دارد");
+                }
+                if (password.Length < 8)
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کلمه عبور جدید نمی تواند کمتر از 8 کاراکتر باشد");
+                }
+                if (string.IsNullOrEmpty(captcha))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد امنیتی را وارد نمایید");
+                }
+                if (!DataLayer.Tools.Captcha.ValidateCaptchaCode(captcha, Request.HttpContext))
+                {
+                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد امنیتی صحیح نمی باشد");
+                }
+                else
+                {
+                    using (var unitOfWork = new UnitOfWork())
+                    {
+                        var user = unitOfWork.Users.Get(p => p.EmailCode == code).FirstOrDefault();
+                        if (user != null)
+                        {
+                            if (user.Deleted != 0)
+                            {
+                                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کاربری یافت نشد");
+                            }
 
-        //        [HttpPost, Route("services/account/Register")]
-        //        public ServiceResult<object> Register()
-        //        {
-        //            try
-        //            {
-        //                var userName = HttpContext.Current.Request.Form["username"];
-        //                var password = HttpContext.Current.Request.Form["password"];
-        //                var confirmPassword = HttpContext.Current.Request.Form["confirmPassword"];
-        //                var law = HttpContext.Current.Request.Form["law"] != null;
-        //                var captcha = HttpContext.Current.Request.Form["captcha"];
-        //                var currentCaptcha = HttpContext.Current.Session["Captcha"].ToString();
-        //                if (string.IsNullOrEmpty(userName))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نام کاربری را وارد نمایید");
-        //                }
-        //                if (string.IsNullOrEmpty(password))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کلمه عبور را وارد نمایید");
-        //                }
-        //                if (string.IsNullOrEmpty(confirmPassword))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا تکرار کلمه عبور را وارد نمایید");
-        //                }
-        //                if (string.IsNullOrEmpty(captcha))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد امنیتی را وارد نمایید");
-        //                }
-        //                if (captcha != currentCaptcha)
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد امنیتی صحیح نمی باشد");
-        //                }
-        //                if (password != confirmPassword)
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کلمه عبور با تکرار کلمه عبور مغایرت دارد");
-        //                }
-        //                if (!userName.Trim().IsValidEmail() && !userName.Trim().IsValidNumber())
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "نام کاربری شما مورد تایید نمی باشد لطفا یا یک ایمیل معتبر یا یک شماره تلفن همراه 11 رقمی وارد نمایید");
-        //                }
-        //                if (law)
-        //                {
-        //                    if (userName.Trim().IsValidEmail())
-        //                    {
-        //                        var existUser = _unitOfWork.Users.Get(p => p.Username == userName && p.IsDeleted == 0)
-        //                            .FirstOrDefault();
-        //                        if (existUser != null)
-        //                        {
-        //                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
-        //                                "کاربر گرامی با عرض پوزش این نام کاربری قبلا ثبت گردیده است لطفا یک نام کاربری دیگر را امتحان نمایید");
-        //                        }
-        //                        else if (password.Length < 8)
-        //                        {
-        //                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
-        //                                "کاربر گرامی تعداد کاراکتر های مجاز برای کلمه عبور حداقل 8 رقم می باشد");
-        //                        }
-        //                        else
-        //                        {
-        //                            var user = new Datalayer.Model.Users()
-        //                            {
-        //                                Username = userName.Trim().ToLower(),
-        //                                EmailCode = Guid.NewGuid().ToString(),
-        //                                RegisterDate = DateTime.Now,
-        //                                Status = false,
-        //                                Password = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "MD5"),
-        //                                PhoneCode = Tools.RandomNumber(),
-        //                                IsDeleted = 0,
-        //                                Attempt = 0,
-        //                                LastVisit = DateTime.Now,
-        //                                Created = DateTime.Now
-        //                            };
-        //                            var userInRole = new UserInRoles()
-        //                            {
-        //                                UserId = user.EntityId,
-        //                                RoleId = 1,
-        //                                IsDeleted = 0,
-        //                                CreateBy = user.EntityId,
-        //                                Created = DateTime.Now
-        //                            };
-        //                            var profile = new Profiles()
-        //                            {
-        //                                UserId = user.EntityId,
-        //                                IsDeleted = 0,
-        //                                CreateBy = user.EntityId,
-        //                                Created = DateTime.Now,
-        //                                Email = userName
-        //                            };
-        //
-        //                            var ip = new InternetProtocols()
-        //                            {
-        //                                Protocol = HttpContext.Current.Request.UserHostAddress,
-        //                                IsDeleted = 0,
-        //                                Created = DateTime.Now,
-        //                                CreateBy = user.EntityId
-        //                            };
-        //                            var visit = new Visits()
-        //                            {
-        //                                InternetProtocolId = ip.EntityId,
-        //                                CreateBy = user.EntityId,
-        //                                Created = DateTime.Now,
-        //                                Count = 1,
-        //                                IsDeleted = 0
-        //                            };
-        //                            _unitOfWork.Users.Insert(user);
-        //                            _unitOfWork.UserInRole.Insert(userInRole);
-        //                            _unitOfWork.Profile.Insert(profile);
-        //                            _unitOfWork.InternetProtocol.Insert(ip);
-        //                            _unitOfWork.Visit.Insert(visit);
-        //                            _unitOfWork.Users.Save();
-        //                            user.CreateBy = user.EntityId;
-        //                            _unitOfWork.Users.Update(user);
-        //                            _unitOfWork.Users.Save();
-        //                            var body = PartialToStringClass.RenderPartialView("Email", "Register", user);
-        //                            SendEmail.Send(userName.Trim().ToLower(), "فعال سازی حساب کاربری", body,
-        //                                System.Configuration.ConfigurationManager.AppSettings["siteName"]);
-        //                            return new ServiceResult<object>("email", 1);
-        //
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        var c = userName.ToLower().Trim().FirstOrDefault();
-        //                        if (c != '0')
-        //                        {
-        //                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
-        //                                "شماره تلفن همراه معتبر نمی باشد ( با کاراکتر 0 شروع شود و 11 رقم باشد )");
-        //                        }
-        //                        else if (userName.ToLower().Trim().Length != 11)
-        //                        {
-        //                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
-        //                                "شماره تلفن همراه معتبر نمی باشد ( با کاراکتر 0 شروع شود و 11 رقم باشد )");
-        //                        }
-        //                        else
-        //                        {
-        //                            var existUser = _unitOfWork.Users.Get(p => p.Username == userName && p.IsDeleted == 0)
-        //                                .FirstOrDefault();
-        //                            if (existUser != null)
-        //                            {
-        //                                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
-        //                                    "کاربر گرامی با عرض پوزش این نام کاربری قبلا ثبت گردیده است لطفا یک نام کاربری دیگر را امتحان نمایید");
-        //                            }
-        //                            else if (password.Length < 8)
-        //                            {
-        //                                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
-        //                                    "کاربر گرامی تعداد کاراکتر های مجاز برای کلمه عبور حداقل 8 رقم می باشد");
-        //                            }
-        //                            else
-        //                            {
-        //                                var user = new Datalayer.Model.Users()
-        //                                {
-        //                                    Username = userName.Trim().ToLower(),
-        //                                    EmailCode = Guid.NewGuid().ToString(),
-        //                                    RegisterDate = DateTime.Now,
-        //                                    Status = false,
-        //                                    Password = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "MD5"),
-        //                                    PhoneCode = Tools.RandomNumber(),
-        //                                    IsDeleted = 0,
-        //                                    Attempt = 0,
-        //                                    LastVisit = DateTime.Now,
-        //                                    Created = DateTime.Now
-        //                                };
-        //                                var userInRole = new UserInRoles()
-        //                                {
-        //                                    UserId = user.EntityId,
-        //                                    RoleId = 1,
-        //                                    IsDeleted = 0,
-        //                                    CreateBy = user.EntityId,
-        //                                    Created = DateTime.Now
-        //                                };
-        //                                var profile = new Profiles()
-        //                                {
-        //                                    UserId = user.EntityId,
-        //                                    IsDeleted = 0,
-        //                                    CreateBy = user.EntityId,
-        //                                    Created = DateTime.Now,
-        //                                    Phone = userName
-        //                                };
-        //                                var ip = new InternetProtocols()
-        //                                {
-        //                                    Protocol = HttpContext.Current.Request.UserHostAddress,
-        //                                    IsDeleted = 0,
-        //                                    Created = DateTime.Now,
-        //                                    CreateBy = user.EntityId
-        //                                };
-        //                                var visit = new Visits()
-        //                                {
-        //                                    InternetProtocolId = ip.EntityId,
-        //                                    CreateBy = user.EntityId,
-        //                                    Created = DateTime.Now,
-        //                                    Count = 1,
-        //                                    IsDeleted = 0
-        //                                };
-        //                                _unitOfWork.Users.Insert(user);
-        //                                _unitOfWork.UserInRole.Insert(userInRole);
-        //                                _unitOfWork.Profile.Insert(profile);
-        //                                _unitOfWork.InternetProtocol.Insert(ip);
-        //                                _unitOfWork.Visit.Insert(visit);
-        //                                _unitOfWork.Users.Save();
-        //                                user.CreateBy = user.EntityId;
-        //                                _unitOfWork.Users.Update(user);
-        //                                _unitOfWork.Users.Save();
-        //                                Sms sms = new Sms();
-        //                                long number = Convert.ToInt64(userName.ToLower());
-        //                                sms.VerifyCode(user.PhoneCode, number);
-        //                                return new ServiceResult<object>("phone", 1);
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا جهت عضویت در سایت موافقت خود را با قوانین عضویت در سایت تایید نمایید");
-        //                }
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, e.Message);
-        //            }
-        //        }
-        //        [HttpPost, Route("services/account/ActiveCode")]
-        //        public ServiceResult<object> ActiveCode()
-        //        {
-        //            try
-        //            {
-        //                var phoneNumber = HttpContext.Current.Request.Form["phoneNumber"];
-        //                var code = HttpContext.Current.Request.Form["code"];
-        //                var captcha = HttpContext.Current.Request.Form["captcha"];
-        //                var currentCaptcha = HttpContext.Current.Session["Captcha"].ToString();
-        //                if (string.IsNullOrEmpty(phoneNumber))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا تلفن همراه را وارد نمایید");
-        //                }
-        //                if (string.IsNullOrEmpty(code))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد فعال سازی را وارد نمایید");
-        //                }
-        //                if (string.IsNullOrEmpty(captcha))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد امنیتی را وارد نمایید");
-        //                }
-        //                if (captcha != currentCaptcha)
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد امنیتی صحیح نمی باشد");
-        //                }
-        //                else
-        //                {
-        //                    var user = _unitOfWork.Users.Get(p => p.Username == phoneNumber & p.PhoneCode == code).FirstOrDefault();
-        //                    if (user != null)
-        //                    {
-        //                        if (user.IsDeleted != 0)
-        //                        {
-        //                            return new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد");
-        //                        }
-        //                        user.PhoneCode = Tools.RandomNumber();
-        //                        user.Status = true;
-        //                        _unitOfWork.Users.Update(user);
-        //                        _unitOfWork.Users.Save();
-        //                        return new ServiceResult<object>(true, 1);
-        //                    }
-        //                    else
-        //                    {
-        //                        return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "اطلاعات ارسالی معتبر نمی باشد");
-        //                    }
-        //
-        //                }
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, e.Message);
-        //            }
-        //        }
-        //        [HttpPost, Route("services/account/Recovery")]
-        //        public ServiceResult<object> Recovery()
-        //        {
-        //            try
-        //            {
-        //                var username = HttpContext.Current.Request.Form["username"];
-        //                var captcha = HttpContext.Current.Request.Form["captcha"];
-        //                var currentCaptcha = HttpContext.Current.Session["Captcha"].ToString();
-        //                if (string.IsNullOrEmpty(username))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نام کاربری را وارد نمایید");
-        //                }
-        //                if (string.IsNullOrEmpty(captcha))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد امنیتی را وارد نمایید");
-        //                }
-        //                if (captcha != currentCaptcha)
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد امنیتی صحیح نمی باشد");
-        //                }
-        //                else
-        //                {
-        //                    var user = _unitOfWork.Users.Get(p => p.Username == username & p.IsDeleted==0).FirstOrDefault();
-        //                    if (user != null)
-        //                    {
-        //                        if (user.IsDeleted != 0)
-        //                        {
-        //                            return new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "کاربری یافت نشد");
-        //                        }
-        //
-        //                        if (user.Username.IsValidNumber())
-        //                        {
-        //                            Sms sms = new Sms();
-        //                            long number = Convert.ToInt64(username.ToLower());
-        //                            sms.RecoveryPassword(user.EmailCode, number);
-        //                            return new ServiceResult<object>("phone", 1);
-        //                        }
-        //                        else
-        //                        {
-        //                            var body = PartialToStringClass.RenderPartialView("Email", "ForgetPassword", user);
-        //                            SendEmail.Send(username.ToLower().Trim(), "بازیابی کلمه عبور", body, System.Configuration.ConfigurationManager.AppSettings["siteName"]);
-        //                            return new ServiceResult<object>("email", 1);
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کاربری یافت نشد");
-        //                    }
-        //
-        //                }
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, e.Message);
-        //            }
-        //        }
-        //        [HttpPost, Route("services/account/ChangePassword")]
-        //        public ServiceResult<object> ChangePassword()
-        //        {
-        //            try
-        //            {
-        //                var password = HttpContext.Current.Request.Form["new-password"];
-        //                var confirmPassword = HttpContext.Current.Request.Form["confirm-password"];
-        //                var code = HttpContext.Current.Request.Form["code"];
-        //                var captcha = HttpContext.Current.Request.Form["captcha"];
-        //                var currentCaptcha = HttpContext.Current.Session["Captcha"].ToString();
-        //                if (string.IsNullOrEmpty(password))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کلمه عبور جدید را وارد نمایید");
-        //                }
-        //                if (string.IsNullOrEmpty(confirmPassword))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا تکرار کلمه عبور جدید را وارد نمایید");
-        //                }
-        //                if (password != confirmPassword)
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کلمه عبور جدید با تکرار کلمه عبور جدید مغایرت دارد");
-        //                }
-        //                if (password.Length < 8)
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کلمه عبور جدید نمی تواند کمتر از 8 کاراکتر باشد");
-        //                }
-        //                if (string.IsNullOrEmpty(captcha))
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد امنیتی را وارد نمایید");
-        //                }
-        //                if (captcha != currentCaptcha)
-        //                {
-        //                    return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد امنیتی صحیح نمی باشد");
-        //                }
-        //                else
-        //                {
-        //                    var user = _unitOfWork.Users.Get(p => p.EmailCode == code & p.IsDeleted==0).FirstOrDefault();
-        //                    if (user != null)
-        //                    {
-        //                        if (user.IsDeleted != 0)
-        //                        {
-        //                            return new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "کاربری یافت نشد");
-        //                        }
-        //
-        //                        user.Password = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "MD5");
-        //                        user.EmailCode = Guid.NewGuid().ToString();
-        //                        _unitOfWork.Users.Update(user);
-        //                        _unitOfWork.Users.Save();
-        //                        return new ServiceResult<object>(true, 1);
-        //                    }
-        //                    else
-        //                    {
-        //                        return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کاربری یافت نشد");
-        //                    }
-        //
-        //                }
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, e.Message);
-        //            }
-        //        }
-        //        [HttpPost, Route("services/account/LogOut")]
-        //        public ServiceResult<object> LogOut()
-        //        {
-        //            try
-        //            {
-        //                var tic = User.Identity.Name.GetTicket();
-        //                if (tic != null)
-        //                {
-        //                    var user = _unitOfWork.Users.Get(p => p.EntityId == tic.UserId).FirstOrDefault();
-        //                    if (user != null)
-        //                    {
-        //                        user.LastVisit = DateTime.Now;
-        //                        _unitOfWork.Users.Update(user);
-        //                        _unitOfWork.Users.Save();
-        //                    }
-        //        
-        //                    DynamicToken.Token.Remove(tic.Username);
-        //                    DynamicRoles.Roles.Remove(tic.Username);
-        //                    HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        //                    return new ServiceResult<object>(new StandardResponse() { Ticket = null }, 1);
-        //                }
-        //                else
-        //                {
-        //                    HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        //                    return new ServiceResult<object>(new StandardResponse() { Ticket = null }, 1);
-        //                }
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, e.Message);
-        //            }
-        //        }
+                            user.Password = UserFacade.GetInstance().GetHashPassword(password.Trim());
+                            user.EmailCode = Guid.NewGuid().ToString();
+                            unitOfWork.Users.Update(user);
+                            unitOfWork.Users.Save();
+                            return new ServiceResult<object>(true, 1);
+                        }
+                        else
+                        {
+                            return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کاربری یافت نشد");
+                        }
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, e.Message);
+            }
+        }
+        [HttpPost, Route("service/account/logout")]
+        public ServiceResult<object> LogOut(Clause clause)
+        {
+            try
+            {
+                var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var user = unitOfWork.Users.Get(p => p.Username == userInfo.Username.ToLower()).FirstOrDefault();
+                    if (user != null)
+                    {
+                        user.LastVisit = DateTime.Now;
+                        unitOfWork.Users.Update(user);
+                        unitOfWork.Users.Save();
+                    }
+
+                    if (OnlineUser.UserSessionManager.ContainsKey(userInfo.Username.ToLower()))
+                    {
+                        OnlineUser.UserSessionManager.Remove(userInfo.Username.ToLower());
+                    }
+
+                    HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    return new ServiceResult<object>(Enumerator.ErrorCode.UserExpired, "");
+                }
+               
+            }
+            catch (Exception e)
+            {
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, e.Message);
+            }
+        }
     }
 }

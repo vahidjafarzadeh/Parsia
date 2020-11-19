@@ -1,94 +1,47 @@
-﻿
-@{
-    ViewBag.Title = "ActivePhoneCode";
-    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
-}
+﻿    <div class="login-box">
+        <div class="card logged-box">
+            <div class="body">
+                <div class="logo">
+                    <a href="/">
+                        <img class="log-image" src="/images/application/logo.png" alt="logo of site" />
+                    </a>
+                    <small class="cursor-defult">فعال سازی حساب کاربری</small>
+                </div>
+                <div class="row m-0">
+                    <div class="form-group floating-form-group col-12 col-lg-12">
+                        <input type="text" class="form-control form-control-sm floating-form-control float text-left" id="phoneNumber"
+                               max-length="100" required="" tabindex="1" maxlength="11" minlength="11" autocomplete="off">
+                        <span class="floating-form-bar"></span>
+                        <label for="phoneNumber" class="floating-label">
+                            <i class="fas fa-mobile-alt icon"></i><span>تلفن همراه</span>
+                        </label>
+                    </div>
+                    <div class="form-group floating-form-group col-12 col-lg-12">
+                        <input type="number" class="form-control form-control-sm floating-form-control float text-left" id="code"
+                               max-length="100" ksun-input-type="text" tabindex="2" maxlength="6" minlength="6" required autocomplete="off">
+                        <span class="floating-form-bar"></span>
+                        <label for="code" class="floating-label">
+                            <i class="fas fa-sms icon"></i><span>کد فعال سازی</span>
+                        </label>
+                    </div>
+                    <div class="form-group floating-form-group col-8 col-lg-8">
+                        <input type="text" class="form-control form-control-sm floating-form-control float text-left" id="captcha"
+                               length="4" tabindex="3" required="">
+                        <span class="floating-form-bar"></span>
+                        <label for="captcha" class="floating-label">
+                            <i class="fas fa-code icon"></i><span>کد امنیتی</span>
+                        </label>
+                    </div>
+                    <div class="form-group floating-form-group col-4 col-lg-4 p-0">
+                        <div id="container-captcha">
 
-
-<div class="login-box">
-    <div class="logo">
-        <a href="/">
-            <img class="log-image" src="~/Content/images/site/logo.png" alt="logo of site" />
-        </a>
-        <small class="cursor-defult">فعال سازی حساب کاربری</small>
-    </div>
-    <div class="card">
-        <div class="body">
-            <form id="active-code" method="POST">
-                <div class="msg">کد فعال سازی را وارد نمایید</div>
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="material-icons">person</i>
-                    </span>
-                    <div class="form-line">
-                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" maxlength="11" minlength="11" placeholder="تلفن همراه" required autocomplete="off">
+                        </div>
+                    </div>
+                   
+                    <div class="form-group floating-form-group col-12 col-lg-12 pt-0 pb-0 pr-1 pl-1">
+                        <button class="btn btn-sm success material f-w" id="btn-sms-verify"><i class="far fa-check-circle btn-icon"></i><span class="btn-title">بررسی</span></button>
                     </div>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="material-icons">phonelink_lock</i>
-                    </span>
-                    <div class="form-line">
-                        <input type="text" class="form-control" name="code" maxlength="6" minlength="6" placeholder="کد فعال سازی" required autocomplete="off">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="material-icons">code</i>
-                    </span>
-                    <div class="form-line" style="width: 140px">
-                        <input type="text" class="form-control" name="captcha" minlength="6" maxlength="6" placeholder="کد امنیتی" required autocomplete="off">
-                    </div>
-                    <span class="input-group-addon" id="captchaContent">
-
-                    </span>
-                </div>
-                <div class="input-group">
-                    <button class="btn btn-block bg-green waves-effect full-width" type="submit">بررسی</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function (event) { });
-    function ready(callback) {
-        if (document.readyState !== 'loading') callback();
-        else if (document.addEventListener) document.addEventListener('DOMContentLoaded', callback);
-        else document.attachEvent('onreadystatechange', function () {
-            if (document.readyState === 'complete') callback();
-        });
-    }
-    ready(function () {
-        Captcha("captchaContent");
-        var hand = new Handler();
-        hand.success = function (data, textStatus, jqXhr) {
-            if (data.Done) {
-                if (jqXhr && jqXhr.responseJSON && jqXhr.responseJSON.Done && jqXhr.responseJSON.Result.Ticket) {
-                    localStorage.setItem("ticket", jqXhr.responseJSON.Result.Ticket);
-                }
-                hideLoading();
-                swal({
-                    title: "پیغام سیستم",
-                    text: "فعال سازی اکانت با موفقیت انجام شد",
-                    timer: 4000,
-                    showConfirmButton: false
-                });
-                setTimeout(() => {
-                    window.location.href = Config.applicationUrl + "login";
-                }, 5000);
-            } else {
-                $("#captchaContent").html("");
-                Captcha("captchaContent");
-                hand.configError(data);
-            }
-        };
-        hand.complete = function (jqXhr) {
-
-        };
-        addSubmitToForm("active-code", "Account/ActiveCode", "formData", hand);
-    });
-
-
-</script>

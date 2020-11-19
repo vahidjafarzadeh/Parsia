@@ -22,100 +22,43 @@
 </div>
 
 <div class="login-box">
-    <div class="logo">
-        <a href="/">
-            <img class="log-image" src="~/Content/images/site/logo.png" alt="logo of site" />
-        </a>
-        <small class="cursor-defult">بازیابی رمز عبور</small>
-    </div>
-    <div class="card">
+    <div class="card logged-box">
         <div class="body">
-            <form id="recovery" method="POST">
-                <div class="msg">برای بازیابی نام کاربری خود را وارد نمایید</div>
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="material-icons">person</i>
-                    </span>
-                    <div class="form-line">
-                        <input type="text" class="form-control" name="username" maxlength="100" minlength="8" placeholder="نام کاربری" required autocomplete="off">
+            <div class="logo">
+                <a href="/">
+                    <img class="log-image" src="/images/application/logo.png" alt="logo of site" />
+                </a>
+                <small class="cursor-defult">بازیابی رمز عبور</small>
+            </div>
+            <div class="row m-0">
+                <div class="form-group floating-form-group col-12 col-lg-12">
+                    <input type="text" class="form-control form-control-sm floating-form-control float text-left" id="username"
+                           max-length="100" required="" tabindex="1">
+                    <span class="floating-form-bar"></span>
+                    <label for="username" class="floating-label">
+                        <i class="fas fa-user icon"></i><span>نام کاربری (شماره همراه یا ایمیل)</span>
+                    </label>
+                </div>
+                <div class="form-group floating-form-group col-8 col-lg-8">
+                    <input type="text" class="form-control form-control-sm floating-form-control float text-left" id="captcha"
+                           length="4" tabindex="3" required="">
+                    <span class="floating-form-bar"></span>
+                    <label for="captcha" class="floating-label">
+                        <i class="fas fa-code icon"></i><span>کد امنیتی</span>
+                    </label>
+                </div>
+                <div class="form-group floating-form-group col-4 col-lg-4 p-0">
+                    <div id="container-captcha">
+
                     </div>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <i class="material-icons">code</i>
-                    </span>
-                    <div class="form-line"  style="width: 140px">
-                        <input type="text" class="form-control" name="captcha" minlength="6" maxlength="6" placeholder="کد امنیتی" required autocomplete="off">
-                    </div>
-                    <span class="input-group-addon" id="captchaContent">
-                    </span>
+                <div class="form-group floating-form-group col-12 col-lg-12 pt-0 pb-0 pr-1 pl-1">
+                    <button class="btn btn-sm success material f-w" id="btn-recover-tow"><i class="fas fa-sync btn-icon"></i><span class="btn-title">بازیابی</span></button>
                 </div>
-                <div class="input-group">
-                    <button class="btn btn-block bg-green waves-effect full-width" type="submit">بازیابی</button>
+                <div class="form-group floating-form-group col-12 col-lg-12  pt-0 pb-0 pr-1 pl-1 o-h">
+                    <a href="/" class="btn btn-sm purple  material f-w" type="submit"><i class="fas fa-reply-all btn-icon"></i><span class="btn-title">بازگشت به سایت</span></a>
                 </div>
-                <div class="input-group">
-                    <a href="/" class="btn btn-block bg-pink waves-effect full-width">بازگشت به سایت</a>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
-
-
-@section script
-{
-    <script>
-        $("body").addClass("login-page ls-closed");
-        Captcha("captchaContent");
-        var hand = new Handler();
-        hand.success = function (data, textStatus, jqXhr) {
-            if (data.Done) {
-                if (jqXhr && jqXhr.responseJSON && jqXhr.responseJSON.Done && jqXhr.responseJSON.Result.Ticket) {
-                    localStorage.setItem("ticket", jqXhr.responseJSON.Result.Ticket);
-                }
-                hideLoading();
-                if (data.Result === "phone") {
-                    swal({
-                        title: "پیغام سیستم",
-                        text:"کد بازیابی با موفقیت ارسال شد . کد فعال سازی ارسالی به تلفن همراه خود را وارد نمایید ",
-                        timer: 4000,
-                        showConfirmButton: false
-                    });
-                    setTimeout(() => {
-                        var myHandler = new Handler();
-                        myHandler.success = function (data, textStatus, jqXhr) {
-                            $("body").html(data);
-                        };
-                        myHandler.complete = function (jqXhr) { hideLoading(); };
-                        Api.getController({
-                            url: "recover-phone",
-                            filter: {},
-                            handler: myHandler,
-                            ticket: false,
-                            isAsync: true,
-                            setHeader: false
-                        });
-                    },
-                        4000);
-                }
-                else {
-                    swal({
-                        title: "پیغام سیستم",
-                        text:
-                            "کد فعال سازی با موفقیت ارسال شد. با کلیک بر روی لینک ارسالی به ایمیل خود کلمه عبور خود را بازیابی کنید",
-                        timer: 4000,
-                        showConfirmButton: false
-                    });
-                }
-            } else {
-                $("#captchaContent").html("");
-                Captcha("captchaContent");
-                hand.configError(data);
-            }
-        };
-        hand.complete = function (jqXhr) {
-
-        };
-        addSubmitToForm("recovery", "Account/Recovery", "formData", hand);
-    </script>
-}

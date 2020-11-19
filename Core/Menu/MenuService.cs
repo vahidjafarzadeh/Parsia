@@ -1,5 +1,8 @@
-﻿using DataLayer.Tools;
+﻿using System;
+using System.Collections.Generic;
+using DataLayer.Tools;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Parsia.Core.Menu
 {
@@ -7,7 +10,14 @@ namespace Parsia.Core.Menu
     [ClassDetails(Clazz = "Menu", Facade = "MenuService")]
     public class MenuService : ControllerBase
     {
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(MenuFacade).GetCustomAttributes(typeof(ClassDetails), true);
+        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(MenuService).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private IMemoryCache _memoryCache;
+
+        public MenuService(IMemoryCache memoryCache)
+        {
+            _memoryCache = memoryCache;
+        }
 
         [HttpPost]
         [Route("service/menu/gridView")]
@@ -78,7 +88,23 @@ namespace Parsia.Core.Menu
         {
             var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            return MenuFacade.GetInstance().GetAllMenu(bp);
+            var data = new List<MenuDto>();
+            if (_memoryCache.TryGetValue("Menu_"+bp.UserInfo.RoleId,out data))
+            {
+                return new ServiceResult<object>(data,data.Count);
+            }
+            else
+            {
+                var myServiceData = MenuFacade.GetInstance().GetAllMenu(bp);
+                if (myServiceData.Done)
+                {
+                    data = (List<MenuDto>) myServiceData.Result;
+                    _memoryCache.Set("Menu_" + bp.UserInfo.RoleId, data,
+                        TimeSpan.FromMinutes(DataLayer.Tools.SystemConfig.MenuCacheTimeMinute));
+                }
+                return myServiceData;
+            }
+             
         }
     }
 }

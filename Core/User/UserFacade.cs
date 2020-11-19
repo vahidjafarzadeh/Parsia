@@ -258,7 +258,7 @@ namespace Parsia.Core.User
             if (!string.IsNullOrEmpty(request.Form["emailCode"])) dto.EmailCode = request.Form["emailCode"]; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد فعال سازی ایمیل  را وارد نمایید");
             if (!string.IsNullOrEmpty(request.Form["phoneCode"])) dto.PhoneCode = request.Form["phoneCode"]; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا کد فعال سازی موبایل را وارد نمایید");
             if (!string.IsNullOrEmpty(request.Form["attempt"])) dto.Attempt = Convert.ToInt16(request.Form["attempt"]); else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا تعداد تلاش ناموفق برای ورود را وارد نمایید");
-            if (!string.IsNullOrEmpty(request.Form["lastVisit"])) dto.LastVisit = Util.GetDateTime(Convert.ToDouble(request.Form["lastVisit"])); else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا آخرین بازدید را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["lastVisit"])) dto.LastVisit = Convert.ToDouble(request.Form["lastVisit"]); else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا آخرین بازدید را وارد نمایید");
             if (!string.IsNullOrEmpty(request.Form["EntityId"])) dto.EntityId = Convert.ToInt64(request.Form["EntityId"]);
             if (!string.IsNullOrEmpty(request.Form["Code"])) dto.Code = request.Form["Code"];
             if (!string.IsNullOrEmpty(request.Form["Active"])) dto.Active = Convert.ToBoolean(request.Form["Active"]);

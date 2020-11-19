@@ -19,6 +19,7 @@ namespace Parsia.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogError("fefr rf rf ef efrfe");
             return View();
         }
 

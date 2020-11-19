@@ -738,3 +738,41 @@ button, input, select, a {
   .role-manager .role {
     float: right;
     margin: 0; }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0;
+  /* <-- Apparently some margin are still there even though it's hidden */ }
+
+input[type=number] {
+  -moz-appearance: textfield;
+  /* Firefox */ }
+
+.container-build {
+  position: absolute;
+  left: 0;
+  background: white;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box ;
+  display: -webkit-flex ;
+  display: -ms-flexbox ;
+  display: flex ;
+  -webkit-justify-content: center ;
+  justify-content: center ;
+  -webkit-flex-direction: column ;
+  flex-direction: column ; }
+  .container-build img {
+    max-width: 500px;
+    display: table;
+    margin: auto;
+    height: 265px;
+    object-fit: contain;
+    -o-object-fit: contain; }
+  .container-build p {
+    font-size: 0.8rem;
+    text-align: center;
+    color: #ff2c72; }

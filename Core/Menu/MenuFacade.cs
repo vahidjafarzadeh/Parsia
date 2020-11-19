@@ -213,9 +213,9 @@ namespace Parsia.Core.Menu
                         {
                             list.Add(Copier.GetDto(menu));
                         }
-                        else if (bp.UserInfo.AccessUserInfos.UseCase.ContainsKey(usecase))
+                        else if (bp.UserInfo.UseCase.ContainsKey(usecase))
                         {
-                            var lst = bp.UserInfo.AccessUserInfos.UseCase[usecase];
+                            var lst = bp.UserInfo.UseCase[usecase];
                             foreach (var item in lst)
                             {
                                 if (item.ToLower() == "showinmenu")
