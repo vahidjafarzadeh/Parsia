@@ -8,7 +8,7 @@ namespace Parsia.Core.Location
     public class LocationCopier : IBaseCopier<LocationDto, DataLayer.Model.Core.Location.Location>
     {
 
-        public LocationDto GetDto(DataLayer.Model.Core.Location.Location entity)
+        public LocationDto GetDtDataLayer.Model.Core.Location.Locationon entity)
         {
             var createUser = entity.CreateUserEntity != null
                 ? new UserDto() { EntityId = entity.CreateUserEntity.EntityId, Username = entity.CreateUserEntity.Username }
@@ -43,9 +43,9 @@ namespace Parsia.Core.Location
             return location;
         }
 
-        public DataLayer.Model.Core.Location.Location GetEntity(LocationDto dto, BusinessParam bp, bool setCreate)
+    DataLayer.Model.Core.Location.Locationon.Location GetEntity(LocationDto dto, BusinessParam bp, bool setCreate)
         {
-            var location = new DataLayer.Model.Core.Location.Location
+            var locaDataLayer.Model.Core.Location.Locationon.Location
             {
                 EntityId = dto.EntityId,
                 Active = dto.Active,
@@ -59,7 +59,7 @@ namespace Parsia.Core.Location
             return SetMandatoryField(location, bp, setCreate);
         }
 
-        public DataLayer.Model.Core.Location.Location SetMandatoryField(DataLayer.Model.Core.Location.Location location,
+    DataLayer.Model.Core.Location.Locationon.Location SetMandDataLayer.Model.Core.Location.Locationon.Location location,
             BusinessParam bp, bool setCreate)
         {
             location.AccessKey = bp.UserInfo.AccessKey;

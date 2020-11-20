@@ -44,12 +44,7 @@ function showLoginPage(retURL) {
         const externalID = Util.urlParameter("externalID");
         top.login(externalID);
     } else {
-        top.location.href =
-            AUTHENTICATION_SERVER +
-            "login/?" +
-            new Date().getTime() +
-            "&r=" +
-            window.btoa(retURL !== null ? retURL : top.location.href); //encode
+        top.location.href = "/login";
     }
 }
 const createScrollBar = () => {
@@ -227,6 +222,43 @@ function showConfirm(config) {
 function hideConfirm() {
     modalInstance.hideConfirm();
 };
+function errorHandler(response) {
+    switch (response.errorCode) {
+    case 2:
+        if (top.showConfirm) {
+            top.showConfirm({
+                body: "زمان استفاده از حساب کاربری شما به پایان رسیده است. آیا مایلید دوباره وارد شوید؟ ",
+                confirmButton: {
+                    onClick: function (e) {
+                        showLoginPage();
+                    }
+                }
+            });
+        } else {
+            showLoginPage();
+        }
+        break;
+    default:
+        if (top.showConfirm) {
+            setTimeout(function () {
+                    top.showConfirm({
+                        title: "خطا",
+                        body: response.errorDesc,
+                        confirmButton: {
+                            hidden: true
+                        },
+                        declineButton: {
+                            text: GeneralBundle.$close
+                        }
+                    });
+                },
+                450);
+        } else {
+            alert(response.errorDesc);
+        }
+        break;
+    }
+}
 const getMenu = () => {
     var handler = new Handler();
     handler.beforeSend = () => {

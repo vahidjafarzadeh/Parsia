@@ -130,12 +130,9 @@ namespace Parsia.Core.Organization
             if (entity.CurrentProvince != null)
             {
                 organizationDto.Province = new LocationDto()
-                {
-                    EntityId = entity.CurrentProvince.EntityId,
+            DataLayer.Model.Core.Organization.OrganizationurrentProvince.EntityId,
                     Name = entity.CurrentProvince.Name,
-                    FullTitle = entity.CurrentProvince.FullTitle
-                };
-            }
+                    FullTitle = entity.CurrDataLayer.Model.Core.Organization.Organization         }
 
             return organizationDto;
         }
@@ -172,9 +169,8 @@ namespace Parsia.Core.Organization
                 Mobile = dto.Mobile,
                 Longitude = dto.Latitude,
                 Logo = dto.Logo?.EntityId,
-                Latitude = dto.Latitude,
-                Fax = dto.Fax,
-                EstablishingYear = Util.GetDateTime(dto.EstablishingYear),
+               DataLayer.Model.Core.Organization.Organization = dto.Fax,
+                EstaDataLayer.Model.Core.Organization.OrganizationngYear),
                 Email = dto.Email
             };
             return SetMandatoryField(organization, bp, setCreate);
@@ -183,7 +179,8 @@ namespace Parsia.Core.Organization
         public DataLayer.Model.Core.Organization.Organization SetMandatoryField(DataLayer.Model.Core.Organization.Organization organization,
             BusinessParam bp, bool setCreate)
         {
-            organization.UpdateBy = bp.UserInfo.UserId;
+            organization.UpdateBy = bp.
+    fo.UserId;
             organization.Updated = DateTime.Now;
             if (!setCreate) return organization;
             organization.CreateBy = bp.UserInfo.UserId;

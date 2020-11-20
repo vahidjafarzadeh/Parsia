@@ -10,10 +10,10 @@ namespace Parsia.Core.User
         public UserDto GetDto(Users entity)
         {
             var createUser = entity.CreateUserEntity != null
-                ? new UserDto() { EntityId = entity.CreateUserEntity.EntityId, Username = entity.CreateUserEntity.Username }
+                ? new UserDto {EntityId = entity.CreateUserEntity.EntityId, Username = entity.CreateUserEntity.Username}
                 : new UserDto();
             var updateUser = entity.UpdateUserEntity != null
-                ? new UserDto() { EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username }
+                ? new UserDto {EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username}
                 : new UserDto();
             return new UserDto
             {
@@ -52,16 +52,13 @@ namespace Parsia.Core.User
                 Active = dto.Active,
                 Code = dto.Code,
                 Deleted = dto.Deleted,
-                FullTitle = dto.Username + " | " + dto.FirstName+" | "+ dto.LastName,
+                FullTitle = dto.Username + " | " + dto.FirstName + " | " + dto.LastName,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 PersonId = dto.PersonId,
                 IsAdmin = dto.IsAdmin
             };
-            if (string.IsNullOrEmpty(user.Code))
-            {
-                user.Code = "-";
-            }
+            if (string.IsNullOrEmpty(user.Code)) user.Code = "-";
             return SetMandatoryField(user, bp, setCreate);
         }
 

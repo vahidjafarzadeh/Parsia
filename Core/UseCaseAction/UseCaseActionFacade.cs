@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,11 +13,14 @@ namespace Parsia.Core.UseCaseAction
     {
         private static readonly UseCaseActionFacade Facade = new UseCaseActionFacade();
         private static readonly UseCaseActionCopier Copier = new UseCaseActionCopier();
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(UseCaseActionFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(UseCaseActionFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         private UseCaseActionFacade()
         {
         }
+
         public static UseCaseActionFacade GetInstance()
         {
             return Facade;
@@ -30,7 +32,9 @@ namespace Parsia.Core.UseCaseAction
             {
                 using (var unitOfWork = new UnitOfWork())
                 {
-                   return unitOfWork.UseCaseAction.Get(p=>p.Action == dto.Action.EntityId && p.UseCase == dto.UseCase.EntityId).Select(p=>p.EntityId).FirstOrDefault();
+                    return unitOfWork.UseCaseAction
+                        .Get(p => p.Action == dto.Action.EntityId && p.UseCase == dto.UseCase.EntityId)
+                        .Select(p => p.EntityId).FirstOrDefault();
                 }
             }
             catch (Exception e)
@@ -38,12 +42,12 @@ namespace Parsia.Core.UseCaseAction
                 return -1;
             }
         }
+
         public ServiceResult<object> SaveList(BusinessParam bp, List<UseCaseActionDto> lstDto)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
-
                 foreach (var dto in lstDto)
                 {
                     DataLayer.Model.Core.UseCaseAction.UseCaseAction useCaseAction;
@@ -61,8 +65,11 @@ namespace Parsia.Core.UseCaseAction
                             unitOfWork.UseCaseAction.Update(useCaseAction);
                             unitOfWork.UseCaseAction.Save();
                         }
-                    Elastic<UseCaseActionDto, DataLayer.Model.Core.UseCaseAction.UseCaseAction>.SaveToElastic(useCaseAction, "UseCaseAction", bp);
+
+                    Elastic<UseCaseActionDto, DataLayer.Model.Core.UseCaseAction.UseCaseAction>.SaveToElastic(
+                        useCaseAction, "UseCaseAction", bp);
                 }
+
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
@@ -78,14 +85,12 @@ namespace Parsia.Core.UseCaseAction
             {
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var useCaseActions = unitOfWork.UseCaseAction.Get(p=>p.UseCase == useCaseId).ToList();
-                    foreach (var item in useCaseActions)
-                    {
-                        unitOfWork.UseCaseAction.Delete(item.EntityId);
-                    }
+                    var useCaseActions = unitOfWork.UseCaseAction.Get(p => p.UseCase == useCaseId).ToList();
+                    foreach (var item in useCaseActions) unitOfWork.UseCaseAction.Delete(item.EntityId);
                     unitOfWork.UseCaseAction.Save();
                 }
-                return new ServiceResult<object>(true,1);
+
+                return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
             {

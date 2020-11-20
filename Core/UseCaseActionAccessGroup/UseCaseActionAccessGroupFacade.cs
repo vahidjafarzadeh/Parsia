@@ -13,14 +13,17 @@ namespace Parsia.Core.UseCaseActionAccessGroup
     {
         private static readonly UseCaseActionAccessGroupFacade Facade = new UseCaseActionAccessGroupFacade();
         private static readonly UseCaseActionAccessGroupCopier Copier = new UseCaseActionAccessGroupCopier();
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(UseCaseActionAccessGroupFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(UseCaseActionAccessGroupFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private UseCaseActionAccessGroupFacade()
+        {
+        }
 
         public static UseCaseActionAccessGroupFacade GetInstance()
         {
             return Facade;
-        }
-        private UseCaseActionAccessGroupFacade()
-        {
         }
 
         public ServiceResult<object> SaveList(BusinessParam bp, List<UseCaseActionAccessGroupDto> lstDto)
@@ -28,7 +31,6 @@ namespace Parsia.Core.UseCaseActionAccessGroup
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
-
                 foreach (var dto in lstDto)
                 {
                     DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup caseActionAccessGroup;
@@ -41,7 +43,6 @@ namespace Parsia.Core.UseCaseActionAccessGroup
                                 unitOfWork.UseCaseActionAccessGroup.Insert(caseActionAccessGroup);
                                 unitOfWork.UseCaseActionAccessGroup.Save();
                             }
-                           
                         }
                     else
                         using (var unitOfWork = new UnitOfWork())
@@ -50,30 +51,12 @@ namespace Parsia.Core.UseCaseActionAccessGroup
                             unitOfWork.UseCaseActionAccessGroup.Update(caseActionAccessGroup);
                             unitOfWork.UseCaseActionAccessGroup.Save();
                         }
-                    Elastic<UseCaseActionAccessGroupDto, DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup>.SaveToElastic(caseActionAccessGroup, "UseCaseActionAccessGroup", bp);
+
+                    Elastic<UseCaseActionAccessGroupDto,
+                            DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup>
+                        .SaveToElastic(caseActionAccessGroup, "UseCaseActionAccessGroup", bp);
                 }
-                return new ServiceResult<object>(true, 1);
-            }
-            catch (Exception e)
-            {
-                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
-            }
-        }
-        public ServiceResult<object> DeletedList(BusinessParam bp, long accessGroupId)
-        {
-            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
-            try
-            {
-                using (var unitOfWork = new UnitOfWork())
-                {
-                    var useCaseActionAccessGroups = unitOfWork.UseCaseActionAccessGroup.Get(p => p.AccessGroup == accessGroupId).ToList();
-                    foreach (var item in useCaseActionAccessGroups)
-                    {
-                        unitOfWork.UseCaseActionAccessGroup.Delete(item);
-                        Elastic<UseCaseActionAccessGroupDto, DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup>.SaveToElastic(item, "UseCaseActionAccessGroup", bp);
-                    }
-                    unitOfWork.UseCaseActionAccessGroup.Save();
-                }
+
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
@@ -82,5 +65,32 @@ namespace Parsia.Core.UseCaseActionAccessGroup
             }
         }
 
+        public ServiceResult<object> DeletedList(BusinessParam bp, long accessGroupId)
+        {
+            var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
+            try
+            {
+                using (var unitOfWork = new UnitOfWork())
+                {
+                    var useCaseActionAccessGroups = unitOfWork.UseCaseActionAccessGroup
+                        .Get(p => p.AccessGroup == accessGroupId).ToList();
+                    foreach (var item in useCaseActionAccessGroups)
+                    {
+                        unitOfWork.UseCaseActionAccessGroup.Delete(item);
+                        Elastic<UseCaseActionAccessGroupDto,
+                                DataLayer.Model.Core.UseCaseActionAccessGroup.UseCaseActionAccessGroup>
+                            .SaveToElastic(item, "UseCaseActionAccessGroup", bp);
+                    }
+
+                    unitOfWork.UseCaseActionAccessGroup.Save();
+                }
+
+                return new ServiceResult<object>(true, 1);
+            }
+            catch (Exception e)
+            {
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
+            }
+        }
     }
 }

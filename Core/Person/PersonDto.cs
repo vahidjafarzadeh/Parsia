@@ -1,7 +1,8 @@
 ﻿using DataLayer.Base;
 using Parsia.Core.ComboVal;
 using Parsia.Core.File;
-namespace Parsia.Core.Person
+
+mespace Parsia.Core.Person
 {
     
     public class PersonDto : BaseDto
@@ -36,7 +37,7 @@ namespace Parsia.Core.Person
         public ComboValDto MaritalStatus { get; set; }
         public ComboValDto HousingSituation { get; set; }
         public ComboValDto HealthStatus { get; set; }
-        public ComboValDto DisabilityType { get; set; }
-    }
+        public ComboValDto DisabilityType { get; se
+        }
 
 }

@@ -20,7 +20,9 @@ namespace Parsia.Core.Menu
     {
         private static readonly MenuFacade Facade = new MenuFacade();
         private static readonly MenuCopier Copier = new MenuCopier();
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(MenuFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(MenuFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         private MenuFacade()
         {
@@ -33,10 +35,11 @@ namespace Parsia.Core.Menu
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Menu.Menu>();
                 var tblUseCase = Util.GetSqlServerTableName<DataLayer.Model.Core.UseCase.UseCase>();
-                var queryString = $"select entityId,useCaseName,name,title,orderNode,parentName,useCase,parentId,deleted,createBy,fullTitle,accessKey from ( select EntityId as entityId, Name as name,Title as title, OrderNode as orderNode,useCaseTarget.useCaseName as useCaseName ,parentMenu.parentName as parentName, ParentId as parentId, UseCase as useCase,Deleted as deleted , CreateBy as createBy , AccessKey as accessKey, FullTitle as fullTitle from {tableName} as mainData left join (select EntityId as useCaseEntityId,UseCaseName as useCaseName from {tblUseCase}) as useCaseTarget on useCaseTarget.useCaseEntityId = mainData.UseCase left join (select EntityId as parentEntityId , Name as parentName  from {tableName}) as parentMenu on parentMenu.parentEntityId = mainData.ParentId ) e " +
-                                  QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
-                                  QueryUtil.GetOrderByClause(bp.Clause);
+                var queryString =
+                    $"select entityId,useCaseName,name,title,orderNode,parentName,useCase,parentId,deleted,createBy,fullTitle,accessKey from ( select EntityId as entityId, Name as name,Title as title, OrderNode as orderNode,useCaseTarget.useCaseName as useCaseName ,parentMenu.parentName as parentName, ParentId as parentId, UseCase as useCase,Deleted as deleted , CreateBy as createBy , AccessKey as accessKey, FullTitle as fullTitle from {tableName} as mainData left join (select EntityId as useCaseEntityId,UseCaseName as useCaseName from {tblUseCase}) as useCaseTarget on useCaseTarget.useCaseEntityId = mainData.UseCase left join (select EntityId as parentEntityId , Name as parentName  from {tableName}) as parentMenu on parentMenu.parentEntityId = mainData.ParentId ) e " +
+                    QueryUtil.GetWhereClause(bp.Clause,
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
+                    QueryUtil.GetOrderByClause(bp.Clause);
                 queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
                 {
@@ -53,7 +56,7 @@ namespace Parsia.Core.Menu
                     if (lstMenu.Count == 0)
                         return new ServiceResult<object>(new List<MenuDto>(), 0);
                     var list = new List<object>();
-                    var headerTitle = new object[] { "entityId", "useCase", "name", "title", "orderNode", "parent" };
+                    var headerTitle = new object[] {"entityId", "useCase", "name", "title", "orderNode", "parent"};
                     list.Add(headerTitle);
                     list.AddRange(lstMenu);
                     return new ServiceResult<object>(list, lstMenu.Count);
@@ -64,6 +67,7 @@ namespace Parsia.Core.Menu
                 return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
+
         public ServiceResult<object> Save(BusinessParam bp, MenuDto dto)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
@@ -94,6 +98,7 @@ namespace Parsia.Core.Menu
                 return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
+
         public ServiceResult<object> ShowRow(BusinessParam bp)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
@@ -105,7 +110,8 @@ namespace Parsia.Core.Menu
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var context = new ParsiContext())
                 {
@@ -138,7 +144,8 @@ namespace Parsia.Core.Menu
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 DataLayer.Model.Core.Menu.Menu menu;
                 using (var unitOfWork = new UnitOfWork())
@@ -147,7 +154,8 @@ namespace Parsia.Core.Menu
                 }
 
                 if (menu == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
                 menu.Deleted = menu.EntityId;
@@ -156,6 +164,7 @@ namespace Parsia.Core.Menu
                     unitOfWork.Menu.Update(menu);
                     unitOfWork.Menu.Save();
                 }
+
                 Elastic<MenuDto, DataLayer.Model.Core.Menu.Menu>.SaveToElastic(menu, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(true, 1);
             }
@@ -171,20 +180,21 @@ namespace Parsia.Core.Menu
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Menu.Menu>();
-                var queryString = $"select * from (select EntityId as entityId,Name as name,Title as title,Path as path,OrderNode as orderNode,FullTitle as fullTitle,Deleted as deleted,AccessKey as accessKey,CreateBy as createBy from {tableName}) e " +
-                                  QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, true, false, true)) +
-                                  QueryUtil.GetOrderByClause(bp.Clause);
+                var queryString =
+                    $"select * from (select EntityId as entityId,Name as name,Title as title,Path as path,OrderNode as orderNode,FullTitle as fullTitle,Deleted as deleted,AccessKey as accessKey,CreateBy as createBy from {tableName}) e " +
+                    QueryUtil.GetWhereClause(bp.Clause,
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, true, false, true)) +
+                    QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var menuList = unitOfWork.Menu.CreateNativeQuery(queryString, x => new Dictionary<string, object>()
+                    var menuList = unitOfWork.Menu.CreateNativeQuery(queryString, x => new Dictionary<string, object>
                     {
-                        {"entityId",Convert.ToInt64(x[0].ToString()) },
-                        {"name",x[1]?.ToString() },
-                        {"title",x[2]?.ToString() },
-                        {"path",x[3]?.ToString() },
-                        {"orderNode",x[4]?.ToString() },
-                        {"fullTitle",x[5]?.ToString() }
+                        {"entityId", Convert.ToInt64(x[0].ToString())},
+                        {"name", x[1]?.ToString()},
+                        {"title", x[2]?.ToString()},
+                        {"path", x[3]?.ToString()},
+                        {"orderNode", x[4]?.ToString()},
+                        {"fullTitle", x[5]?.ToString()}
                     });
                     return menuList.Count == 0
                         ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکوردی یافت نشد")
@@ -217,14 +227,11 @@ namespace Parsia.Core.Menu
                         {
                             var lst = bp.UserInfo.UseCase[usecase];
                             foreach (var item in lst)
-                            {
                                 if (item.ToLower() == "showinmenu")
-                                {
                                     list.Add(Copier.GetDto(menu));
-                                }
-                            }
                         }
                     }
+
                     return new ServiceResult<object>(list, list.Count);
                 }
             }
@@ -237,16 +244,38 @@ namespace Parsia.Core.Menu
         public ServiceResult<object> GetDtoFromRequest(HttpRequest request)
         {
             var dto = new MenuDto();
-            if (!string.IsNullOrEmpty(request.Form["entityId"])) dto.EntityId = Convert.ToInt64(request.Form["entityId"]);
-            if (!string.IsNullOrEmpty(request.Form["name"])) dto.Name = request.Form["name"]; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نام منو را وارد نمایید");
-            if (!string.IsNullOrEmpty(request.Form["title"])) dto.Title = request.Form["title"]; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا عنوان منو را وارد نمایید");
-            if (!string.IsNullOrEmpty(request.Form["orderNode"])) dto.OrderNode = Convert.ToInt32(request.Form["orderNode"]); else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا سطح منو را وارد نمایید");
-            if (!string.IsNullOrEmpty(request.Form["path"])) dto.Path = request.Form["path"]; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا مسیر منو را وارد نمایید");
-            if (!string.IsNullOrEmpty(request.Form["icon"])) dto.Icon = request.Form["icon"]; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا آیکون منو را وارد نمایید");
-            if (!string.IsNullOrEmpty(request.Form["useCase"])) dto.UseCase = new UseCaseDto() { EntityId = Convert.ToInt64(request.Form["useCase"]) }; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا فرآیند منو را وارد نمایید");
-            if (!string.IsNullOrEmpty(request.Form["target"])) dto.Target = new ComboValDto() { EntityId = Convert.ToInt64(request.Form["target"]) }; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نحوه نمایش منو را وارد نمایید");
-            if (!string.IsNullOrEmpty(request.Form["parent"])) dto.Parent = new MenuDto() { EntityId = Convert.ToInt64(request.Form["parent"]) };
-            if (!string.IsNullOrEmpty(request.Form["file"])) dto.File = new FileDto() { EntityId = Convert.ToInt64(request.Form["file"]) };
+            if (!string.IsNullOrEmpty(request.Form["entityId"]))
+                dto.EntityId = Convert.ToInt64(request.Form["entityId"]);
+            if (!string.IsNullOrEmpty(request.Form["name"])) dto.Name = request.Form["name"];
+            else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نام منو را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["title"])) dto.Title = request.Form["title"];
+            else
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                    "لطفا عنوان منو را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["orderNode"]))
+                dto.OrderNode = Convert.ToInt32(request.Form["orderNode"]);
+            else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا سطح منو را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["path"])) dto.Path = request.Form["path"];
+            else
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا مسیر منو را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["icon"])) dto.Icon = request.Form["icon"];
+            else
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                    "لطفا آیکون منو را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["useCase"]))
+                dto.UseCase = new UseCaseDto {EntityId = Convert.ToInt64(request.Form["useCase"])};
+            else
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                    "لطفا فرآیند منو را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["target"]))
+                dto.Target = new ComboValDto {EntityId = Convert.ToInt64(request.Form["target"])};
+            else
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                    "لطفا نحوه نمایش منو را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["parent"]))
+                dto.Parent = new MenuDto {EntityId = Convert.ToInt64(request.Form["parent"])};
+            if (!string.IsNullOrEmpty(request.Form["file"]))
+                dto.File = new FileDto {EntityId = Convert.ToInt64(request.Form["file"])};
             if (!string.IsNullOrEmpty(request.Form["ticket"])) dto.Ticket = request.Form["ticket"];
             if (!string.IsNullOrEmpty(request.Form["code"])) dto.Code = request.Form["code"];
             if (!string.IsNullOrEmpty(request.Form["active"])) dto.Active = Convert.ToBoolean(request.Form["active"]);

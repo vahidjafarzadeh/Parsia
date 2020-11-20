@@ -8,14 +8,13 @@ namespace Parsia.Core.Role
 {
     public class RoleCopier : IBaseCopier<RoleDto, DataLayer.Model.Core.Role.Role>
     {
-
         public RoleDto GetDto(DataLayer.Model.Core.Role.Role entity)
         {
             var createUser = entity.CreateUserEntity != null
-                ? new UserDto() { EntityId = entity.CreateUserEntity.EntityId, Username = entity.CreateUserEntity.Username }
+                ? new UserDto {EntityId = entity.CreateUserEntity.EntityId, Username = entity.CreateUserEntity.Username}
                 : new UserDto();
             var updateUser = entity.UpdateUserEntity != null
-                ? new UserDto() { EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username }
+                ? new UserDto {EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username}
                 : new UserDto();
             var dto = new RoleDto
             {
@@ -32,7 +31,8 @@ namespace Parsia.Core.Role
             };
             if (entity.ParentRoleAccessGroup != null)
             {
-                var groupDto = entity.ParentRoleAccessGroup.Select(item => new AccessGroupDto() { EntityId = item.CurrentAccessGroup.EntityId, Name = item.CurrentAccessGroup.Name }).ToList();
+                var groupDto = entity.ParentRoleAccessGroup.Select(item => new AccessGroupDto
+                    {EntityId = item.CurrentAccessGroup.EntityId, Name = item.CurrentAccessGroup.Name}).ToList();
 
                 dto.AccessGroupDto = groupDto;
             }

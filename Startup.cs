@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Security.Claims;
+using AspNetCore.SEOHelper;
 using DataLayer.Context;
 using DataLayer.Token;
 using DataLayer.Tools;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -85,7 +87,7 @@ namespace Parsia
             services.AddDbContext<ParsiContext>(options =>
             {
                 options.UseSqlServer("Data Source =.;Initial Catalog=Parsi;Integrated Security=True");
-                //                options.UseSqlServer("data source=185.159.152.59;initial catalog=sensoper_ParsShoping;User Id=sensoper_ParsShoping;Password=zA9$s4d6zA9$s4d6;integrated security=False;MultipleActiveResultSets=True;");
+//                options.UseSqlServer("data source=185.159.152.59;initial catalog=sensoper_new;User Id=sensoper_new;Password=zA9$s4d6zA9$s4d6;integrated security=False;MultipleActiveResultSets=True;");
             });
             services.AddMvc().AddJsonOptions(options => { options.JsonSerializerOptions.IgnoreNullValues = true; });
 
@@ -136,7 +138,7 @@ namespace Parsia
             #region Add Memory Cache
 
             services.AddMemoryCache();
-
+            services.AddTransient<IUserSessionManager, UserSessionManager>();
             #endregion
             #region Partial To String
             services.AddScoped<IViewRenderService, ViewRenderService>();
@@ -146,6 +148,7 @@ namespace Parsia
             services.AddLogging();
 
             #endregion
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -216,6 +219,10 @@ namespace Parsia
                 // Do logging or other work that doesn't write to the Response.
             });
 
+            #endregion
+            #region SiteMap
+            app.UseRobotsTxt(env.ContentRootPath);
+            app.UseXMLSitemap(env.ContentRootPath);
             #endregion
             app.UseCors(builder => builder.WithOrigins(SystemConfig.ApplicationUrl.ToString()).AllowAnyHeader());
             app.UseEndpoints(endpoints =>

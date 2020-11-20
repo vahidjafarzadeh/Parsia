@@ -7,13 +7,22 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+
+tityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 
 namespace Parsia.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IMemoryCache _memoryCache;
 
+        public AccountController(IMemoryCache memoryCache)
+        {
+            _memoryCache = memoryCache;
+        }
         [Route("login")]
         public ActionResult Login()
         {
@@ -34,7 +43,7 @@ namespace Parsia.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return View("_Error", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد فعال سازی معتبر نمی باشد"));
+          Enumerator.ErrorCodeError", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد فعال سازی معتبر نمی باشد"));
             }
             else
             {
@@ -43,7 +52,7 @@ namespace Parsia.Controllers
                     var user = context.Users.Where(p => p.EmailCode == id.Trim()).IgnoreQueryFilters().FirstOrDefault();
                     if (user != null)
                     {
-                        if (user.Deleted != 0)
+                       Enumerator.ErrorCode 0)
                         {
                             return View("_Error", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد"));
 
@@ -51,8 +60,7 @@ namespace Parsia.Controllers
                         user.EmailCode = Guid.NewGuid().ToString();
                         user.Active = true;
                         context.Users.Update(user);
-                        context.SaveChanges();
-                        return Redirect("/login");
+                        conteEnumerator.ErrorCode                       return Redirect("/login");
                     }
                     else
                     {
@@ -67,7 +75,7 @@ namespace Parsia.Controllers
         {
             return PartialView();
         }
-        [Route("recovery-password")]
+        Enumerator.ErrorCodesword")]
         public ActionResult RecoveryPassword(string code)
         {
 
@@ -79,12 +87,12 @@ namespace Parsia.Controllers
             {
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var user = unitOfWork.Users.Get(p => p.EmailCode == code.Trim()).FirstOrDefault();
+                 Enumerator.ErrorCodeWork.Users.Get(p => p.EmailCode == code.Trim()).FirstOrDefault();
                     if (user != null)
                     {
                         if (user.Deleted != 0)
                         {
-                            return View("_Error", new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد"));
+                            return ViEnumerator.ErrorCodeviceResult<Object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد"));
 
                         }
                         ViewData["code"] = user.EmailCode;
@@ -135,18 +143,14 @@ namespace Parsia.Controllers
                             user.LastVisit = DateTime.Now;
                             unitOfWork.Users.Update(user);
                             unitOfWork.Users.Save();
+                            _memoryCache.Remove("session_" + user.Username);
                         }
-
-                        if (OnlineUser.UserSessionManager.ContainsKey(username))
-                        {
-                            OnlineUser.UserSessionManager.Remove(username);
-                        }
-
                         HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                         return RedirectToAction("Index", "Home", new { Areas = "" });
                     }
                 }
-                else
+           
+    lse
                 {
                     HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                     return RedirectToAction("Index", "Home", new { Areas = "" });

@@ -19,7 +19,9 @@ namespace Parsia.Core.UseCase
     {
         private static readonly UseCaseFacade Facade = new UseCaseFacade();
         private static readonly UseCaseCopier Copier = new UseCaseCopier();
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(UseCaseFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(UseCaseFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         private UseCaseFacade()
         {
@@ -31,7 +33,8 @@ namespace Parsia.Core.UseCase
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.UseCase.UseCase>();
-                var queryString = $"select entityId,useCaseName,clazz,tableName,uName as parent,ParentId,createBy,accessKey,fullTitle,deleted from (select * from (select EntityId as entityId, UseCaseName as useCaseName, Clazz as clazz, TableName as tableName, ParentId, CreateBy as createBy, FullTitle as fullTitle, AccessKey As accessKey, Deleted as deleted from {tableName} where code <> 'ADMIN') as currentUseCase left join(select EntityId as eId, UseCaseName as uName from {tableName}) as parentUseCase on currentUseCase.ParentId = parentUseCase.eId) e" +
+                var queryString =
+                    $"select entityId,useCaseName,clazz,tableName,uName as parent,ParentId,createBy,accessKey,fullTitle,deleted from (select * from (select EntityId as entityId, UseCaseName as useCaseName, Clazz as clazz, TableName as tableName, ParentId, CreateBy as createBy, FullTitle as fullTitle, AccessKey As accessKey, Deleted as deleted from {tableName} where code <> 'ADMIN') as currentUseCase left join(select EntityId as eId, UseCaseName as uName from {tableName}) as parentUseCase on currentUseCase.ParentId = parentUseCase.eId) e" +
                     QueryUtil.GetWhereClause(bp.Clause,
                         QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
                     QueryUtil.GetOrderByClause(bp.Clause);
@@ -50,7 +53,7 @@ namespace Parsia.Core.UseCase
                     if (useCaseList.Count == 0)
                         return new ServiceResult<object>(new List<UseCaseDto>(), 0);
                     var list = new List<object>();
-                    var headerTitle = new object[] { "entityId", "useCaseName", "clazz", "tableName", "parent" };
+                    var headerTitle = new object[] {"entityId", "useCaseName", "clazz", "tableName", "parent"};
                     list.Add(headerTitle);
                     list.AddRange(useCaseList);
                     return new ServiceResult<object>(list, useCaseList.Count);
@@ -67,10 +70,7 @@ namespace Parsia.Core.UseCase
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
-                if (dto.Parent == null)
-                {
-                    dto.Parent = new UseCaseDto() { EntityId = 1 };
-                }
+                if (dto.Parent == null) dto.Parent = new UseCaseDto {EntityId = 1};
                 var useCase = new DataLayer.Model.Core.UseCase.UseCase();
                 if (dto.EntityId == 0)
                 {
@@ -80,17 +80,13 @@ namespace Parsia.Core.UseCase
                         unitOfWork.UseCase.Insert(useCase);
                         unitOfWork.UseCase.Save();
                     }
+
                     if (dto.UseCaseActions != null)
                     {
                         foreach (var item in dto.UseCaseActions)
-                        {
-                            item.UseCase = new UseCaseDto() { EntityId = useCase.EntityId };
-                        }
+                            item.UseCase = new UseCaseDto {EntityId = useCase.EntityId};
                         var serviceResult = UseCaseActionFacade.GetInstance().SaveList(bp, dto.UseCaseActions);
-                        if (!serviceResult.Done)
-                        {
-                            return serviceResult;
-                        }
+                        if (!serviceResult.Done) return serviceResult;
                     }
                 }
                 else
@@ -101,33 +97,27 @@ namespace Parsia.Core.UseCase
                         if (dto.UseCaseActions != null)
                         {
                             foreach (var item in dto.UseCaseActions)
-                            {
-                                item.UseCase = new UseCaseDto() { EntityId = dto.EntityId };
-                            }
+                                item.UseCase = new UseCaseDto {EntityId = dto.EntityId};
                             var serviceResult = UseCaseActionFacade.GetInstance().SaveList(bp, dto.UseCaseActions);
                             if (serviceResult.Done)
-                            {
                                 using (var unitOfWork = new UnitOfWork())
                                 {
                                     useCase = Copier.GetEntity(dto, bp, false);
                                     unitOfWork.UseCase.Update(useCase);
                                     unitOfWork.UseCase.Save();
                                 }
-                            }
                             else
-                            {
                                 return serviceResult;
-                            }
                         }
-                           
                     }
                     else
                     {
                         return deletedList;
                     }
-
                 }
-                Elastic<UseCaseDto, DataLayer.Model.Core.UseCase.UseCase>.SaveToElastic(useCase, ClassDetails[0].Clazz, bp);
+
+                Elastic<UseCaseDto, DataLayer.Model.Core.UseCase.UseCase>.SaveToElastic(useCase, ClassDetails[0].Clazz,
+                    bp);
                 return new ServiceResult<object>(Copier.GetDto(useCase), 1);
             }
             catch (Exception e)
@@ -147,7 +137,8 @@ namespace Parsia.Core.UseCase
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var context = new ParsiContext())
                 {
@@ -179,7 +170,8 @@ namespace Parsia.Core.UseCase
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 DataLayer.Model.Core.UseCase.UseCase useCase;
                 using (var unitOfWork = new UnitOfWork())
@@ -188,7 +180,8 @@ namespace Parsia.Core.UseCase
                 }
 
                 if (useCase == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
                 useCase.Deleted = useCase.EntityId;
@@ -197,7 +190,9 @@ namespace Parsia.Core.UseCase
                     unitOfWork.UseCase.Update(useCase);
                     unitOfWork.UseCase.Save();
                 }
-                Elastic<UseCaseDto, DataLayer.Model.Core.UseCase.UseCase>.SaveToElastic(useCase, ClassDetails[0].Clazz, bp);
+
+                Elastic<UseCaseDto, DataLayer.Model.Core.UseCase.UseCase>.SaveToElastic(useCase, ClassDetails[0].Clazz,
+                    bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
@@ -212,13 +207,14 @@ namespace Parsia.Core.UseCase
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.UseCase.UseCase>();
-                var queryString = $"select * from (select EntityId as entityId,UseCaseName as useCaseName,Clazz as clazz,TableName as tableName,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey,Deleted as deleted from {tableName}) e" +
-                                  QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
-                                  QueryUtil.GetOrderByClause(bp.Clause);
+                var queryString =
+                    $"select * from (select EntityId as entityId,UseCaseName as useCaseName,Clazz as clazz,TableName as tableName,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey,Deleted as deleted from {tableName}) e" +
+                    QueryUtil.GetWhereClause(bp.Clause,
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
+                    QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var useCaseList = unitOfWork.UseCase.CreateNativeQuery(queryString, x => new UseCaseDto()
+                    var useCaseList = unitOfWork.UseCase.CreateNativeQuery(queryString, x => new UseCaseDto
                     {
                         EntityId = Convert.ToInt64(x[0].ToString()),
                         UseCaseName = x[1]?.ToString(),
@@ -240,37 +236,42 @@ namespace Parsia.Core.UseCase
         public ServiceResult<object> GetDtoFromRequest(HttpRequest request)
         {
             var dto = new UseCaseDto();
-            if (!string.IsNullOrEmpty(request.Form["EntityId"])) dto.EntityId = Convert.ToInt64(request.Form["EntityId"]);
-            if (!string.IsNullOrEmpty(request.Form["useCaseName"])) dto.UseCaseName = request.Form["useCaseName"]; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نام فرآیند را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["EntityId"]))
+                dto.EntityId = Convert.ToInt64(request.Form["EntityId"]);
+            if (!string.IsNullOrEmpty(request.Form["useCaseName"])) dto.UseCaseName = request.Form["useCaseName"];
+            else
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                    "لطفا نام فرآیند را وارد نمایید");
             if (!string.IsNullOrEmpty(request.Form["Code"])) dto.Code = request.Form["Code"];
             if (!string.IsNullOrEmpty(request.Form["clazz"])) dto.Clazz = request.Form["clazz"];
             if (!string.IsNullOrEmpty(request.Form["Active"])) dto.Active = Convert.ToBoolean(request.Form["Active"]);
-            if (!string.IsNullOrEmpty(request.Form["virtualNode"])) dto.VirtualNode = Convert.ToBoolean(request.Form["virtualNode"]);
+            if (!string.IsNullOrEmpty(request.Form["virtualNode"]))
+                dto.VirtualNode = Convert.ToBoolean(request.Form["virtualNode"]);
             if (!string.IsNullOrEmpty(request.Form["Ticket"])) dto.Ticket = request.Form["Ticket"];
             if (!string.IsNullOrEmpty(request.Form["tableName"])) dto.TableName = request.Form["tableName"];
-            if (!string.IsNullOrEmpty(request.Form["parent"])) dto.Parent = new UseCaseDto() { EntityId = Convert.ToInt64(request.Form["parent"]) };
+            if (!string.IsNullOrEmpty(request.Form["parent"]))
+                dto.Parent = new UseCaseDto {EntityId = Convert.ToInt64(request.Form["parent"])};
             if (!string.IsNullOrEmpty(request.Form["useCaseActions"]))
             {
                 var usCaseAction = new List<long>();
                 var strings = request.Form["useCaseActions"].ToString().Split(",");
                 foreach (var item in strings)
-                {
                     if (!string.IsNullOrEmpty(item))
-                    {
                         usCaseAction.Add(Convert.ToInt64(item));
-                    }
-                }
-                var lstUseCaseActionDto = usCaseAction.Select(item => new UseCaseActionDto() { Action = new ActionDto() { EntityId = item } }).ToList();
+                var lstUseCaseActionDto = usCaseAction
+                    .Select(item => new UseCaseActionDto {Action = new ActionDto {EntityId = item}}).ToList();
                 dto.UseCaseActions = lstUseCaseActionDto;
             }
+
             return new ServiceResult<object>(dto, 1);
         }
-        public ServiceResult<object> GetTotalUseCase(BusinessParam bp, bool getAllData, string search, string pageNumber)
+
+        public ServiceResult<object> GetTotalUseCase(BusinessParam bp, bool getAllData, string search,
+            string pageNumber)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
-
                 using (var context = new ParsiContext())
                 {
                     var useCase = context.UseCase
@@ -280,8 +281,6 @@ namespace Parsia.Core.UseCase
                         .ToList();
                     return new ServiceResult<object>(PrePareToShowInAccessGroup(Copier.GetDto(useCase)), 1);
                 }
-
-
             }
             catch (Exception e)
             {
@@ -300,24 +299,25 @@ namespace Parsia.Core.UseCase
             var result = new List<Dictionary<string, object>>();
             foreach (var item in data)
             {
-                var usecase = new Dictionary<string, object>()
+                var usecase = new Dictionary<string, object>
                 {
-                    {"entityId",item.EntityId },
-                    {"parent",item.Parent?.EntityId}, 
-                    {"fullTitle","<i class='fas fa-star usecase'></i>"+item.FullTitle }
+                    {"entityId", item.EntityId},
+                    {"parent", item.Parent?.EntityId},
+                    {"fullTitle", "<i class='fas fa-star usecase'></i>" + item.FullTitle}
                 };
                 result.Add(usecase);
                 foreach (var child in item.UseCaseActions)
                 {
-                    var action = new Dictionary<string, object>()
+                    var action = new Dictionary<string, object>
                     {
-                        {"entityId",item.EntityId +"|"+child.Action.EntityId },
-                        {"parent",item.EntityId},
-                        {"fullTitle",child.Action.FullTitle }
+                        {"entityId", item.EntityId + "|" + child.Action.EntityId},
+                        {"parent", item.EntityId},
+                        {"fullTitle", child.Action.FullTitle}
                     };
                     result.Add(action);
                 }
             }
+
             return result;
         }
     }

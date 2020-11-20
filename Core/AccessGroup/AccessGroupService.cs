@@ -9,15 +9,23 @@ namespace Parsia.Core.AccessGroup
     [ClassDetails(Clazz = "AccessGroup", Facade = "AccessGroupService")]
     public class AccessGroupService : ControllerBase
     {
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(AccessGroupService).GetCustomAttributes(typeof(ClassDetails), true);
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(AccessGroupService).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private readonly IUserSessionManager _userSessionManager;
+
+        public AccessGroupService(IUserSessionManager userSessionManager)
+        {
+            _userSessionManager = userSessionManager;
+        }
 
         [HttpPost]
         [Route("service/accessGroup/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket,Request);
+            var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
                 ? AccessGroupFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -30,10 +38,10 @@ namespace Parsia.Core.AccessGroup
             var dtoFromRequest = AccessGroupFacade.GetInstance().GetDtoFromRequest(HttpContext.Request);
             if (!dtoFromRequest.Done)
                 return dtoFromRequest;
-            var dto = (List<UseCaseActionAccessGroupDto>)dtoFromRequest.Result;
-            var userInfo = UserSessionManager.GetUserInfo(dto[0].AccessGroup.Ticket, Request);
+            var dto = (List<UseCaseActionAccessGroupDto>) dtoFromRequest.Result;
+            var userInfo = _userSessionManager.GetUserInfo(dto[0].AccessGroup.Ticket, Request);
             var bp = new BusinessParam(userInfo);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz,
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz,
                 dto[0].AccessGroup.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? AccessGroupFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
@@ -42,9 +50,9 @@ namespace Parsia.Core.AccessGroup
         [Route("service/accessGroup/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "update");
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "update");
             return checkAccess.Done
                 ? AccessGroupFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -54,9 +62,9 @@ namespace Parsia.Core.AccessGroup
         [Route("service/accessGroup/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "delete");
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "delete");
             return checkAccess.Done
                 ? AccessGroupFacade.GetInstance().Delete(bp)
                 : checkAccess;
@@ -66,21 +74,21 @@ namespace Parsia.Core.AccessGroup
         [Route("service/accessGroup/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "autocomplete");
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "autocomplete");
             return checkAccess.Done
                 ? AccessGroupFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
         }
-        
+
         [HttpPost]
         [Route("service/accessGroup/getAllData")]
         public ServiceResult<object> GetAllData(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
                 ? AccessGroupFacade.GetInstance().GetAllData(bp)
                 : checkAccess;

@@ -13,6 +13,5 @@ namespace Parsia.Core.UseCase
         public bool VirtualNode { get; set; }
         public UseCaseDto Parent { get; set; }
         public List<UseCaseActionDto> UseCaseActions { get; set; }
-
     }
 }

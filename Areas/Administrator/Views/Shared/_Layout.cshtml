@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="fa">
 <head>
     <meta charset="utf-8" />
@@ -40,10 +41,10 @@
                             <i class="fas fa-sign-out-alt"></i>
                         </a>
                         <div class="avatar">
-                            <img src="images/users/avatar.png" alt="avatar user" />
+                            <img src="@(((ClaimsIdentity)User.Identity).FindFirst("picture").Value)" alt="avatar user" />
                         </div>
-                        <p class="user-name">وحید جعفرزاده</p>
-                        <small class="role">مدیر سیستم</small>
+                        <p class="user-name">@(((ClaimsIdentity)User.Identity).FindFirst("firstName").Value) @(((ClaimsIdentity)User.Identity).FindFirst("lastName").Value)</p>
+                        <small class="role">@(((ClaimsIdentity)User.Identity).FindFirst("roleName").Value)</small>
                     </header>
                     <nav class="main-nav">
                         <div class="container-tootal-menu">

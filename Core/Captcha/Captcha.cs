@@ -18,8 +18,6 @@ namespace Parsia.Core.Captcha
             Stream s = new MemoryStream(result.CaptchaByteData);
             var base64String = Convert.ToBase64String(Util.ReadToEnd(s));
             return new ServiceResult<object>(base64String,1);
-        }
-
-
-    }
+        }
+       }
 }

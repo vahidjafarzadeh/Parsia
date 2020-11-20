@@ -1,25 +1,28 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using DataLayer.Token;
+using DataLayer.Tools;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
+using Parsia.Core.SiteMap;
 using Parsia.Models;
 
 namespace Parsia.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IJwtHandlers _jwtHandlers;
-        private readonly ILogger<HomeController> _logger;
+        private readonly IHostEnvironment _env;
 
-        public HomeController(ILogger<HomeController> logger, IJwtHandlers jwtHandlers)
+        public HomeController(IHostEnvironment env)
         {
-            _logger = logger;
-            _jwtHandlers = jwtHandlers;
+            _env = env;
         }
+
+        
 
         public IActionResult Index()
         {
-            _logger.LogError("fefr rf rf ef efrfe");
+            SiteMap.GenerateSiteMap("www.test.com",0.1,DateTime.Now,1,_env.ContentRootPath+"/"+SystemConfig.Root+"/"+"sitemap/article/");
             return View();
         }
 

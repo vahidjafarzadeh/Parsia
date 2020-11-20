@@ -16,7 +16,10 @@ namespace Parsia.Core.ComboVal
     {
         private static readonly ComboValFacade Facade = new ComboValFacade();
         private static readonly ComboValCopier Copier = new ComboValCopier();
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(ComboValFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(ComboValFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
         private ComboValFacade()
         {
         }
@@ -34,7 +37,7 @@ namespace Parsia.Core.ComboVal
                     QueryUtil.GetWhereClause(bp.Clause,
                         QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
                     QueryUtil.GetOrderByClause(bp.Clause);
-                queryString = QueryUtil.SetPaging(bp.Clause.PageNo,bp.Clause.PageSize, queryString);
+                queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
                 {
                     var comboList = unitOfWork.ComboVal.CreateNativeQuery(queryString, x => new[]
@@ -57,7 +60,7 @@ namespace Parsia.Core.ComboVal
             }
             catch (Exception e)
             {
-                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade+ methodName, bp.UserInfo);
+                return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
 
@@ -82,7 +85,9 @@ namespace Parsia.Core.ComboVal
                         unitOfWork.ComboVal.Update(comboVal);
                         unitOfWork.ComboVal.Save();
                     }
-                Elastic<ComboValDto, DataLayer.Model.Core.ComboVal.ComboVal>.SaveToElastic(comboVal, ClassDetails[0].Clazz, bp);
+
+                Elastic<ComboValDto, DataLayer.Model.Core.ComboVal.ComboVal>.SaveToElastic(comboVal,
+                    ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(Copier.GetDto(comboVal), 1);
             }
             catch (Exception e)
@@ -102,7 +107,8 @@ namespace Parsia.Core.ComboVal
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 var tableNameComboval = Util.GetSqlServerTableName<DataLayer.Model.Core.ComboVal.ComboVal>();
                 var tableNameUser = Util.GetSqlServerTableName<Users>();
@@ -127,8 +133,12 @@ namespace Parsia.Core.ComboVal
                         Value = x[2]?.ToString(),
                         AdminOnly = Convert.ToBoolean(x[3]?.ToString()),
                         Active = Convert.ToBoolean(x[4]?.ToString()),
-                        Created = Util.GetTimeStamp(string.IsNullOrEmpty(x[5].ToString()) ? (DateTime?)null : Convert.ToDateTime(x[5]?.ToString())),
-                        Updated = Util.GetTimeStamp(string.IsNullOrEmpty(x[6].ToString()) ? (DateTime?)null : Convert.ToDateTime(x[6]?.ToString())),
+                        Created = Util.GetTimeStamp(string.IsNullOrEmpty(x[5].ToString())
+                            ? (DateTime?) null
+                            : Convert.ToDateTime(x[5]?.ToString())),
+                        Updated = Util.GetTimeStamp(string.IsNullOrEmpty(x[6].ToString())
+                            ? (DateTime?) null
+                            : Convert.ToDateTime(x[6]?.ToString())),
                         Code = x[7]?.ToString(),
                         Parent = string.IsNullOrEmpty(x[8].ToString())
                             ? null
@@ -163,7 +173,8 @@ namespace Parsia.Core.ComboVal
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 DataLayer.Model.Core.ComboVal.ComboVal comboVal;
                 using (var unitOfWork = new UnitOfWork())
@@ -172,7 +183,8 @@ namespace Parsia.Core.ComboVal
                 }
 
                 if (comboVal == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
                 comboVal.Deleted = comboVal.EntityId;
@@ -181,7 +193,9 @@ namespace Parsia.Core.ComboVal
                     unitOfWork.ComboVal.Update(comboVal);
                     unitOfWork.ComboVal.Save();
                 }
-                Elastic<ComboValDto, DataLayer.Model.Core.ComboVal.ComboVal>.SaveToElastic(comboVal, ClassDetails[0].Clazz, bp);
+
+                Elastic<ComboValDto, DataLayer.Model.Core.ComboVal.ComboVal>.SaveToElastic(comboVal,
+                    ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
@@ -199,7 +213,8 @@ namespace Parsia.Core.ComboVal
                 var queryString = "select * from (select EntityId,Name,Value,code,CreateBy,AccessKey,Deleted from " +
                                   tableName + " ) e" +
                                   QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
+                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false,
+                                          true)) +
                                   QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
@@ -220,15 +235,18 @@ namespace Parsia.Core.ComboVal
                 return ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
+
         public ServiceResult<object> AutocompleteViewParent(BusinessParam bp)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.ComboVal.ComboVal>();
-                var queryString = $"SELECT * FROM(SELECT e1.EntityId AS entityId,e1.Name AS name,e1.Value AS value,e1.code AS code,e2.Name AS parentName,e2.code AS parentCode,e1.Deleted,e1.FullTitle AS fullTitle,e1.AccessKey,e1.CreateBy FROM {tableName} e1 LEFT JOIN {tableName} e2 on e1.ParentId = e2.EntityId where e1.Deleted = 0 and e2.Deleted = 0) e" + QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
-                                  QueryUtil.GetOrderByClause(bp.Clause);
+                var queryString =
+                    $"SELECT * FROM(SELECT e1.EntityId AS entityId,e1.Name AS name,e1.Value AS value,e1.code AS code,e2.Name AS parentName,e2.code AS parentCode,e1.Deleted,e1.FullTitle AS fullTitle,e1.AccessKey,e1.CreateBy FROM {tableName} e1 LEFT JOIN {tableName} e2 on e1.ParentId = e2.EntityId where e1.Deleted = 0 and e2.Deleted = 0) e" +
+                    QueryUtil.GetWhereClause(bp.Clause,
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
+                    QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
                     var comboList = unitOfWork.ComboVal.CreateNativeQuery(queryString, x => new ComboValDto

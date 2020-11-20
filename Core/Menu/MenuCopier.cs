@@ -71,14 +71,14 @@ namespace Parsia.Core.Menu
                 {
                     EntityId = entity.CurrentUseCase.EntityId,
                     UseCaseName = entity.CurrentUseCase.UseCaseName,
-                    FullTitle = entity.CurrentUseCase.FullTitle
+                 DataLayer.Model.Core.Menu.MenuseCase.FullTitle
                 };
             }
             return dto;
 
         }
 
-        public DataLayer.Model.Core.Menu.Menu GetEntity(MenuDto dto, BusinessParam bp, bool setCreate)
+    DataLayer.Model.Core.Menu.Menue.Menu.Menu GetEntity(MenuDto dto, BusinessParam bp, bool setCreate)
         {
             var menu = new DataLayer.Model.Core.Menu.Menu
             {
@@ -95,9 +95,8 @@ namespace Parsia.Core.Menu
                 Icon = dto.Icon,
                 Target = dto.Target.EntityId,
                 OrderNode = dto.OrderNode,
-                ParentId = dto.Parent?.EntityId
-            };
-            return SetMandatoryField(menu, bp, setCreate);
+               DataLayer.Model.Core.Menu.MenuId
+            };DataLayer.Model.Core.Menu.MenuryField(menu, bp, setCreate);
         }
 
         public DataLayer.Model.Core.Menu.Menu SetMandatoryField(DataLayer.Model.Core.Menu.Menu menu, BusinessParam bp,
@@ -106,7 +105,8 @@ namespace Parsia.Core.Menu
             menu.AccessKey = bp.UserInfo.AccessKey;
             menu.UpdateBy = bp.UserInfo.UserId;
             menu.Updated = DateTime.Now;
-            if (!setCreate) return menu;
+            if (!setCreate) re
+    enu;
             menu.CreateBy = bp.UserInfo.UserId;
             menu.Created = DateTime.Now;
             return menu;

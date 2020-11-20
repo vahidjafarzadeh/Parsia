@@ -4,7 +4,7 @@
     {
         public SystemConfigDto GetDto()
         {
-            var to = new SystemConfigDto()
+            var to = new SystemConfigDto
             {
                 AdminTitlePage = DataLayer.Tools.SystemConfig.AdminTitlePage,
                 AdminValidIp = DataLayer.Tools.SystemConfig.AdminValidIp,
@@ -31,11 +31,11 @@
                 TemplateIdRecoveryPasswordCode = DataLayer.Tools.SystemConfig.TemplateIdRecoveryPasswordCode,
                 TemplateIdRememberMeCode = DataLayer.Tools.SystemConfig.TemplateIdRememberMeCode,
                 TemplateIdUserFactorCode = DataLayer.Tools.SystemConfig.TemplateIdUserFactorCode
-
             };
 
             return to;
         }
+
         public void GetEntity(SystemConfigDto dto)
         {
             DataLayer.Tools.SystemConfig.AdminTitlePage = dto.AdminTitlePage;

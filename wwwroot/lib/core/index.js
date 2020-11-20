@@ -96,29 +96,7 @@ var initInstances = function() {
                         Translation.translate();
                     }
                 } else {
-                    if (resp.errorDesc === ENVIRONMENT.ErrorDesc.NO_DATA) {
-                        pageNumber = lastPageNumber;
-                        pageNumberInput.val(lastPageNumber);
-                        updatePaginationView();
-                        fillGrid();
-                        if (top.showConfirm) {
-                            setTimeout(function() {
-                                    top.showConfirm({
-                                        title: "پیام سیستمی",
-                                        body: "اطلاعاتی برای نمایش وجود ندارد",
-                                        confirmButton: {
-                                            hidden: true
-                                        },
-                                        declineButton: {
-                                            text: GeneralBundle.$close
-                                        }
-                                    });
-                                },
-                                450);
-                        }
-                    } else {
-                        errorHandler(resp);
-                    }
+                    errorHandler(resp);
                 }
             };
         }

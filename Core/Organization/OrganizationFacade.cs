@@ -19,11 +19,14 @@ namespace Parsia.Core.Organization
     {
         private static readonly OrganizationFacade Facade = new OrganizationFacade();
         private static readonly OrganizationCopier Copier = new OrganizationCopier();
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(OrganizationFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(OrganizationFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         private OrganizationFacade()
         {
         }
+
         public static OrganizationFacade GetInstance()
         {
             return Facade;
@@ -36,23 +39,26 @@ namespace Parsia.Core.Organization
             {
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    return unitOfWork.Organization.Get(p => p.EntityId == orgId).Select(p => p.AccessKey).FirstOrDefault();
+                    return unitOfWork.Organization.Get(p => p.EntityId == orgId).Select(p => p.AccessKey)
+                        .FirstOrDefault();
                 }
             }
             catch (Exception ex)
             {
-                ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade+methodName, null);
+                ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, null);
                 return "";
             }
         }
+
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Organization.Organization>();
-                var queryString = $"select * from ( select EntityId as entityId,Name as name,child.parentName,ParentId as parentId,FullTitle as fullTitle,Deleted as deleted , AccessKey as accessKey , CreateBy as createBy from {tableName} as org left join (select EntityId as parentEntityId,Name as parentName from {tableName}) child on child.parentEntityId = org.ParentId ) e " +
-                                 QueryUtil.GetWhereClause(bp.Clause,
+                var queryString =
+                    $"select * from ( select EntityId as entityId,Name as name,child.parentName,ParentId as parentId,FullTitle as fullTitle,Deleted as deleted , AccessKey as accessKey , CreateBy as createBy from {tableName} as org left join (select EntityId as parentEntityId,Name as parentName from {tableName}) child on child.parentEntityId = org.ParentId ) e " +
+                    QueryUtil.GetWhereClause(bp.Clause,
                         QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, false)) +
                     QueryUtil.GetOrderByClause(bp.Clause);
                 queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
@@ -68,7 +74,7 @@ namespace Parsia.Core.Organization
                     if (orgList.Count == 0)
                         return new ServiceResult<object>(new List<OrganizationDto>(), 1);
                     var list = new List<object>();
-                    var headerTitle = new object[] { "entityId", "name", "parent" };
+                    var headerTitle = new object[] {"entityId", "name", "parent"};
                     list.Add(headerTitle);
                     list.AddRange(orgList);
                     return new ServiceResult<object>(list, orgList.Count);
@@ -100,7 +106,9 @@ namespace Parsia.Core.Organization
                         unitOfWork.Organization.Update(organization);
                         unitOfWork.Organization.Save();
                     }
-                Elastic<OrganizationDto, DataLayer.Model.Core.Organization.Organization>.SaveToElastic(organization, ClassDetails[0].Clazz, bp);
+
+                Elastic<OrganizationDto, DataLayer.Model.Core.Organization.Organization>.SaveToElastic(organization,
+                    ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(Copier.GetDto(organization), 1);
             }
             catch (Exception e)
@@ -120,7 +128,8 @@ namespace Parsia.Core.Organization
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var context = new ParsiContext())
                 {
@@ -141,7 +150,6 @@ namespace Parsia.Core.Organization
                     return data.Count == 0
                         ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکورد یافت نشد")
                         : new ServiceResult<object>(Copier.GetDto(data[0]), 1);
-
                 }
             }
             catch (Exception e)
@@ -161,7 +169,8 @@ namespace Parsia.Core.Organization
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 DataLayer.Model.Core.Organization.Organization organization;
                 using (var unitOfWork = new UnitOfWork())
@@ -170,7 +179,8 @@ namespace Parsia.Core.Organization
                 }
 
                 if (organization == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
                 organization.Deleted = organization.EntityId;
@@ -179,7 +189,9 @@ namespace Parsia.Core.Organization
                     unitOfWork.Organization.Update(organization);
                     unitOfWork.Organization.Save();
                 }
-                Elastic<OrganizationDto, DataLayer.Model.Core.Organization.Organization>.SaveToElastic(organization, ClassDetails[0].Clazz, bp);
+
+                Elastic<OrganizationDto, DataLayer.Model.Core.Organization.Organization>.SaveToElastic(organization,
+                    ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
@@ -194,14 +206,15 @@ namespace Parsia.Core.Organization
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.Organization.Organization>();
-                var queryString = "select * from (select EntityId as entityId,Name as name,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey,Deleted as deleted from " +
-                                  tableName + " ) e" +
-                                  QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, false)) +
-                                  QueryUtil.GetOrderByClause(bp.Clause);
+                var queryString =
+                    "select * from (select EntityId as entityId,Name as name,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey,Deleted as deleted from " +
+                    tableName + " ) e" +
+                    QueryUtil.GetWhereClause(bp.Clause,
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, false)) +
+                    QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var orgList = unitOfWork.Organization.CreateNativeQuery(queryString, x => new OrganizationDto()
+                    var orgList = unitOfWork.Organization.CreateNativeQuery(queryString, x => new OrganizationDto
                     {
                         EntityId = Convert.ToInt64(x[0].ToString()),
                         Name = x[1]?.ToString(),
@@ -223,16 +236,23 @@ namespace Parsia.Core.Organization
         public ServiceResult<object> GetDtoFromRequest(HttpRequest request)
         {
             var dto = new OrganizationDto();
-            if (!string.IsNullOrEmpty(request.Form["EntityId"])) dto.EntityId = Convert.ToInt64(request.Form["EntityId"]);
-            if (!string.IsNullOrEmpty(request.Form["name"])) dto.Name = request.Form["Name"]; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نام سازمان را وارد نمایید");
-            if (!string.IsNullOrEmpty(request.Form["establishingYear"])) dto.EstablishingYear = Convert.ToDouble(request.Form["establishingYear"]);
+            if (!string.IsNullOrEmpty(request.Form["EntityId"]))
+                dto.EntityId = Convert.ToInt64(request.Form["EntityId"]);
+            if (!string.IsNullOrEmpty(request.Form["name"])) dto.Name = request.Form["Name"];
+            else
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                    "لطفا نام سازمان را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["establishingYear"]))
+                dto.EstablishingYear = Convert.ToDouble(request.Form["establishingYear"]);
             if (!string.IsNullOrEmpty(request.Form["order"])) dto.Order = request.Form["order"];
             if (!string.IsNullOrEmpty(request.Form["longitude"])) dto.Longitude = request.Form["longitude"];
             if (!string.IsNullOrEmpty(request.Form["latitude"])) dto.Latitude = request.Form["latitude"];
             if (!string.IsNullOrEmpty(request.Form["area"])) dto.Area = request.Form["area"];
-            if (!string.IsNullOrEmpty(request.Form["numberOfFloors"])) dto.NumberOfFloors = request.Form["numberOfFloors"];
+            if (!string.IsNullOrEmpty(request.Form["numberOfFloors"]))
+                dto.NumberOfFloors = request.Form["numberOfFloors"];
             if (!string.IsNullOrEmpty(request.Form["numberOfRooms"])) dto.NumberOfRooms = request.Form["numberOfRooms"];
-            if (!string.IsNullOrEmpty(request.Form["yearOfConstruction"])) dto.YearOfConstruction = Convert.ToDouble(request.Form["yearOfConstruction"]);
+            if (!string.IsNullOrEmpty(request.Form["yearOfConstruction"]))
+                dto.YearOfConstruction = Convert.ToDouble(request.Form["yearOfConstruction"]);
             if (!string.IsNullOrEmpty(request.Form["fax"])) dto.Fax = request.Form["fax"];
             if (!string.IsNullOrEmpty(request.Form["mobile"])) dto.Mobile = request.Form["mobile"];
             if (!string.IsNullOrEmpty(request.Form["email"])) dto.Email = request.Form["email"];
@@ -242,15 +262,27 @@ namespace Parsia.Core.Organization
             if (!string.IsNullOrEmpty(request.Form["code"])) dto.Code = request.Form["code"];
             if (!string.IsNullOrEmpty(request.Form["description"])) dto.Description = request.Form["description"];
             if (!string.IsNullOrEmpty(request.Form["active"])) dto.Active = Convert.ToBoolean(request.Form["active"]);
-            if (!string.IsNullOrEmpty(request.Form["parent"])) dto.Parent = new OrganizationDto(){EntityId = Convert.ToInt64(request.Form["parent"]) };
-            if (!string.IsNullOrEmpty(request.Form["organizationStatus"])) dto.OrganizationStatus =new ComboValDto(){EntityId = Convert.ToInt64(request.Form["organizationStatus"]) };
-            if (!string.IsNullOrEmpty(request.Form["organizationOwnershipType"])) dto.OrganizationOwnershipType = new ComboValDto() { EntityId = Convert.ToInt64(request.Form["organizationOwnershipType"]) };
-            if (!string.IsNullOrEmpty(request.Form["organizationRoadType"])) dto.OrganizationRoadType = new ComboValDto() { EntityId = Convert.ToInt64(request.Form["organizationRoadType"]) };
-            if (!string.IsNullOrEmpty(request.Form["province"])) dto.Province = new LocationDto() { EntityId = Convert.ToInt64(request.Form["province"]) };
-            if (!string.IsNullOrEmpty(request.Form["city"])) dto.City = new LocationDto() { EntityId = Convert.ToInt64(request.Form["city"]) };
-            if (!string.IsNullOrEmpty(request.Form["organizationType"])) dto.OrganizationType = new ComboValDto() { EntityId = Convert.ToInt64(request.Form["organizationType"]) };
-            if (!string.IsNullOrEmpty(request.Form["organizationGrade"])) dto.OrganizationGrade = new ComboValDto() { EntityId = Convert.ToInt64(request.Form["organizationGrade"]) };
-            if (!string.IsNullOrEmpty(request.Form["Logo"])) dto.Logo = new FileDto() { EntityId = Convert.ToInt64(request.Form["Logo"]) };
+            if (!string.IsNullOrEmpty(request.Form["parent"]))
+                dto.Parent = new OrganizationDto {EntityId = Convert.ToInt64(request.Form["parent"])};
+            if (!string.IsNullOrEmpty(request.Form["organizationStatus"]))
+                dto.OrganizationStatus = new ComboValDto
+                    {EntityId = Convert.ToInt64(request.Form["organizationStatus"])};
+            if (!string.IsNullOrEmpty(request.Form["organizationOwnershipType"]))
+                dto.OrganizationOwnershipType = new ComboValDto
+                    {EntityId = Convert.ToInt64(request.Form["organizationOwnershipType"])};
+            if (!string.IsNullOrEmpty(request.Form["organizationRoadType"]))
+                dto.OrganizationRoadType = new ComboValDto
+                    {EntityId = Convert.ToInt64(request.Form["organizationRoadType"])};
+            if (!string.IsNullOrEmpty(request.Form["province"]))
+                dto.Province = new LocationDto {EntityId = Convert.ToInt64(request.Form["province"])};
+            if (!string.IsNullOrEmpty(request.Form["city"]))
+                dto.City = new LocationDto {EntityId = Convert.ToInt64(request.Form["city"])};
+            if (!string.IsNullOrEmpty(request.Form["organizationType"]))
+                dto.OrganizationType = new ComboValDto {EntityId = Convert.ToInt64(request.Form["organizationType"])};
+            if (!string.IsNullOrEmpty(request.Form["organizationGrade"]))
+                dto.OrganizationGrade = new ComboValDto {EntityId = Convert.ToInt64(request.Form["organizationGrade"])};
+            if (!string.IsNullOrEmpty(request.Form["Logo"]))
+                dto.Logo = new FileDto {EntityId = Convert.ToInt64(request.Form["Logo"])};
             if (!string.IsNullOrEmpty(request.Form["aboutUs"])) dto.AboutUs = request.Form["aboutUs"];
             if (!string.IsNullOrEmpty(request.Form["Ticket"])) dto.Ticket = request.Form["Ticket"];
             return new ServiceResult<object>(dto, 1);
@@ -271,7 +303,7 @@ namespace Parsia.Core.Organization
                         : $"SELECT max(AccessKey) FROM {tableName} WHERE ParentId = {parentId} AND Deleted=0";
                     var data = unitOfWork.ComboVal.CreateNativeQuery(queryString, x => new[]
                     {
-                        x[0],
+                        x[0]
                     });
                     if (data.Count > 0)
                     {
@@ -288,29 +320,20 @@ namespace Parsia.Core.Organization
                                 : $"SELECT AccessKey FROM {tableName} WHERE entityId = {parentId} AND Deleted=0";
                             var orgIds = unitOfWork.ComboVal.CreateNativeQuery(query, x => new[]
                             {
-                                x[0],
+                                x[0]
                             });
-                            if (orgIds.Count > 0)
-                            {
-                                siblingLastPart = orgIds[0].ToString();
-                            }
+                            if (orgIds.Count > 0) siblingLastPart = orgIds[0].ToString();
                         }
+
                         var nextKey = NextKey(siblingLastPart);
                         if (parentOrganization?.AccessKey != null)
                             return parentOrganization.AccessKey + nextKey;
-                        else
-                            return nextKey;
-
-
-                    }
-                    else
-                    {
-                        if (parentOrganization?.AccessKey != null)
-                            return parentOrganization.AccessKey + "AAA";
-                        else
-                            return "AAA";
+                        return nextKey;
                     }
 
+                    if (parentOrganization?.AccessKey != null)
+                        return parentOrganization.AccessKey + "AAA";
+                    return "AAA";
                 }
             }
             catch (Exception e)
@@ -319,11 +342,13 @@ namespace Parsia.Core.Organization
                 return "AAA";
             }
         }
+
         public string NextKey(string key)
         {
             if (key.Equals("ZZZ"))
-                throw new Exception("Organization access key last part exceed from (ZZZ). Groups organizations to smaller counts");
-            var next = Util.Base26Code((Util.Base26Number(key) + 1));
+                throw new Exception(
+                    "Organization access key last part exceed from (ZZZ). Groups organizations to smaller counts");
+            var next = Util.Base26Code(Util.Base26Number(key) + 1);
             return "" + next;
         }
     }

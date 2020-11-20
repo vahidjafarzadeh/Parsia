@@ -16,12 +16,13 @@ using Parsia.Core.Role;
 namespace Parsia.Core.BusinessAccess
 {
     [ClassDetails(Clazz = "BusinessAccess", Facade = "BusinessAccessFacade")]
-
     public class BusinessAccessFacade : IBaseFacade<BusinessAccessDto>
     {
         private static readonly BusinessAccessFacade Facade = new BusinessAccessFacade();
         private static readonly BusinessAccessCopier Copier = new BusinessAccessCopier();
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(BusinessAccessFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(BusinessAccessFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         private BusinessAccessFacade()
         {
@@ -34,36 +35,27 @@ namespace Parsia.Core.BusinessAccess
             {
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var item = unitOfWork.BusinessAccess.Get(p => p.UseCase == dto.UseCase && p.Role == dto.Role.EntityId && p.Organization == dto.Organization.EntityId).FirstOrDefault();
+                    var item = unitOfWork.BusinessAccess.Get(p =>
+                        p.UseCase == dto.UseCase && p.Role == dto.Role.EntityId &&
+                        p.Organization == dto.Organization.EntityId).FirstOrDefault();
                     if (item != null)
                     {
-
                         var lstIds = new HashSet<string>();
                         var split = dto.EntityIds.Split(",");
                         foreach (var s in split)
-                        {
                             if (!string.IsNullOrEmpty(s))
-                            {
                                 lstIds.Add(s.Trim());
-                            }
-                        }
                         if (dto.AddCurrentList)
 
                         {
                             var split2 = item.EntityIds.Split(",");
                             foreach (var s in split2)
-                            {
                                 if (!string.IsNullOrEmpty(s))
-                                {
                                     lstIds.Add(s.Trim());
-                                }
-                            }
                         }
+
                         var result = new StringBuilder();
-                        foreach (var data in lstIds)
-                        {
-                            result.Append(data).Append(",");
-                        }
+                        foreach (var data in lstIds) result.Append(data).Append(",");
                         item.EntityIds = result.ToString().Substring(0, result.ToString().Length - 1);
                         return Copier.GetDto(item);
                     }
@@ -76,8 +68,8 @@ namespace Parsia.Core.BusinessAccess
                 ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
                 return dto;
             }
-
         }
+
         public ServiceResult<object> GridView(BusinessParam bp)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
@@ -86,10 +78,11 @@ namespace Parsia.Core.BusinessAccess
                 var tblBusiness = Util.GetSqlServerTableName<DataLayer.Model.Core.BusinessAccess.BusinessAccess>();
                 var tblRole = Util.GetSqlServerTableName<DataLayer.Model.Core.Role.Role>();
                 var tblOrganization = Util.GetSqlServerTableName<DataLayer.Model.Core.Organization.Organization>();
-                var queryString = $"select entityId,organizationName,roleRoleName,useCase,fullTitle,deleted,createBy,accessKey from ( select EntityId as entityId,UseCase as useCase,mainRole.roleName as roleRoleName , mainOrg.orgName as organizationName, FullTitle as fullTitle,CreateBy as createBy,Deleted as deleted,AccessKey as accessKey from {tblBusiness} as mainData left join (select EntityId as roleEntityId,RoleName as roleName from {tblRole}) as mainRole on mainRole.roleEntityId = mainData.Role left join (select EntityId as orgEntityId , Name as orgName from {tblOrganization}) as mainOrg on mainOrg.orgEntityId = mainData.Organization ) e" +
-                                  QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
-                                  QueryUtil.GetOrderByClause(bp.Clause);
+                var queryString =
+                    $"select entityId,organizationName,roleRoleName,useCase,fullTitle,deleted,createBy,accessKey from ( select EntityId as entityId,UseCase as useCase,mainRole.roleName as roleRoleName , mainOrg.orgName as organizationName, FullTitle as fullTitle,CreateBy as createBy,Deleted as deleted,AccessKey as accessKey from {tblBusiness} as mainData left join (select EntityId as roleEntityId,RoleName as roleName from {tblRole}) as mainRole on mainRole.roleEntityId = mainData.Role left join (select EntityId as orgEntityId , Name as orgName from {tblOrganization}) as mainOrg on mainOrg.orgEntityId = mainData.Organization ) e" +
+                    QueryUtil.GetWhereClause(bp.Clause,
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
+                    QueryUtil.GetOrderByClause(bp.Clause);
                 queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
                 {
@@ -99,12 +92,12 @@ namespace Parsia.Core.BusinessAccess
                         x[1] != null ? Convert.ToInt64(x[1]) : (object) null,
                         x[2]?.ToString(),
                         x[3]?.ToString(),
-                        x[4]?.ToString(),
+                        x[4]?.ToString()
                     });
                     if (businessAccessList.Count == 0)
                         return new ServiceResult<object>(new List<BusinessAccessDto>(), 0);
                     var list = new List<object>();
-                    var headerTitle = new object[] { "entityId", "organizationName", "roleRoleName", "usecase" };
+                    var headerTitle = new object[] {"entityId", "organizationName", "roleRoleName", "usecase"};
                     list.Add(headerTitle);
                     list.AddRange(businessAccessList);
                     return new ServiceResult<object>(list, businessAccessList.Count);
@@ -115,6 +108,7 @@ namespace Parsia.Core.BusinessAccess
                 return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
+
         public ServiceResult<object> Save(BusinessParam bp, BusinessAccessDto dto)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
@@ -141,7 +135,8 @@ namespace Parsia.Core.BusinessAccess
                         unitOfWork.BusinessAccess.Save();
                     }
 
-                Elastic<BusinessAccessDto, DataLayer.Model.Core.BusinessAccess.BusinessAccess>.SaveToElastic(businessAccess, ClassDetails[0].Clazz, bp);
+                Elastic<BusinessAccessDto, DataLayer.Model.Core.BusinessAccess.BusinessAccess>.SaveToElastic(
+                    businessAccess, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(Copier.GetDto(businessAccess), 1);
             }
             catch (Exception e)
@@ -149,6 +144,7 @@ namespace Parsia.Core.BusinessAccess
                 return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
+
         public ServiceResult<object> ShowRow(BusinessParam bp)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
@@ -160,7 +156,8 @@ namespace Parsia.Core.BusinessAccess
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var context = new ParsiContext())
                 {
@@ -191,7 +188,8 @@ namespace Parsia.Core.BusinessAccess
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 DataLayer.Model.Core.BusinessAccess.BusinessAccess businessAccess;
                 using (var unitOfWork = new UnitOfWork())
@@ -200,14 +198,17 @@ namespace Parsia.Core.BusinessAccess
                 }
 
                 if (businessAccess == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var unitOfWork = new UnitOfWork())
                 {
                     unitOfWork.BusinessAccess.Delete(businessAccess);
                     unitOfWork.BusinessAccess.Save();
                 }
-                Elastic<BusinessAccessDto, DataLayer.Model.Core.BusinessAccess.BusinessAccess>.SaveToElastic(businessAccess, ClassDetails[0].Clazz, bp);
+
+                Elastic<BusinessAccessDto, DataLayer.Model.Core.BusinessAccess.BusinessAccess>.SaveToElastic(
+                    businessAccess, ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
@@ -222,17 +223,19 @@ namespace Parsia.Core.BusinessAccess
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.BusinessAccess.BusinessAccess>();
-                var queryString = $"select * from (select EntityId as entityId,FullTitle as fullTitle,Deleted as deleted,AccessKey as accessKey,CreateBy as createBy from {tableName}) e " +
-                                  QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, true, false, true)) +
-                                  QueryUtil.GetOrderByClause(bp.Clause);
+                var queryString =
+                    $"select * from (select EntityId as entityId,FullTitle as fullTitle,Deleted as deleted,AccessKey as accessKey,CreateBy as createBy from {tableName}) e " +
+                    QueryUtil.GetWhereClause(bp.Clause,
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, true, false, true)) +
+                    QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var businessAccessList = unitOfWork.BusinessAccess.CreateNativeQuery(queryString, x => new Dictionary<string, object>()
-                    {
-                        {"entityId",Convert.ToInt64(x[0].ToString()) },
-                        {"fullTitle",x[1]?.ToString() }
-                    });
+                    var businessAccessList = unitOfWork.BusinessAccess.CreateNativeQuery(queryString, x =>
+                        new Dictionary<string, object>
+                        {
+                            {"entityId", Convert.ToInt64(x[0].ToString())},
+                            {"fullTitle", x[1]?.ToString()}
+                        });
                     return businessAccessList.Count == 0
                         ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکوردی یافت نشد")
                         : new ServiceResult<object>(businessAccessList, businessAccessList.Count);
@@ -247,12 +250,18 @@ namespace Parsia.Core.BusinessAccess
         public ServiceResult<object> GetDtoFromRequest(HttpRequest request)
         {
             var dto = new BusinessAccessDto();
-            if (!string.IsNullOrEmpty(request.Form["entityId"])) dto.EntityId = Convert.ToInt64(request.Form["entityId"]);
-            if (!string.IsNullOrEmpty(request.Form["organization"])) dto.Organization = new OrganizationDto() { EntityId = Convert.ToInt64(request.Form["organization"]) }; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا سازمان را وارد نمایید");
-            if (!string.IsNullOrEmpty(request.Form["role"])) dto.Role = new RoleDto() { EntityId = Convert.ToInt64(request.Form["role"]) }; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نقش را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["entityId"]))
+                dto.EntityId = Convert.ToInt64(request.Form["entityId"]);
+            if (!string.IsNullOrEmpty(request.Form["organization"]))
+                dto.Organization = new OrganizationDto {EntityId = Convert.ToInt64(request.Form["organization"])};
+            else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا سازمان را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["role"]))
+                dto.Role = new RoleDto {EntityId = Convert.ToInt64(request.Form["role"])};
+            else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نقش را وارد نمایید");
             if (!string.IsNullOrEmpty(request.Form["usecase"])) dto.UseCase = request.Form["usecase"];
             if (!string.IsNullOrEmpty(request.Form["entityIds"])) dto.EntityIds = request.Form["entityIds"];
-            if (!string.IsNullOrEmpty(request.Form["addCurrentList"])) dto.AddCurrentList = Convert.ToBoolean(request.Form["addCurrentList"]);
+            if (!string.IsNullOrEmpty(request.Form["addCurrentList"]))
+                dto.AddCurrentList = Convert.ToBoolean(request.Form["addCurrentList"]);
             if (!string.IsNullOrEmpty(request.Form["active"])) dto.Active = Convert.ToBoolean(request.Form["active"]);
             if (!string.IsNullOrEmpty(request.Form["ticket"])) dto.Ticket = request.Form["ticket"];
             if (!string.IsNullOrEmpty(request.Form["code"])) dto.Code = request.Form["code"];

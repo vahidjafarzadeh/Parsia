@@ -16,10 +16,7 @@ namespace Parsia.Core.Action
                 ActionName = entity.ActionName
             };
         }
-        public List<ActionDto> GetDto(List<DataLayer.Model.Core.Action.Action> entity)
-        {
-            return entity.Select(action => new ActionDto {EntityId = action.EntityId, ActionName = action.ActionName, ActionEnName = action.ActionEnName}).ToList();
-        }
+
         public DataLayer.Model.Core.Action.Action GetEntity(ActionDto dto, BusinessParam bp, bool setCreate)
         {
             var action = new DataLayer.Model.Core.Action.Action
@@ -32,6 +29,13 @@ namespace Parsia.Core.Action
                 FullTitle = dto.ActionName + " | " + dto.EntityId
             };
             return SetMandatoryField(action, bp, setCreate);
+        }
+
+        public List<ActionDto> GetDto(List<DataLayer.Model.Core.Action.Action> entity)
+        {
+            return entity.Select(action => new ActionDto
+                    {EntityId = action.EntityId, ActionName = action.ActionName, ActionEnName = action.ActionEnName})
+                .ToList();
         }
 
         public DataLayer.Model.Core.Action.Action SetMandatoryField(DataLayer.Model.Core.Action.Action action,

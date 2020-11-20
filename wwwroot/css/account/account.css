@@ -751,7 +751,7 @@ input[type=number] {
   /* Firefox */ }
 
 .container-build {
-  position: absolute;
+  position: fixed;
   left: 0;
   background: white;
   top: 0;
@@ -766,7 +766,7 @@ input[type=number] {
   -webkit-flex-direction: column ;
   flex-direction: column ; }
   .container-build img {
-    max-width: 500px;
+    max-width: 100%;
     display: table;
     margin: auto;
     height: 265px;

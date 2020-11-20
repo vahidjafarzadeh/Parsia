@@ -11,12 +11,12 @@ namespace Parsia.Core.UseCaseAction
         public UseCaseActionDto GetDto(DataLayer.Model.Core.UseCaseAction.UseCaseAction entity)
         {
             var createUser = entity.CreateUserEntity != null
-                ? new UserDto() { EntityId = entity.CreateUserEntity.EntityId, Username = entity.CreateUserEntity.Username }
+                ? new UserDto {EntityId = entity.CreateUserEntity.EntityId, Username = entity.CreateUserEntity.Username}
                 : new UserDto();
             var updateUser = entity.UpdateUserEntity != null
-                ? new UserDto() { EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username }
+                ? new UserDto {EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username}
                 : new UserDto();
-            var useCaseAction = new UseCaseActionDto()
+            var useCaseAction = new UseCaseActionDto
             {
                 EntityId = entity.EntityId,
                 Created = Util.GetTimeStamp(entity.Created),
@@ -27,14 +27,14 @@ namespace Parsia.Core.UseCaseAction
                 Code = entity.Code
             };
             if (entity.CurrentAction != null)
-                useCaseAction.Action = new ActionDto()
+                useCaseAction.Action = new ActionDto
                 {
                     EntityId = entity.CurrentAction.EntityId,
                     ActionEnName = entity.CurrentAction.ActionEnName,
                     ActionName = entity.CurrentAction.ActionName
                 };
             if (entity.CurrentUseCase != null)
-                useCaseAction.UseCase = new UseCaseDto()
+                useCaseAction.UseCase = new UseCaseDto
                 {
                     EntityId = entity.CurrentUseCase.EntityId,
                     UseCaseName = entity.CurrentUseCase.UseCaseName,
@@ -43,21 +43,25 @@ namespace Parsia.Core.UseCaseAction
             return useCaseAction;
         }
 
-        public DataLayer.Model.Core.UseCaseAction.UseCaseAction GetEntity(UseCaseActionDto dto, BusinessParam bp, bool setCreate)
+        public DataLayer.Model.Core.UseCaseAction.UseCaseAction GetEntity(UseCaseActionDto dto, BusinessParam bp,
+            bool setCreate)
         {
-            var useCaseAction = new DataLayer.Model.Core.UseCaseAction.UseCaseAction()
+            var useCaseAction = new DataLayer.Model.Core.UseCaseAction.UseCaseAction
             {
                 EntityId = dto.EntityId,
                 Active = dto.Active,
                 Code = dto.Code,
                 Deleted = dto.Deleted,
-                FullTitle = dto.Action?.EntityId + " | " + dto.UseCase?.EntityId + " | " + dto.Code + " | " + dto.EntityId,
+                FullTitle = dto.Action?.EntityId + " | " + dto.UseCase?.EntityId + " | " + dto.Code + " | " +
+                            dto.EntityId,
                 UseCase = dto.UseCase?.EntityId,
                 Action = dto.Action?.EntityId
             };
             return SetMandatoryField(useCaseAction, bp, setCreate);
         }
-        public DataLayer.Model.Core.UseCaseAction.UseCaseAction SetMandatoryField(DataLayer.Model.Core.UseCaseAction.UseCaseAction useCaseAction,
+
+        public DataLayer.Model.Core.UseCaseAction.UseCaseAction SetMandatoryField(
+            DataLayer.Model.Core.UseCaseAction.UseCaseAction useCaseAction,
             BusinessParam bp, bool setCreate)
         {
             useCaseAction.AccessKey = bp.UserInfo.AccessKey;

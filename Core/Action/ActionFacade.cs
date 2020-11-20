@@ -13,7 +13,9 @@ namespace Parsia.Core.Action
     {
         private static readonly ActionFacade Facade = new ActionFacade();
         private static readonly ActionCopier Copier = new ActionCopier();
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(ActionFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(ActionFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         private ActionFacade()
         {
@@ -43,7 +45,7 @@ namespace Parsia.Core.Action
                     if (actionList.Count == 0)
                         return new ServiceResult<object>(new List<ActionDto>(), 0);
                     var list = new List<object>();
-                    var headerTitle = new object[] { "entityId", "actionName", "actionEnName" };
+                    var headerTitle = new object[] {"entityId", "actionName", "actionEnName"};
                     list.Add(headerTitle);
                     list.AddRange(actionList);
                     return new ServiceResult<object>(list, actionList.Count);
@@ -74,6 +76,7 @@ namespace Parsia.Core.Action
         {
             throw new NotImplementedException();
         }
+
         public ServiceResult<object> GetAllList(BusinessParam bp)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
@@ -84,6 +87,7 @@ namespace Parsia.Core.Action
                 {
                     myAction = unitOfWork.Action.Get().ToList();
                 }
+
                 return new ServiceResult<object>(Copier.GetDto(myAction), myAction.Count);
             }
             catch (Exception ex)

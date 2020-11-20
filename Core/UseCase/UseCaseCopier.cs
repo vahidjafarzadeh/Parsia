@@ -13,12 +13,12 @@ namespace Parsia.Core.UseCase
         public UseCaseDto GetDto(DataLayer.Model.Core.UseCase.UseCase entity)
         {
             var createUser = entity.CreateUserEntity != null
-                ? new UserDto() { EntityId = entity.CreateUserEntity.EntityId, Username = entity.CreateUserEntity.Username }
+                ? new UserDto {EntityId = entity.CreateUserEntity.EntityId, Username = entity.CreateUserEntity.Username}
                 : new UserDto();
             var updateUser = entity.UpdateUserEntity != null
-                ? new UserDto() { EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username }
+                ? new UserDto {EntityId = entity.UpdateUserEntity.EntityId, Username = entity.UpdateUserEntity.Username}
                 : new UserDto();
-            var useCase = new UseCaseDto()
+            var useCase = new UseCaseDto
             {
                 EntityId = entity.EntityId,
                 Clazz = entity.Clazz,
@@ -30,61 +30,35 @@ namespace Parsia.Core.UseCase
                 UpdatedBy = updateUser,
                 Active = entity.Active,
                 Code = entity.Code,
-                UseCaseName = entity.UseCaseName,
+                UseCaseName = entity.UseCaseName
             };
             if (entity.CurrentUseCase != null)
-                useCase.Parent = new UseCaseDto()
+                useCase.Parent = new UseCaseDto
                 {
                     EntityId = entity.CurrentUseCase.EntityId,
                     UseCaseName = entity.CurrentUseCase.UseCaseName
                 };
             if (entity.ParentUseCaseUseCaseAction != null)
             {
-                var dataDto = entity.ParentUseCaseUseCaseAction.Select(item => new UseCaseActionDto() { UseCase = new UseCaseDto() { EntityId = Convert.ToInt64(item.UseCase) }, Action = new ActionDto() { ActionName = (item.CurrentAction != null ? item.CurrentAction.ActionName : ""), EntityId = Convert.ToInt64(item.Action) } }).ToList();
+                var dataDto = entity.ParentUseCaseUseCaseAction.Select(item => new UseCaseActionDto
+                {
+                    UseCase = new UseCaseDto {EntityId = Convert.ToInt64(item.UseCase)},
+                    Action = new ActionDto
+                    {
+                        ActionName = item.CurrentAction != null ? item.CurrentAction.ActionName : "",
+                        EntityId = Convert.ToInt64(item.Action)
+                    }
+                }).ToList();
 
                 useCase.UseCaseActions = dataDto;
             }
+
             return useCase;
         }
-        public List<UseCaseDto> GetDto(List<DataLayer.Model.Core.UseCase.UseCase> lastData)
-        {
-            var lstDto = new List<UseCaseDto>();
-            foreach (var entity in lastData)
-            {
-                var useCase = new UseCaseDto()
-                {
-                    EntityId = entity.EntityId,
-                    Clazz = entity.Clazz,
-                    VirtualNode = entity.VirtualNode,
-                    TableName = entity.TableName,
-                    Created = Util.GetTimeStamp(entity.Created),
-                    Updated = Util.GetTimeStamp(entity.Updated),
-                    CreatedBy = null,
-                    UpdatedBy = null,
-                    FullTitle = entity.UseCaseName,
-                    Active = entity.Active,
-                    Code = entity.Code,
-                    UseCaseName = entity.UseCaseName,
-                };
-                if (entity.CurrentUseCase != null)
-                    useCase.Parent = new UseCaseDto()
-                    {
-                        EntityId = entity.CurrentUseCase.EntityId,
-                        UseCaseName = entity.CurrentUseCase.UseCaseName
-                    };
-                if (entity.ParentUseCaseUseCaseAction != null)
-                {
-                    var dataDto = entity.ParentUseCaseUseCaseAction.Select(item => new UseCaseActionDto() { UseCase = new UseCaseDto() { EntityId = Convert.ToInt64(item.UseCase) }, Action = new ActionDto() { FullTitle = (item.CurrentAction != null ? item.CurrentAction.ActionName : ""), EntityId = Convert.ToInt64(item.Action) } }).ToList();
 
-                    useCase.UseCaseActions = dataDto;
-                }
-                lstDto.Add(useCase);
-            }
-            return lstDto;
-        }
         public DataLayer.Model.Core.UseCase.UseCase GetEntity(UseCaseDto dto, BusinessParam bp, bool setCreate)
         {
-            var useCase = new DataLayer.Model.Core.UseCase.UseCase()
+            var useCase = new DataLayer.Model.Core.UseCase.UseCase
             {
                 EntityId = dto.EntityId,
                 Active = dto.Active,
@@ -97,11 +71,55 @@ namespace Parsia.Core.UseCase
                 TableName = dto.TableName,
                 Clazz = dto.Clazz
             };
-            if (string.IsNullOrEmpty(useCase.Code))
-            {
-                useCase.Code = "-";
-            }
+            if (string.IsNullOrEmpty(useCase.Code)) useCase.Code = "-";
             return SetMandatoryField(useCase, bp, setCreate);
+        }
+
+        public List<UseCaseDto> GetDto(List<DataLayer.Model.Core.UseCase.UseCase> lastData)
+        {
+            var lstDto = new List<UseCaseDto>();
+            foreach (var entity in lastData)
+            {
+                var useCase = new UseCaseDto
+                {
+                    EntityId = entity.EntityId,
+                    Clazz = entity.Clazz,
+                    VirtualNode = entity.VirtualNode,
+                    TableName = entity.TableName,
+                    Created = Util.GetTimeStamp(entity.Created),
+                    Updated = Util.GetTimeStamp(entity.Updated),
+                    CreatedBy = null,
+                    UpdatedBy = null,
+                    FullTitle = entity.UseCaseName,
+                    Active = entity.Active,
+                    Code = entity.Code,
+                    UseCaseName = entity.UseCaseName
+                };
+                if (entity.CurrentUseCase != null)
+                    useCase.Parent = new UseCaseDto
+                    {
+                        EntityId = entity.CurrentUseCase.EntityId,
+                        UseCaseName = entity.CurrentUseCase.UseCaseName
+                    };
+                if (entity.ParentUseCaseUseCaseAction != null)
+                {
+                    var dataDto = entity.ParentUseCaseUseCaseAction.Select(item => new UseCaseActionDto
+                    {
+                        UseCase = new UseCaseDto {EntityId = Convert.ToInt64(item.UseCase)},
+                        Action = new ActionDto
+                        {
+                            FullTitle = item.CurrentAction != null ? item.CurrentAction.ActionName : "",
+                            EntityId = Convert.ToInt64(item.Action)
+                        }
+                    }).ToList();
+
+                    useCase.UseCaseActions = dataDto;
+                }
+
+                lstDto.Add(useCase);
+            }
+
+            return lstDto;
         }
 
         public DataLayer.Model.Core.UseCase.UseCase SetMandatoryField(DataLayer.Model.Core.UseCase.UseCase useCase,

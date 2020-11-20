@@ -14,14 +14,17 @@ namespace Parsia.Core.roleAccessGroup
     {
         private static readonly RoleAccessGroupFacade Facade = new RoleAccessGroupFacade();
         private static readonly RoleAccessGroupCopier Copier = new RoleAccessGroupCopier();
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(RoleAccessGroupFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(RoleAccessGroupFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private RoleAccessGroupFacade()
+        {
+        }
 
         public static RoleAccessGroupFacade GetInstance()
         {
             return Facade;
-        }
-        private RoleAccessGroupFacade()
-        {
         }
 
         public ServiceResult<object> SaveList(BusinessParam bp, List<RoleAccessGroupDto> lstDto)
@@ -29,7 +32,6 @@ namespace Parsia.Core.roleAccessGroup
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
             try
             {
-
                 foreach (var dto in lstDto)
                 {
                     DataLayer.Model.Core.RoleAccessGroup.RoleAccessGroup accessGroup;
@@ -47,8 +49,11 @@ namespace Parsia.Core.roleAccessGroup
                             unitOfWork.RoleAccessGroup.Update(accessGroup);
                             unitOfWork.RoleAccessGroup.Save();
                         }
-                    Elastic<RoleAccessGroupDto, DataLayer.Model.Core.RoleAccessGroup.RoleAccessGroup>.SaveToElastic(accessGroup, ClassDetails[0].Clazz, bp);
+
+                    Elastic<RoleAccessGroupDto, DataLayer.Model.Core.RoleAccessGroup.RoleAccessGroup>.SaveToElastic(
+                        accessGroup, ClassDetails[0].Clazz, bp);
                 }
+
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
@@ -56,6 +61,7 @@ namespace Parsia.Core.roleAccessGroup
                 return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
+
         public ServiceResult<object> DeletedList(BusinessParam bp, long roleId)
         {
             var methodName = $".{new StackTrace().GetFrame(1).GetMethod().Name}";
@@ -67,10 +73,13 @@ namespace Parsia.Core.roleAccessGroup
                     foreach (var item in accessGroups)
                     {
                         unitOfWork.RoleAccessGroup.Delete(item);
-                        Elastic<RoleAccessGroupDto, DataLayer.Model.Core.RoleAccessGroup.RoleAccessGroup>.SaveToElastic(item, ClassDetails[0].Clazz, bp);
+                        Elastic<RoleAccessGroupDto, DataLayer.Model.Core.RoleAccessGroup.RoleAccessGroup>.SaveToElastic(
+                            item, ClassDetails[0].Clazz, bp);
                     }
+
                     unitOfWork.UseCaseActionAccessGroup.Save();
                 }
+
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
@@ -78,6 +87,5 @@ namespace Parsia.Core.roleAccessGroup
                 return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
-
     }
 }

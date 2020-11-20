@@ -22,6 +22,7 @@
     <_ContentIncludedByDefault Remove="wwwroot\sass\page\index.min.css" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AspNetCore.SEOHelper" Version="1.0.1" />
     <PackageReference Include="AWSSDK.Core" Version="3.5.1.38" />
     <PackageReference Include="BuildWebCompiler" Version="1.12.394" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.10" />
@@ -52,10 +53,6 @@
     <PackageReference Include="WebMarkupMin.AspNetCore3" Version="2.8.11" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\BusinessAccess\" />
-    <Folder Include="Core\EntityState\" />
-    <Folder Include="Core\RoleAccessGroup\" />
-    <Folder Include="Core\UserRole\" />
     <Folder Include="wwwroot\images\system\icons\" />
     <Folder Include="wwwroot\lib\core\" />
     <Folder Include="wwwroot\lib\editor\" />
@@ -72,6 +69,7 @@
     <Folder Include="wwwroot\pages\core\role\" />
     <Folder Include="wwwroot\pages\core\usecase\" />
     <Folder Include="wwwroot\sass\button\" />
+    <Folder Include="wwwroot\sitemap\article\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="compilerconfig.json" />

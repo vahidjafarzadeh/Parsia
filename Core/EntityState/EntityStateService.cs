@@ -7,15 +7,23 @@ namespace Parsia.Core.EntityState
     [ClassDetails(Clazz = "EntityState", Facade = "EntityStateService")]
     public class EntityStateService : ControllerBase
     {
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(EntityStateFacade).GetCustomAttributes(typeof(ClassDetails), true);
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(EntityStateFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private readonly IUserSessionManager _userSessionManager;
+
+        public EntityStateService(IUserSessionManager userSessionManager)
+        {
+            _userSessionManager = userSessionManager;
+        }
 
         [HttpPost]
         [Route("service/entityState/gridView")]
         public ServiceResult<object> GridView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
                 ? EntityStateFacade.GetInstance().GridView(bp)
                 : checkAccess;
@@ -28,10 +36,10 @@ namespace Parsia.Core.EntityState
             var dtoFromRequest = EntityStateFacade.GetInstance().GetDtoFromRequest(HttpContext.Request);
             if (!dtoFromRequest.Done)
                 return dtoFromRequest;
-            var dto = (EntityStateDto)dtoFromRequest.Result;
-            var userInfo = UserSessionManager.GetUserInfo(dto.Ticket, Request);
+            var dto = (EntityStateDto) dtoFromRequest.Result;
+            var userInfo = _userSessionManager.GetUserInfo(dto.Ticket, Request);
             var bp = new BusinessParam(userInfo);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz,
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz,
                 dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? EntityStateFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
@@ -40,9 +48,9 @@ namespace Parsia.Core.EntityState
         [Route("service/entityState/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "update");
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "update");
             return checkAccess.Done
                 ? EntityStateFacade.GetInstance().ShowRow(bp)
                 : checkAccess;
@@ -52,9 +60,9 @@ namespace Parsia.Core.EntityState
         [Route("service/entityState/delete")]
         public ServiceResult<object> Delete(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "delete");
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "delete");
             return checkAccess.Done
                 ? EntityStateFacade.GetInstance().Delete(bp)
                 : checkAccess;
@@ -64,9 +72,9 @@ namespace Parsia.Core.EntityState
         [Route("service/entityState/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
-            var userInfo = UserSessionManager.GetUserInfo(clause.Ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "autocomplete");
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "autocomplete");
             return checkAccess.Done
                 ? EntityStateFacade.GetInstance().AutocompleteView(bp)
                 : checkAccess;
@@ -78,50 +86,52 @@ namespace Parsia.Core.EntityState
         public ServiceResult<object> Lock()
         {
             var ticket = HttpContext.Request.Form["ticket"];
-            var userInfo = UserSessionManager.GetUserInfo(ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(ticket, Request);
             var bp = new BusinessParam(userInfo, new Clause());
-            var dtoFromRequest = EntityStateFacade.GetInstance().GetDtoFromRequestWithCurrentUser(HttpContext.Request, bp);
+            var dtoFromRequest = EntityStateFacade.GetInstance()
+                .GetDtoFromRequestWithCurrentUser(HttpContext.Request, bp);
             if (!dtoFromRequest.Done)
                 return dtoFromRequest;
-            var dto = (EntityStateDto)dtoFromRequest.Result;
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz,
+            var dto = (EntityStateDto) dtoFromRequest.Result;
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz,
                 dto.EntityId == 0 ? "insert" : "update");
             return checkAccess.Done ? EntityStateFacade.GetInstance().Save(bp, dto) : checkAccess;
         }
+
         [HttpPost]
         [Route("service/entityState/deleteLock")]
         public ServiceResult<object> DeleteLock()
         {
             var ticket = HttpContext.Request.Form["ticket"];
-            var userInfo = UserSessionManager.GetUserInfo(ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(ticket, Request);
             var bp = new BusinessParam(userInfo, new Clause());
-            var dtoFromRequest = EntityStateFacade.GetInstance().GetDtoFromRequestWithCurrentUser(HttpContext.Request, bp);
+            var dtoFromRequest = EntityStateFacade.GetInstance()
+                .GetDtoFromRequestWithCurrentUser(HttpContext.Request, bp);
             if (!dtoFromRequest.Done)
                 return dtoFromRequest;
-            var dto = (EntityStateDto)dtoFromRequest.Result;
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "delete");
+            var dto = (EntityStateDto) dtoFromRequest.Result;
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "delete");
             return checkAccess.Done
                 ? EntityStateFacade.GetInstance().Delete(bp, dto)
                 : checkAccess;
         }
+
         [HttpPost]
         [Route("service/entityState/getState")]
         public ServiceResult<object> GetState()
         {
             var ticket = HttpContext.Request.Form["ticket"];
-            var userInfo = UserSessionManager.GetUserInfo(ticket, Request);
+            var userInfo = _userSessionManager.GetUserInfo(ticket, Request);
             var bp = new BusinessParam(userInfo, new Clause());
-            var dtoFromRequest = EntityStateFacade.GetInstance().GetDtoFromRequestWithCurrentUser(HttpContext.Request, bp);
+            var dtoFromRequest = EntityStateFacade.GetInstance()
+                .GetDtoFromRequestWithCurrentUser(HttpContext.Request, bp);
             if (!dtoFromRequest.Done)
                 return dtoFromRequest;
-            var dto = (EntityStateDto)dtoFromRequest.Result;
-            var checkAccess = UserSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
+            var dto = (EntityStateDto) dtoFromRequest.Result;
+            var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "gridView");
             return checkAccess.Done
                 ? EntityStateFacade.GetInstance().GetState(bp, dto)
                 : checkAccess;
         }
-
-
-
     }
 }

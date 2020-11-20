@@ -14,30 +14,7 @@ function showLoginPage(retURL) {
 }
 function errorHandler(response) {
     switch (response.errorCode) {
-    case ENVIRONMENT.ErrorCode.BUSINESS_MESSAGE:
-        switch (response.errorDesc) {
-        case "NO_DATA":
-            break;
-        default:
-            if (top.showConfirm) {
-                setTimeout(function() {
-                        top.showConfirm({
-                            title: "خطا در ذخیره سازی / بروزرسانی",
-                            body: response.errorDesc,
-                            confirmButton: {
-                                hidden: true
-                            },
-                            declineButton: {
-                                text: GeneralBundle.$close
-                            }
-                        });
-                    },
-                    450);
-            }
-            break;
-        }
-        break;
-    case ENVIRONMENT.ErrorCode.USER_EXPIRED:
+    case 2:
         if (top.showConfirm) {
             top.showConfirm({
                 body: "زمان استفاده از حساب کاربری شما به پایان رسیده است. آیا مایلید دوباره وارد شوید؟ ",

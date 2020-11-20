@@ -20,7 +20,9 @@ namespace Parsia.Core.AccessGroup
     {
         private static readonly AccessGroupFacade Facade = new AccessGroupFacade();
         private static readonly AccessGroupCopier Copier = new AccessGroupCopier();
-        private static readonly ClassDetails[] ClassDetails = (ClassDetails[])typeof(AccessGroupFacade).GetCustomAttributes(typeof(ClassDetails), true);
+
+        private static readonly ClassDetails[] ClassDetails =
+            (ClassDetails[]) typeof(AccessGroupFacade).GetCustomAttributes(typeof(ClassDetails), true);
 
         private AccessGroupFacade()
         {
@@ -32,10 +34,11 @@ namespace Parsia.Core.AccessGroup
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.AccessGroup.AccessGroup>();
-                var queryString = $"select entityId,name,deleted,fullTitle,createBy,accessKey from (select EntityId as entityId,Name as name,Deleted as deleted,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey from {tableName} where code <> 'ADMIN') e  " +
-                                  QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
-                                  QueryUtil.GetOrderByClause(bp.Clause);
+                var queryString =
+                    $"select entityId,name,deleted,fullTitle,createBy,accessKey from (select EntityId as entityId,Name as name,Deleted as deleted,FullTitle as fullTitle,CreateBy as createBy,AccessKey as accessKey from {tableName} where code <> 'ADMIN') e  " +
+                    QueryUtil.GetWhereClause(bp.Clause,
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
+                    QueryUtil.GetOrderByClause(bp.Clause);
                 queryString = QueryUtil.SetPaging(bp.Clause.PageNo, bp.Clause.PageSize, queryString);
                 using (var unitOfWork = new UnitOfWork())
                 {
@@ -43,12 +46,12 @@ namespace Parsia.Core.AccessGroup
                     {
                         x[0] != null ? Convert.ToInt32(x[0]) : (object) null,
                         x[1] != null ? Convert.ToInt64(x[1]) : (object) null,
-                        x[2]?.ToString(),
+                        x[2]?.ToString()
                     });
                     if (accessGroupList.Count == 0)
                         return new ServiceResult<object>(new List<AccessGroupDto>(), 0);
                     var list = new List<object>();
-                    var headerTitle = new object[] { "entityId", "name" };
+                    var headerTitle = new object[] {"entityId", "name"};
                     list.Add(headerTitle);
                     list.AddRange(accessGroupList);
                     return new ServiceResult<object>(list, accessGroupList.Count);
@@ -57,7 +60,6 @@ namespace Parsia.Core.AccessGroup
             catch (Exception e)
             {
                 return ExceptionUtil.ExceptionHandler(e, ClassDetails[0].Facade + methodName, bp.UserInfo);
-
             }
         }
 
@@ -75,19 +77,15 @@ namespace Parsia.Core.AccessGroup
                         unitOfWork.AccessGroup.Insert(accessGroup);
                         unitOfWork.AccessGroup.Save();
                     }
-                    foreach (var item in dto)
-                    {
-                        item.AccessGroup = Copier.GetDto(accessGroup);
-                    }
+
+                    foreach (var item in dto) item.AccessGroup = Copier.GetDto(accessGroup);
                     var serviceResult = UseCaseActionAccessGroupFacade.GetInstance().SaveList(bp, dto);
-                    if (!serviceResult.Done)
-                    {
-                        return serviceResult;
-                    }
+                    if (!serviceResult.Done) return serviceResult;
                 }
                 else
                 {
-                    var delete = UseCaseActionAccessGroupFacade.GetInstance().DeletedList(bp, dto[0].AccessGroup.EntityId);
+                    var delete = UseCaseActionAccessGroupFacade.GetInstance()
+                        .DeletedList(bp, dto[0].AccessGroup.EntityId);
                     if (delete.Done)
                     {
                         using (var unitOfWork = new UnitOfWork())
@@ -96,23 +94,19 @@ namespace Parsia.Core.AccessGroup
                             unitOfWork.AccessGroup.Update(accessGroup);
                             unitOfWork.AccessGroup.Save();
                         }
-                        foreach (var item in dto)
-                        {
-                            item.AccessGroup = Copier.GetDto(accessGroup);
-                        }
+
+                        foreach (var item in dto) item.AccessGroup = Copier.GetDto(accessGroup);
                         var serviceResult = UseCaseActionAccessGroupFacade.GetInstance().SaveList(bp, dto);
-                        if (!serviceResult.Done)
-                        {
-                            return serviceResult;
-                        }
+                        if (!serviceResult.Done) return serviceResult;
                     }
                     else
                     {
                         return delete;
                     }
-
                 }
-                Elastic<AccessGroupDto, DataLayer.Model.Core.AccessGroup.AccessGroup>.SaveToElastic(accessGroup, ClassDetails[0].Clazz, bp);
+
+                Elastic<AccessGroupDto, DataLayer.Model.Core.AccessGroup.AccessGroup>.SaveToElastic(accessGroup,
+                    ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(Copier.GetDto(accessGroup), 1);
             }
             catch (Exception e)
@@ -132,16 +126,17 @@ namespace Parsia.Core.AccessGroup
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 using (var content = new ParsiContext())
                 {
                     var data = content.AccessGroup.Where(p => p.EntityId == entityId).Include(p => p.CreateUserEntity)
                         .Include(p => p.UpdateUserEntity).Include(p => p.ParentAccessGroupUseCaseActionAccessGroup)
-                        .ThenInclude(p => p.CurrentUseCaseAction).ThenInclude(p => p.CurrentAction).IgnoreQueryFilters().ToList();
+                        .ThenInclude(p => p.CurrentUseCaseAction).ThenInclude(p => p.CurrentAction).IgnoreQueryFilters()
+                        .ToList();
                     return new ServiceResult<object>(Copier.GetDto(data[0]), 1);
                 }
-
             }
             catch (Exception e)
             {
@@ -160,7 +155,8 @@ namespace Parsia.Core.AccessGroup
             try
             {
                 if (entityId == 0)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
                 DataLayer.Model.Core.AccessGroup.AccessGroup accessGroup;
                 using (var unitOfWork = new UnitOfWork())
@@ -169,7 +165,8 @@ namespace Parsia.Core.AccessGroup
                 }
 
                 if (accessGroup == null)
-                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد", ClassDetails[0].Facade + methodName,
+                    return ExceptionUtil.ExceptionHandler("شناسه مورد نظر یافت نشد",
+                        ClassDetails[0].Facade + methodName,
                         bp.UserInfo);
 
                 accessGroup.Deleted = accessGroup.EntityId;
@@ -178,7 +175,9 @@ namespace Parsia.Core.AccessGroup
                     unitOfWork.AccessGroup.Update(accessGroup);
                     unitOfWork.AccessGroup.Save();
                 }
-                Elastic<AccessGroupDto, DataLayer.Model.Core.AccessGroup.AccessGroup>.SaveToElastic(accessGroup, ClassDetails[0].Clazz, bp);
+
+                Elastic<AccessGroupDto, DataLayer.Model.Core.AccessGroup.AccessGroup>.SaveToElastic(accessGroup,
+                    ClassDetails[0].Clazz, bp);
                 return new ServiceResult<object>(true, 1);
             }
             catch (Exception e)
@@ -210,20 +209,21 @@ namespace Parsia.Core.AccessGroup
             try
             {
                 var tableName = Util.GetSqlServerTableName<DataLayer.Model.Core.AccessGroup.AccessGroup>();
-                var queryString = "select * from (select EntityId,Name,FullTitle,code,CreateBy,AccessKey,Deleted from " +
-                                  tableName + "  where code <> 'ADMIN') e" +
-                                  QueryUtil.GetWhereClause(bp.Clause,
-                                      QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
-                                  QueryUtil.GetOrderByClause(bp.Clause);
+                var queryString =
+                    "select * from (select EntityId,Name,FullTitle,code,CreateBy,AccessKey,Deleted from " +
+                    tableName + "  where code <> 'ADMIN') e" +
+                    QueryUtil.GetWhereClause(bp.Clause,
+                        QueryUtil.GetConstraintForNativeQuery(bp, ClassDetails[0].Clazz, false, false, true)) +
+                    QueryUtil.GetOrderByClause(bp.Clause);
                 using (var unitOfWork = new UnitOfWork())
                 {
-                    var accessGroupList = unitOfWork.AccessGroup.CreateNativeQuery(queryString, x => new Dictionary<string, object>()
-                    {
-                        {"entityId",Convert.ToInt64(x[0].ToString()) },
-                        {"name",Convert.ToInt64(x[1].ToString()) },
-                        {"fullTitle",Convert.ToInt64(x[2].ToString()) }
-
-                    });
+                    var accessGroupList = unitOfWork.AccessGroup.CreateNativeQuery(queryString, x =>
+                        new Dictionary<string, object>
+                        {
+                            {"entityId", Convert.ToInt64(x[0].ToString())},
+                            {"name", Convert.ToInt64(x[1].ToString())},
+                            {"fullTitle", Convert.ToInt64(x[2].ToString())}
+                        });
                     return accessGroupList.Count == 0
                         ? new ServiceResult<object>(Enumerator.ErrorCode.NotFound, "رکوردی یافت نشد")
                         : new ServiceResult<object>(accessGroupList, accessGroupList.Count);
@@ -234,42 +234,48 @@ namespace Parsia.Core.AccessGroup
                 return ExceptionUtil.ExceptionHandler(ex, ClassDetails[0].Facade + methodName, bp.UserInfo);
             }
         }
+
         public ServiceResult<object> GetDtoFromRequest(HttpRequest request)
         {
             var lstData = new List<UseCaseActionAccessGroupDto>();
             var accessGroup = new AccessGroupDto();
-            if (!string.IsNullOrEmpty(request.Form["EntityId"])) accessGroup.EntityId = Convert.ToInt64(request.Form["EntityId"]);
-            if (!string.IsNullOrEmpty(request.Form["Name"])) accessGroup.Name = request.Form["Name"]; else return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "لطفا نام گروه دسترسی را وارد نمایید");
+            if (!string.IsNullOrEmpty(request.Form["EntityId"]))
+                accessGroup.EntityId = Convert.ToInt64(request.Form["EntityId"]);
+            if (!string.IsNullOrEmpty(request.Form["Name"])) accessGroup.Name = request.Form["Name"];
+            else
+                return new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError,
+                    "لطفا نام گروه دسترسی را وارد نمایید");
             if (!string.IsNullOrEmpty(request.Form["Code"])) accessGroup.Code = request.Form["Code"];
-            if (!string.IsNullOrEmpty(request.Form["Active"])) accessGroup.Active = Convert.ToBoolean(request.Form["Active"]);
+            if (!string.IsNullOrEmpty(request.Form["Active"]))
+                accessGroup.Active = Convert.ToBoolean(request.Form["Active"]);
             if (!string.IsNullOrEmpty(request.Form["Ticket"])) accessGroup.Ticket = request.Form["Ticket"];
             if (!string.IsNullOrEmpty(request.Form["actions"]))
             {
                 var strings = request.Form["actions"].ToString().Split(",");
                 foreach (var item in strings)
-                {
                     if (item.Contains("|"))
                     {
-                        var useCaseActionDto = new UseCaseActionDto()
+                        var useCaseActionDto = new UseCaseActionDto
                         {
-                            Action = new ActionDto() { EntityId = Convert.ToInt64(item.Split("|")[1]) },
-                            UseCase = new UseCaseDto() { EntityId = Convert.ToInt64(item.Split("|")[0]) }
+                            Action = new ActionDto {EntityId = Convert.ToInt64(item.Split("|")[1])},
+                            UseCase = new UseCaseDto {EntityId = Convert.ToInt64(item.Split("|")[0])}
                         };
-                        lstData.Add(new UseCaseActionAccessGroupDto() { AccessGroup = accessGroup, UseCaseAction = useCaseActionDto });
+                        lstData.Add(new UseCaseActionAccessGroupDto
+                            {AccessGroup = accessGroup, UseCaseAction = useCaseActionDto});
                     }
-                }
-
             }
             else
             {
-                var dto = new UseCaseActionAccessGroupDto()
+                var dto = new UseCaseActionAccessGroupDto
                 {
                     AccessGroup = accessGroup
                 };
                 lstData.Add(dto);
             }
+
             return new ServiceResult<object>(lstData, 1);
         }
+
         public static AccessGroupFacade GetInstance()
         {
             return Facade;
