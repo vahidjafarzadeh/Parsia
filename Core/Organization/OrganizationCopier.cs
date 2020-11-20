@@ -130,9 +130,12 @@ namespace Parsia.Core.Organization
             if (entity.CurrentProvince != null)
             {
                 organizationDto.Province = new LocationDto()
-            DataLayer.Model.Core.Organization.OrganizationurrentProvince.EntityId,
+                {
+                    EntityId = entity.CurrentProvince.EntityId,
                     Name = entity.CurrentProvince.Name,
-                    FullTitle = entity.CurrDataLayer.Model.Core.Organization.Organization         }
+                    FullTitle = entity.CurrentProvince.FullTitle
+                };
+            }
 
             return organizationDto;
         }
@@ -149,7 +152,7 @@ namespace Parsia.Core.Organization
                 Name = dto.Name,
                 ParentId = dto.Parent?.EntityId,
                 AboutUs = dto.AboutUs,
-                AccessKey = OrganizationFacade.GetInstance().SetAccessKey(dto,dto.Parent?.EntityId,bp),
+                AccessKey = OrganizationFacade.GetInstance().SetAccessKey(dto, dto.Parent?.EntityId, bp),
                 Address = dto.Address,
                 Area = dto.Area,
                 City = dto.City?.EntityId,
@@ -169,8 +172,9 @@ namespace Parsia.Core.Organization
                 Mobile = dto.Mobile,
                 Longitude = dto.Latitude,
                 Logo = dto.Logo?.EntityId,
-               DataLayer.Model.Core.Organization.Organization = dto.Fax,
-                EstaDataLayer.Model.Core.Organization.OrganizationngYear),
+                Latitude = dto.Latitude,
+                Fax = dto.Fax,
+                EstablishingYear = Util.GetDateTime(dto.EstablishingYear),
                 Email = dto.Email
             };
             return SetMandatoryField(organization, bp, setCreate);
@@ -179,8 +183,7 @@ namespace Parsia.Core.Organization
         public DataLayer.Model.Core.Organization.Organization SetMandatoryField(DataLayer.Model.Core.Organization.Organization organization,
             BusinessParam bp, bool setCreate)
         {
-            organization.UpdateBy = bp.
-    fo.UserId;
+            organization.UpdateBy = bp.UserInfo.UserId;
             organization.Updated = DateTime.Now;
             if (!setCreate) return organization;
             organization.CreateBy = bp.UserInfo.UserId;

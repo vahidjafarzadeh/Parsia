@@ -1,8 +1,6 @@
 ﻿using DataLayer.Tools;
 using Microsoft.AspNetCore.Mvc;
 
-ing Microsoft.Extensions.Caching.Memory;
-
 namespace Parsia.Core.Action
 {
     [ApiController]

@@ -3,8 +3,6 @@ using DataLayer.Tools;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
-ing Microsoft.Extensions.Caching.Memory;
-
 namespace Parsia.Core.File
 {
     [ApiController]
@@ -36,8 +34,6 @@ namespace Parsia.Core.File
         [Route("service/file/save")]
         public ServiceResult<object> Save(FileDto dto)
         {
-            if (!ModelState.IsValid)
-               Enumerator.ErrorCodeesult<object>(Enumerator.ErrorCode.MoEnumerator.ErrorCode              Enumerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = _userSessionManager.GetUserInfo(dto.Ticket, Request);
             var bp = new BusinessParam(userInfo);
             var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, dto.EntityId == 0 ? "insert" : "update");
@@ -48,9 +44,6 @@ namespace Parsia.Core.File
         [Route("service/file/showRow")]
         public ServiceResult<object> ShowRow(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiEnumerator.ErrorCodemerator.ErrorCode.ModelNotValid,
-   Enumerator.ErrorCodemerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "update");
@@ -75,9 +68,6 @@ namespace Parsia.Core.File
         [Route("service/file/autocompleteView")]
         public ServiceResult<object> AutocompleteView(Clause clause)
         {
-            if (!ModelState.IsValid)
-                return new ServiEnumerator.ErrorCodemerator.ErrorCode.ModelNotValid,
-   Enumerator.ErrorCodemerator.ErrorCode.ModelNotValid.GetDescription());
             var userInfo = _userSessionManager.GetUserInfo(clause.Ticket, Request);
             var bp = new BusinessParam(userInfo, clause);
             var checkAccess = _userSessionManager.CheckAccess(bp, ClassDetails[0].Clazz, "autocomplete");
@@ -143,8 +133,8 @@ namespace Parsia.Core.File
         {
             var thumbnail = Request.Query.ContainsKey("thumbnail");
             var bp = new BusinessParam(_hostEnvironment);
-            return await FileFacade.GetInstance().Download(file, bp, thumb
-    
+            return await FileFacade.GetInstance().Download(file, bp, thumbnail);
+
         }
     }
 }

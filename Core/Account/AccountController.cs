@@ -9,9 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-tityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-
 
 namespace Parsia.Controllers
 {
@@ -43,7 +40,7 @@ namespace Parsia.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-          Enumerator.ErrorCodeError", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد فعال سازی معتبر نمی باشد"));
+                return View("_Error", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کد فعال سازی معتبر نمی باشد"));
             }
             else
             {
@@ -52,7 +49,7 @@ namespace Parsia.Controllers
                     var user = context.Users.Where(p => p.EmailCode == id.Trim()).IgnoreQueryFilters().FirstOrDefault();
                     if (user != null)
                     {
-                       Enumerator.ErrorCode 0)
+                        if (user.Deleted != 0)
                         {
                             return View("_Error", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد"));
 
@@ -60,14 +57,14 @@ namespace Parsia.Controllers
                         user.EmailCode = Guid.NewGuid().ToString();
                         user.Active = true;
                         context.Users.Update(user);
-                        conteEnumerator.ErrorCode                       return Redirect("/login");
+                        context.SaveChanges();
+                        return Redirect("/login");
                     }
                     else
                     {
                         return View("_Error", new ServiceResult<object>(Enumerator.ErrorCode.ApplicationError, "کاربر گرامی لینک فعال سازی حساب کاربری شما منقضی شده است . لطفا مجددا در سایت عضو شده و یا از قسمت ارتباط با ما درخواستی مبنی بر فعال سازی حساب کاربری برای مدیر سایت ارسال نمایید"));
                     }
                 }
-
             }
         }
         [Route("recovery")]
@@ -75,7 +72,7 @@ namespace Parsia.Controllers
         {
             return PartialView();
         }
-        Enumerator.ErrorCodesword")]
+        [Route("recovery-password")]
         public ActionResult RecoveryPassword(string code)
         {
 
@@ -87,12 +84,12 @@ namespace Parsia.Controllers
             {
                 using (var unitOfWork = new UnitOfWork())
                 {
-                 Enumerator.ErrorCodeWork.Users.Get(p => p.EmailCode == code.Trim()).FirstOrDefault();
+                    var user = unitOfWork.Users.Get(p => p.EmailCode == code.Trim()).FirstOrDefault();
                     if (user != null)
                     {
                         if (user.Deleted != 0)
                         {
-                            return ViEnumerator.ErrorCodeviceResult<Object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد"));
+                            return View("_Error", new ServiceResult<Object>(Enumerator.ErrorCode.ApplicationError, "اطلاعاتی یافت نشد"));
 
                         }
                         ViewData["code"] = user.EmailCode;
@@ -149,8 +146,7 @@ namespace Parsia.Controllers
                         return RedirectToAction("Index", "Home", new { Areas = "" });
                     }
                 }
-           
-    lse
+                else
                 {
                     HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                     return RedirectToAction("Index", "Home", new { Areas = "" });

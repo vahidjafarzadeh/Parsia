@@ -36,9 +36,9 @@ namespace Parsia.Core.ComboVal
             return comboValDto;
         }
 
-       DataLayer.Model.Core.ComboVal.ComboValComboVal GetEntity(ComboValDto dto, BusinessParam bp, bool setCreate)
+        public DataLayer.Model.Core.ComboVal.ComboVal GetEntity(ComboValDto dto, BusinessParam bp, bool setCreate)
         {
-            var comboVaDataLayer.Model.Core.ComboVal.ComboValComboVal
+            var comboVal = new DataLayer.Model.Core.ComboVal.ComboVal
             {
                 EntityId = dto.EntityId,
                 Active = dto.Active,
@@ -53,7 +53,7 @@ namespace Parsia.Core.ComboVal
             return SetMandatoryField(comboVal, bp, setCreate);
         }
 
-       DataLayer.Model.Core.ComboVal.ComboValComboVal SetMandatoDataLayer.Model.Core.ComboVal.ComboValComboVal comboVal,
+        public DataLayer.Model.Core.ComboVal.ComboVal SetMandatoryField(DataLayer.Model.Core.ComboVal.ComboVal comboVal,
             BusinessParam bp, bool setCreate)
         {
             comboVal.AccessKey = bp.UserInfo.AccessKey;
@@ -63,7 +63,6 @@ namespace Parsia.Core.ComboVal
             comboVal.CreateBy = bp.UserInfo.UserId;
             comboVal.Created = DateTime.Now;
             return comboVal;
- 
-     }
+        }
     }
 }
